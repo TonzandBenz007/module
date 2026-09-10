@@ -16,7 +16,7 @@
 const PRODUCTS_DATA = [
   {
     id: 1,
-    name: "KinetiPod Pro-Run V4",
+    name: "KinetiPod Pro-Run V4 (Proto-X1 Sensor Pod)",
     category: "running",
     categoryLabel: "นักวิ่ง & ไตรกีฬา",
     price: 2890,
@@ -24,22 +24,23 @@ const PRODUCTS_DATA = [
     rating: 4.9,
     reviewsCount: 840,
     soldCount: "1.4k+",
-    image: "./assets/kinetipod_pro_run_1789023215190.jpg",
+    image: "./assets/proto_x1_sensor.png",
+    shoeImage: "./assets/hero_smart_shoe_sensor_1789023197347.jpg",
     badges: ["bestseller", "runner", "discount"],
     specs: [
-      { label: "เซนเซอร์ IMU", val: "100Hz 16-Axis" },
+      { label: "ตำแหน่งติดตั้ง", val: "หนีบเชือกรองเท้า (Dual-Lock Clip)" },
+      { label: "เซนเซอร์ IMU", val: "100Hz 16-Axis Biomechanics" },
       { label: "อายุแบตเตอรี่", val: "25 ชม. ต่อการชาร์จ" },
       { label: "ระดับการกันน้ำ", val: "IP68 Submersible" },
       { label: "การเชื่อมต่อ", val: "Bluetooth 5.4 / ANT+" },
-      { label: "น้ำหนักอุปกรณ์", val: "12 กรัม (เบาพิเศษ)" },
-      { label: "การรองรับ", val: "Garmin, Apple Watch, Strava" }
+      { label: "น้ำหนักอุปกรณ์", val: "12 กรัม (เบาพิเศษ)" }
     ],
     features: ["wireless", "waterproof", "bestseller"],
-    desc: "เซนเซอร์ติดเชือกรองเท้าความแม่นยำสูงสำหรับนักวิ่ง วัดกำลังวัตต์ (Running Power), รอบขา (Cadence), Ground Contact Time Balance, Pronation Angle และวิเคราะห์จุดลงเท้า midfoot/heel/forefoot แบบ Real-time ป้องกันอาการเจ็บ ITB และเข่า"
+    desc: "เซนเซอร์ Foot Pod ติดเชือกรองเท้าความแม่นยำสูงสำหรับนักวิ่ง วัดกำลังวัตต์ (Running Power), รอบขา (Cadence), Ground Contact Time Balance, Pronation Angle และวิเคราะห์จุดลงเท้า midfoot/heel/forefoot แบบ Real-time ป้องกันอาการเจ็บ ITB และเข่า"
   },
   {
     id: 2,
-    name: "RehabGait MediSense 360",
+    name: "RehabGait MediSense 360 Pod",
     category: "rehab",
     categoryLabel: "กายภาพบำบัด & การแพทย์",
     price: 3490,
@@ -48,21 +49,22 @@ const PRODUCTS_DATA = [
     reviewsCount: 620,
     soldCount: "920+",
     image: "./assets/rehabgait_medisense_1789023233777.jpg",
+    shoeImage: "./assets/hero_smart_shoe_sensor_1789023197347.jpg",
     badges: ["medical", "bestseller", "discount"],
     specs: [
+      { label: "ตำแหน่งติดตั้ง", val: "ติดบนหลังเท้า / ข้อเท้า" },
       { label: "มาตรฐานการแพทย์", val: "ISO 13485 / CE Medical" },
       { label: "การวัดแรงกด", val: "0-2,000 N Dynamic Force" },
       { label: "องศาข้อเท้า", val: "Dorsiflexion / Eversion" },
-      { label: "อายุแบตเตอรี่", val: "30 ชม. (ชาร์จแม่เหล็ก)" },
       { label: "ระบบ Tele-Rehab", val: "ส่งรายงานตรงถึงแพทย์" },
       { label: "การรับประกัน", val: "ศูนย์ไทย 2 ปีเต็ม" }
     ],
     features: ["medical", "wireless", "bestseller"],
-    desc: "คลิปเซนเซอร์เกรดการแพทย์สำหรับผู้ป่วยทำกายภาพบำบัด ฟื้นฟูหลังผ่าตัดเปลี่ยนข้อเข่า ข้อเท้า หรือผู้ป่วยหลอดเลือดสมอง (Stroke) ตรวจจับและฝึกการทิ้งน้ำหนักให้สมดุล พร้อมส่งสถิติความคืบหน้าเข้าสู่ระบบคลินิกออนไลน์"
+    desc: "คลิปเซนเซอร์ Foot Pod เกรดการแพทย์สำหรับผู้ป่วยทำกายภาพบำบัด ฟื้นฟูหลังผ่าตัดเปลี่ยนข้อเข่า ข้อเท้า หรือผู้ป่วยหลอดเลือดสมอง (Stroke) ตรวจจับและฝึกการทิ้งน้ำหนักให้สมดุล พร้อมส่งสถิติความคืบหน้าเข้าสู่ระบบคลินิกออนไลน์"
   },
   {
     id: 3,
-    name: "StepSafe ElderGuard Pod",
+    name: "StepSafe ElderGuard Sensor Pod",
     category: "safety",
     categoryLabel: "ความปลอดภัย & ผู้สูงอายุ",
     price: 2190,
@@ -71,12 +73,13 @@ const PRODUCTS_DATA = [
     reviewsCount: 410,
     soldCount: "680+",
     image: "./assets/stepsafe_elderguard_1789023258283.jpg",
+    shoeImage: "./assets/hero_smart_shoe_sensor_1789023197347.jpg",
     badges: ["safety", "discount"],
     specs: [
+      { label: "ตำแหน่งติดตั้ง", val: "Clip & Go หนีบขอบ/เชือกรองเท้า" },
       { label: "ระบบตรวจจับ", val: "AI Fall & Trip Detection" },
       { label: "การแจ้งเตือน", val: "Auto SOS เข้ามือถือญาติ" },
       { label: "แบตเตอรี่", val: "45 วัน (ระบบ Smart Sleep)" },
-      { label: "การติดตั้ง", val: "Clip & Go หนีบขอบรองเท้า" },
       { label: "สัญญาณเตือน", val: "ไฟ Amber Soft LED นำทาง" },
       { label: "กันน้ำ/กันฝุ่น", val: "IP67 ใช้งานในชีวิตประจำวัน" }
     ],
@@ -85,7 +88,7 @@ const PRODUCTS_DATA = [
   },
   {
     id: 4,
-    name: "AgilityPro Strike Sport",
+    name: "AgilityPro Strike Sport Pod",
     category: "sports",
     categoryLabel: "นักกีฬา & อัตราเร่ง",
     price: 2590,
@@ -94,21 +97,22 @@ const PRODUCTS_DATA = [
     reviewsCount: 380,
     soldCount: "550+",
     image: "./assets/agilitypro_strike_1789023279774.jpg",
+    shoeImage: "./assets/hero_smart_shoe_sensor_1789023197347.jpg",
     badges: ["sports", "discount"],
     specs: [
+      { label: "ตำแหน่งติดตั้ง", val: "Heel Armor Mech-Lock ส้นรองเท้า" },
       { label: "ความทนแรงกระแทก", val: "50G Shock-Resistant" },
       { label: "การวัดสปีด", val: "Acceleration 0-100Hz" },
       { label: "ความสูงกระโดด", val: "Vertical Jump (±0.5cm)" },
       { label: "อายุแบตเตอรี่", val: "20 ชม. ไฮสปีดโหมด" },
-      { label: "การล็อก", val: "Heel Armor Mech-Lock" },
-      { label: "กีฬาที่รองรับ", val: "บาสเกตบอล, ฟุตบอล, แบด" }
+      { label: "กีฬาที่รองรับ", val: "บาสเกตบอล, ฟุตบอล, แบดมินตัน" }
     ],
     features: ["waterproof", "wireless"],
-    desc: "เซนเซอร์ติดส้นรองเท้าสำหรับนักกีฬาความเร็วสูง ออกแบบมาเพื่อวัดสปีด อัตราเร่งในเสี้ยววินาที แรงเบรก เปลี่ยนทิศทาง และความสูงในการกระโดด ป้องกันอาการเอ็นข้อเท้าและเอ็นไขว้หน้า (ACL) ฉีกขาด"
+    desc: "เซนเซอร์ Foot Pod ติดส้นรองเท้าสำหรับนักกีฬาความเร็วสูง ออกแบบมาเพื่อวัดสปีด อัตราเร่งในเสี้ยววินาที แรงเบรก เปลี่ยนทิศทาง และความสูงในการกระโดด ป้องกันอาการเอ็นข้อเท้าและเอ็นไขว้หน้า (ACL) ฉีกขาด"
   },
   {
     id: 5,
-    name: "OrthoPressure Smart Insole Matrix",
+    name: "OrthoPressure Smart Insole & Pod Matrix",
     category: "rehab",
     categoryLabel: "กายภาพ & แผ่นรองเท้า",
     price: 3990,
@@ -117,12 +121,13 @@ const PRODUCTS_DATA = [
     reviewsCount: 290,
     soldCount: "430+",
     image: "./assets/orthopressure_smart_insole_1789023627773.jpg",
+    shoeImage: "./assets/hero_smart_shoe_sensor_1789023197347.jpg",
     badges: ["medical", "discount"],
     specs: [
+      { label: "ตำแหน่งติดตั้ง", val: "แผ่นรองใต้ฝ่าเท้า + Pod ส่งสัญญาณ" },
       { label: "แผ่นเมทริกซ์", val: "8 Piezoelectric Zones" },
       { label: "ความหนาแผ่น", val: "1.8 mm (บางพิเศษตัดได้)" },
       { label: "การแสดงผล", val: "Live Pressure Heatmap" },
-      { label: "การเชื่อมต่อ", val: "BLE Micro Transmitter Clip" },
       { label: "ตรวจจับสรีระ", val: "เท้าแบน, อุ้งเท้าสูง, รองช้ำ" },
       { label: "อายุการใช้งาน", val: "รองรับการก้าว 2,000,000 ก้าว" }
     ],
@@ -131,7 +136,7 @@ const PRODUCTS_DATA = [
   },
   {
     id: 6,
-    name: "NightGlow Pulse LED Pro",
+    name: "NightGlow Pulse LED Sensor Pod",
     category: "safety",
     categoryLabel: "ความปลอดภัย & วิ่งกลางคืน",
     price: 890,
@@ -140,17 +145,18 @@ const PRODUCTS_DATA = [
     reviewsCount: 510,
     soldCount: "1.2k+",
     image: "./assets/nightglow_pulse_led_1789023650760.jpg",
+    shoeImage: "./assets/hero_smart_shoe_sensor_1789023197347.jpg",
     badges: ["runner", "safety", "discount"],
     specs: [
+      { label: "ตำแหน่งติดตั้ง", val: "ส้นรองเท้า / ส้นเท้า" },
       { label: "ระยะการมองเห็น", val: "500 เมตร (High Lumen)" },
       { label: "โหมดไฟ", val: "Cadence Sync Pulse / Flash" },
       { label: "แบตเตอรี่", val: "60 ชม. ต่อการชาร์จ Type-C" },
       { label: "ระดับการกันน้ำ", val: "IP68 วิ่งลุยฝนหนัก" },
-      { label: "น้ำหนัก", val: "9 กรัม" },
-      { label: "ตำแหน่งติด", val: "ส้นรองเท้า / ส้นเท้า" }
+      { label: "น้ำหนัก", val: "9 กรัม" }
     ],
     features: ["waterproof", "bestseller"],
-    desc: "คลิปไฟ LED เซฟตี้ติดส้นรองเท้านวัตกรรมใหม่ มีเซนเซอร์ตรวจจับรอบขา ปรับจังหวะแสงกะพริบตามความเร็วในการวิ่งของคุณโดยอัตโนมัติ เพิ่มทัศนวิสัยและความปลอดภัยในการวิ่ง City Run หรือวิ่งยามค่ำคืน"
+    desc: "คลิปไฟ LED Foot Pod เซฟตี้ติดส้นรองเท้านวัตกรรมใหม่ มีเซนเซอร์ตรวจจับรอบขา ปรับจังหวะแสงกะพริบตามความเร็วในการวิ่งของคุณโดยอัตโนมัติ เพิ่มทัศนวิสัยและความปลอดภัยในการวิ่ง City Run หรือวิ่งยามค่ำคืน"
   }
 ];
 
@@ -450,12 +456,12 @@ function renderProducts(searchQuery = "") {
     }
 
     return `
-      <div class="product-card" data-id="${product.id}">
+      <div class="product-card" data-id="${product.id}" onclick="openProductQuickView(${product.id})">
         <div class="prod-badge-ribbon">
           ${badgesHtml}
         </div>
 
-        <div class="prod-actions-top">
+        <div class="prod-actions-top" onclick="event.stopPropagation();">
           <button class="icon-btn-float ${isWishlist ? 'active' : ''}" title="ถูกใจ" onclick="toggleWishlist(${product.id})">
             <i class="${isWishlist ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
           </button>
@@ -466,9 +472,12 @@ function renderProducts(searchQuery = "") {
 
         <div class="prod-image-wrap">
           <img src="${product.image}" alt="${product.name}" class="prod-img" loading="lazy">
+          <div class="prod-sensor-tag">
+            <i class="fa-solid fa-microchip"></i> Foot Pod Sensor
+          </div>
           <div class="prod-quick-view-overlay">
-            <button class="btn btn-sm btn-glass" onclick="openProductQuickView(${product.id})">
-              <i class="fa-solid fa-eye"></i> ดูสเปกอย่างละเอียด
+            <button class="btn btn-sm btn-glass" onclick="event.stopPropagation(); openProductQuickView(${product.id})">
+              <i class="fa-solid fa-shoe-prints text-cyan"></i> ดูมุมมองติดบนรองเท้า & สเปก
             </button>
           </div>
         </div>
@@ -493,14 +502,19 @@ function renderProducts(searchQuery = "") {
             ${product.specs.slice(0, 3).map(s => `<span class="spec-mini-tag"><i class="fa-solid fa-check text-cyan"></i> ${s.label}: ${s.val}</span>`).join('')}
           </div>
 
-          <div class="prod-footer">
+          <div class="prod-footer" onclick="event.stopPropagation();">
             <div class="prod-price-box">
               <span class="current-price">฿${product.price.toLocaleString()}</span>
               <span class="original-price">฿${product.originalPrice.toLocaleString()}</span>
             </div>
-            <button class="btn-add-cart" onclick="addToCart(${product.id})">
-              <i class="fa-solid fa-cart-plus"></i> ลงตะกร้า
-            </button>
+            <div class="prod-footer-btns">
+              <button class="btn-card-cart" onclick="addToCart(${product.id})" title="เพิ่มลงในตะกร้า">
+                <i class="fa-solid fa-cart-plus"></i> เพิ่มลงตะกร้า
+              </button>
+              <button class="btn-card-buy" onclick="directBuyNow(${product.id})" title="สั่งซื้อและชำระเงินทันที">
+                <i class="fa-solid fa-bolt"></i> ซื้อเลย
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -599,10 +613,12 @@ function updateCartUI() {
   const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-  // Nav badges
+  // Nav badges & Top bar count
+  const topBarCount = document.getElementById("topBarCartCount");
   const navCount = document.getElementById("cartCount");
   const navTotal = document.getElementById("cartTotalNav");
   const drawerCount = document.getElementById("cartDrawerItemCount");
+  if (topBarCount) topBarCount.innerText = totalItems;
   if (navCount) navCount.innerText = totalItems;
   if (navTotal) navTotal.innerText = `฿${subtotal.toLocaleString()}`;
   if (drawerCount) drawerCount.innerText = totalItems;
@@ -1235,23 +1251,78 @@ function resetWizard() {
 }
 
 // ==========================================
-// 11. QUICK VIEW & PRODUCT MODAL
+// 11. QUICK VIEW & PRODUCT MODAL (ON-SHOE & POD DUAL VIEW)
 // ==========================================
 
-function openProductQuickView(productId) {
+function openProductQuickView(productId, activeView = "shoe") {
   const prod = PRODUCTS_DATA.find(p => p.id === productId);
   if (!prod) return;
 
+  const discountPercent = Math.round(((prod.originalPrice - prod.price) / prod.originalPrice) * 100);
+  const currentImg = (activeView === "shoe") ? (prod.shoeImage || prod.image) : prod.image;
+  const isShoe = (activeView === "shoe");
+
   const content = document.getElementById("productModalContent");
   content.innerHTML = `
-    <div>
-      <img src="${prod.image}" alt="${prod.name}" class="modal-prod-image">
+    <!-- Left Column: Visual Display & Switcher -->
+    <div class="modal-visual-col">
+      <!-- View Switcher Tabs -->
+      <div class="modal-view-switcher">
+        <button class="modal-switch-btn ${isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'shoe')">
+          <i class="fa-solid fa-shoe-prints"></i> ติดตั้งบนรองเท้า (On-Shoe)
+        </button>
+        <button class="modal-switch-btn ${!isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'pod')">
+          <i class="fa-solid fa-microchip"></i> ตัวเครื่องเซนเซอร์ (Pod Device)
+        </button>
+      </div>
+
+      <!-- Main Visual Frame -->
+      <div class="modal-img-container">
+        <img src="${currentImg}" alt="${prod.name}" class="modal-prod-image">
+        
+        <!-- Interactive Badge Overlay -->
+        ${isShoe ? `
+          <div class="modal-img-badge on-shoe">
+            <span class="live-dot pulse-anim"></span>
+            <span><i class="fa-solid fa-bolt text-amber"></i> แสดงมุมมอง Foot Pod ติดบนรองเท้าจริง</span>
+          </div>
+          <div class="modal-shoe-hud">
+            <div class="hud-pill"><i class="fa-solid fa-shield-check text-green"></i> Dual-Lock Clip แน่นหนา</div>
+            <div class="hud-pill"><i class="fa-solid fa-wifi text-cyan"></i> Live 100Hz IMU</div>
+            <div class="hud-pill"><i class="fa-solid fa-water text-cyan"></i> IP68 กันน้ำ 100%</div>
+          </div>
+        ` : `
+          <div class="modal-img-badge pod-view">
+            <i class="fa-solid fa-microchip text-cyan"></i>
+            <span>ฮาร์ดแวร์ Foot Pod Sensor น้ำหนักเบาพิเศษ</span>
+          </div>
+        `}
+      </div>
+
+      <!-- Thumbnail Switchers -->
+      <div class="modal-thumbs-row">
+        <div class="modal-thumb-box ${isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'shoe')">
+          <img src="${prod.shoeImage || prod.image}" alt="On Shoe View">
+          <span>มุมมองติดบนรองเท้า</span>
+        </div>
+        <div class="modal-thumb-box ${!isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'pod')">
+          <img src="${prod.image}" alt="Pod View">
+          <span>มุมมองตัวเครื่อง Foot Pod</span>
+        </div>
+      </div>
     </div>
+
+    <!-- Right Column: Info, Specs & Actions -->
     <div class="modal-prod-info">
-      <span class="prod-category">${prod.categoryLabel}</span>
+      <div class="modal-badge-row">
+        <span class="prod-category">${prod.categoryLabel}</span>
+        ${prod.badges.includes("bestseller") ? '<span class="badge-tag bestseller"><i class="fa-solid fa-fire"></i> ขายดีอันดับ 1</span>' : ''}
+        ${prod.badges.includes("medical") ? '<span class="badge-tag medical"><i class="fa-solid fa-certificate"></i> เกรดการแพทย์</span>' : ''}
+      </div>
+
       <h2 class="modal-title">${prod.name}</h2>
       
-      <div class="prod-rating-row" style="margin-bottom: 12px;">
+      <div class="prod-rating-row">
         <span class="prod-stars">
           <i class="fa-solid fa-star"></i>
           <i class="fa-solid fa-star"></i>
@@ -1263,15 +1334,26 @@ function openProductQuickView(productId) {
         <span class="prod-sold-count">(${prod.reviewsCount} รีวิว | ${prod.soldCount} ยอดขาย)</span>
       </div>
 
-      <div class="rec-price-row">
-        <span class="rec-price-main">฿${prod.price.toLocaleString()}</span>
-        <span class="rec-price-old">฿${prod.originalPrice.toLocaleString()}</span>
+      <div class="modal-price-card">
+        <div class="rec-price-row" style="margin-bottom: 0;">
+          <span class="rec-price-main">฿${prod.price.toLocaleString()}</span>
+          <span class="rec-price-old">฿${prod.originalPrice.toLocaleString()}</span>
+          ${discountPercent > 0 ? `<span class="badge-tag discount">ลดพิเศษ ${discountPercent}%</span>` : ''}
+        </div>
+        <div class="modal-stock-status">
+          <i class="fa-solid fa-circle-check text-green"></i> มีสินค้าพร้อมส่ง (ศูนย์ไทย จัดส่งใน 24 ชม.)
+        </div>
+      </div>
+
+      <div class="modal-highlight-note">
+        <i class="fa-solid fa-circle-check text-cyan"></i>
+        <span><strong>ความเข้ากันได้ 100%:</strong> ออกแบบให้ติดกับเชือกรองเท้าหรือส้นรองเท้าวิ่งได้ทุกแบรนด์ (Nike, Adidas, Hoka, Asics, ฯลฯ) ไม่หลุดขณะวิ่ง</span>
       </div>
 
       <p class="modal-desc">${prod.desc}</p>
 
-      <h4 style="font-size: 0.95rem; margin-bottom: 10px; color: var(--primary-cyan);">
-        <i class="fa-solid fa-microchip"></i> ข้อมูลสเปกทางเทคนิค:
+      <h4 class="specs-sec-title">
+        <i class="fa-solid fa-sliders text-cyan"></i> ข้อมูลสเปกทางเทคนิค (Technical Specifications):
       </h4>
       <div class="modal-specs-list">
         ${prod.specs.map(s => `
@@ -1282,12 +1364,16 @@ function openProductQuickView(productId) {
         `).join('')}
       </div>
 
-      <div style="display: flex; gap: 12px; margin-top: auto;">
-        <button class="btn btn-primary btn-glow" style="flex: 1;" onclick="addToCart(${prod.id}); closeProductModal();">
-          <i class="fa-solid fa-cart-shopping"></i> เพิ่มลงตะกร้าสินค้า
+      <!-- Main Action Buttons -->
+      <div class="modal-action-buttons">
+        <button class="btn btn-primary btn-glow btn-modal-buy" onclick="directBuyNow(${prod.id})">
+          <i class="fa-solid fa-bolt"></i> สั่งซื้อทันที / ชำระเงิน
         </button>
-        <button class="btn btn-glass" onclick="toggleCompare(${prod.id}); closeProductModal();">
-          <i class="fa-solid fa-code-compare"></i> เปรียบเทียบ
+        <button class="btn btn-outline btn-modal-cart" onclick="addToCart(${prod.id}); closeProductModal();">
+          <i class="fa-solid fa-cart-plus"></i> เพิ่มลงตะกร้า
+        </button>
+        <button class="btn btn-glass icon-btn-compare" title="เปรียบเทียบสเปก" onclick="toggleCompare(${prod.id}); closeProductModal();">
+          <i class="fa-solid fa-code-compare"></i>
         </button>
       </div>
     </div>
@@ -1295,6 +1381,31 @@ function openProductQuickView(productId) {
 
   document.getElementById("productModalOverlay").classList.add("active");
   document.body.style.overflow = "hidden";
+}
+
+function directBuyNow(productId) {
+  const prod = PRODUCTS_DATA.find(p => p.id === productId);
+  if (!prod) return;
+
+  const existing = cart.find(item => item.id === productId);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({
+      id: prod.id,
+      name: prod.name,
+      price: prod.price,
+      originalPrice: prod.originalPrice,
+      image: prod.image,
+      qty: 1
+    });
+  }
+
+  saveCart();
+  updateCartUI();
+  closeProductModal();
+  openCheckoutModal();
+  showToast(`เพิ่ม "${prod.name}" และเปิดหน้าชำระเงินเรียบร้อยแล้ว`, "success");
 }
 
 function closeProductModal() {

@@ -22,15 +22,21 @@
   <div class="top-bar">
     <div class="container top-bar-content">
       <div class="top-bar-left">
-        <span><i class="fa-solid fa-truck-fast"></i> จัดส่งฟรีทั่วประเทศ & ประกันศูนย์ไทย 2 ปีเต็ม</span>
+        <span><i class="fa-solid fa-truck-fast text-green"></i> จัดส่งฟรีทั่วประเทศ & ประกันศูนย์ไทย 2 ปีเต็ม</span>
+        <span class="bar-separator">|</span>
+        <a href="#flash-deals" class="top-promo-link" style="color: var(--accent-coral); font-weight: 700;">
+          <i class="fa-solid fa-gift"></i> กดรับโปรโมชั่น & คูปองส่วนลด 15%
+        </a>
         <span class="bar-separator">|</span>
         <span id="firebaseStatusBadge" class="fb-badge offline" onclick="openFirebaseSettingsModal()" title="คลิกเพื่อตั้งค่า Firebase Config">
           <span class="fb-dot"></span> <i class="fa-solid fa-fire"></i> กำลังเชื่อมต่อ Firebase...
         </span>
       </div>
       <div class="top-bar-right">
+        <a href="javascript:void(0)" onclick="openCartDrawer()" style="font-weight: 600; color: var(--primary-cyan);">
+          <i class="fa-solid fa-cart-shopping"></i> ดูตะกร้าสินค้า (<span id="topBarCartCount">0</span> ชิ้น)
+        </a>
         <a href="javascript:void(0)" onclick="openCustomersDrawer()"><i class="fa-solid fa-database text-cyan"></i> ฐานข้อมูลลูกค้า (Firebase)</a>
-        <a href="#marketplace-channels"><i class="fa-solid fa-store"></i> Shopee | Lazada | TikTok Shop</a>
         <div class="lang-switch">
           <button class="lang-btn active" data-lang="th">TH</button>
           <button class="lang-btn" data-lang="en">EN</button>
@@ -57,14 +63,14 @@
       <div class="header-search">
         <div class="search-input-wrapper">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="searchInput" placeholder="ค้นหา: วัดองศาข้อเท้า, เพซในร่ม, เช่าอุปกรณ์, โค้ช AI, กายภาพ...">
+          <input type="text" id="searchInput" placeholder="ค้นหา: Foot Pod, วัดองศาข้อเท้า, เพซในร่ม, เช่าอุปกรณ์...">
           <button class="search-btn" id="searchSubmitBtn">ค้นหา</button>
         </div>
         <div class="search-tags">
+          <span class="tag-item" data-search="Foot Pod">#FootPodอุปกรณ์ติดรองเท้า</span>
           <span class="tag-item" data-search="องศาข้อเท้า">#วัดองศาข้อเท้า</span>
-          <span class="tag-item" data-search="เพซในร่ม">#Paceลู่วิ่งในร่ม</span>
           <span class="tag-item" data-search="เช่า">#เช่าฟื้นฟูกายภาพ</span>
-          <span class="tag-item" data-search="เตือนเสียง">#เตือนฟอร์มวิ่งสด</span>
+          <span class="tag-item" data-search="โปรโมชั่น">#รับโปรโมชั่น</span>
         </div>
       </div>
 
@@ -96,6 +102,12 @@
           </div>
         </div>
 
+        <!-- Get Promotion / Voucher Button -->
+        <button class="action-btn promo-btn-action" onclick="document.querySelector('#flash-deals').scrollIntoView({behavior:'smooth'})" title="กดรับโปรโมชั่น & โค้ดส่วนลด" style="background: #FFF1F2; border-color: #FECDD3;">
+          <i class="fa-solid fa-gift text-coral"></i>
+          <span class="action-label" style="font-weight: 700; color: var(--accent-coral);">รับโปรโมชั่น</span>
+        </button>
+
         <!-- Customer Profile Register Button -->
         <button class="action-btn" id="customerProfileBtn" onclick="openCustomerProfileModal()" title="ลงทะเบียนข้อมูลลูกค้า / สุขภาพ">
           <i class="fa-solid fa-id-card-clip text-cyan"></i>
@@ -115,15 +127,10 @@
           <span class="action-label">เปรียบเทียบ</span>
         </button>
 
-        <button class="action-btn" id="wishlistToggleBtn" title="สินค้าที่ถูกใจ">
-          <i class="fa-regular fa-heart"></i>
-          <span class="action-badge" id="wishlistCount">0</span>
-          <span class="action-label">ถูกใจ</span>
-        </button>
-
-        <button class="action-btn cart-btn-action" id="cartToggleBtn" title="ตะกร้าสินค้า">
+        <!-- Shopping Cart Button -->
+        <button class="action-btn cart-btn-action" id="cartToggleBtn" title="ดูตะกร้าสินค้า & ชำระเงิน" onclick="openCartDrawer()">
           <div class="cart-icon-wrap">
-            <i class="fa-solid fa-bag-shopping"></i>
+            <i class="fa-solid fa-cart-shopping"></i>
             <span class="action-badge cart-badge-pulse" id="cartCount">0</span>
           </div>
           <div class="cart-btn-info">
@@ -142,7 +149,8 @@
     <nav class="sub-nav">
       <div class="container sub-nav-content">
         <ul class="nav-links">
-          <li><a href="#catalog" class="nav-link active" data-category="all"><i class="fa-solid fa-layer-group"></i> สินค้าทั้งหมด</a></li>
+          <li><a href="#catalog" class="nav-link active" data-category="all"><i class="fa-solid fa-layer-group"></i> สินค้าทั้งหมด (Foot Pods)</a></li>
+          <li><a href="#flash-deals" class="nav-link highlight-link-alt"><i class="fa-solid fa-gift"></i> กดรับโปรโมชั่น & โค้ดส่วนลด</a></li>
           <li><a href="#bmc-solutions" class="nav-link"><i class="fa-solid fa-person-running"></i> เจาะลึก 2 กลุ่มนักวิ่ง (BMC)</a></li>
           <li><a href="#watch-vs-pod" class="nav-link"><i class="fa-solid fa-code-compare"></i> นาฬิกา vs Foot Pod</a></li>
           <li><a href="#revenue-models" class="nav-link highlight-link"><i class="fa-solid fa-tags"></i> 3 รูปแบบ ซื้อ / เช่า / AI Pro</a></li>
