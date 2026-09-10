@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เข้าสู่ระบบ & ออกจากระบบ | KINETIPOD™ Firebase Authentication</title>
-  <meta name="description" content="ระบบเข้าสู่ระบบ สมัครสมาชิก และจัดการโปรไฟล์สุขภาพนักวิ่ง เชื่อมต่อ Firebase Authentication และ Firestore">
+  <title>เข้าสู่ระบบ & สมัครสมาชิก | KINETIPOD™</title>
+  <meta name="description" content="ระบบเข้าสู่ระบบและสมัครสมาชิก เชื่อมต่อ Firebase Authentication และ Firestore">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 
@@ -17,180 +17,437 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
-    /* Dedicated Auth Page Layout */
+    /* ==========================================================================
+       CLEAN & MINIMALIST AUTH THEME
+       ========================================================================== */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0F172A;
+      color: #F8FAFC;
+      font-family: 'Prompt', 'Plus Jakarta Sans', sans-serif;
+    }
+
     .auth-page-wrapper {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background: radial-gradient(circle at 50% 10%, rgba(0, 240, 255, 0.1) 0%, transparent 60%),
-                  radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
-                  #070B14;
+      background-color: #0F172A;
     }
 
+    /* Minimalist Header */
     .auth-page-header {
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border-light);
-      background: rgba(14, 20, 36, 0.8);
-      backdrop-filter: blur(12px);
+      padding: 16px 0;
+      border-bottom: 1px solid #1E293B;
+      background-color: #0F172A;
     }
 
     .auth-header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
+    .brand-logo-clean {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #FFFFFF;
+    }
+
+    .brand-logo-clean i {
+      font-size: 1.4rem;
+      color: #38BDF8;
+    }
+
+    .brand-logo-clean span {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-logo-clean span b {
+      color: #38BDF8;
+    }
+
+    /* Main Card Layout */
     .auth-page-main {
       flex-grow: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 60px 20px;
+      padding: 48px 20px;
     }
 
-    .auth-standalone-card {
+    .auth-clean-card {
       width: 100%;
-      max-width: 580px;
-      background: rgba(18, 26, 46, 0.85);
-      border: 1px solid var(--border-cyan);
-      border-radius: var(--radius-lg);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), var(--border-glow);
-      backdrop-filter: blur(16px);
+      max-width: 520px;
+      background: #1E293B;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
       overflow: hidden;
-      animation: fadeInDown 0.4s ease;
     }
 
-    /* Logged In Dashboard Card View */
-    .logged-in-card {
-      padding: 36px 30px;
-      text-align: center;
+    /* Clean Tabs */
+    .auth-clean-tabs {
+      display: flex;
+      background: #0F172A;
+      border-bottom: 1px solid #334155;
     }
 
-    .profile-hero-avatar {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #00F0FF, #10B981);
-      color: #070B14;
-      font-size: 2.2rem;
-      font-weight: 800;
+    .auth-clean-tab-btn {
+      flex: 1;
+      padding: 15px 16px;
+      background: transparent;
+      border: none;
+      color: #94A3B8;
+      font-weight: 600;
+      font-size: 0.95rem;
+      font-family: inherit;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 18px auto;
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+      gap: 8px;
+      transition: all 0.2s ease;
+      border-bottom: 2px solid transparent;
     }
 
-    .user-badge-status {
-      display: inline-flex;
+    .auth-clean-tab-btn:hover {
+      color: #F8FAFC;
+    }
+
+    .auth-clean-tab-btn.active {
+      color: #38BDF8;
+      border-bottom-color: #38BDF8;
+      background: #1E293B;
+    }
+
+    .auth-clean-tab-pane {
+      display: none;
+      padding: 30px 28px;
+    }
+
+    .auth-clean-tab-pane.active {
+      display: block;
+    }
+
+    /* Clean Form Elements */
+    .clean-form-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .clean-form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #E2E8F0;
+      margin-bottom: 6px;
+    }
+
+    .clean-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #0F172A;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #F8FAFC;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+
+    .clean-input:focus {
+      border-color: #38BDF8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* Clean Primary Button */
+    .btn-clean-primary {
+      width: 100%;
+      background: #2563EB;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 20px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .btn-clean-primary:hover {
+      background: #1D4ED8;
+    }
+
+    .btn-clean-primary:active {
+      transform: scale(0.99);
+    }
+
+    /* Subsections */
+    .clean-box-section {
+      background: #0F172A;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 16px 14px;
+      margin: 18px 0;
+    }
+
+    .clean-box-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #38BDF8;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Divider */
+    .clean-auth-divider {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      color: #64748B;
+      font-size: 0.82rem;
+    }
+
+    .clean-auth-divider::before, .clean-auth-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #334155;
+    }
+
+    .clean-auth-divider span {
+      padding: 0 12px;
+    }
+
+    /* Quick Demo Bar */
+    .clean-demo-box {
+      background: #0F172A;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 18px;
+    }
+
+    .clean-demo-title {
+      font-size: 0.78rem;
+      color: #94A3B8;
+      margin-bottom: 8px;
+      display: flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 14px;
-      border-radius: 999px;
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: var(--accent-green);
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-bottom: 12px;
     }
 
-    .user-profile-title {
-      font-size: 1.6rem;
-      margin-bottom: 4px;
-      color: #FFFFFF;
-    }
-
-    .user-profile-email {
-      color: var(--text-secondary);
-      font-size: 0.92rem;
-      margin-bottom: 24px;
-    }
-
-    .biometrics-summary-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      background: rgba(14, 20, 36, 0.8);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-md);
-      padding: 16px 12px;
-      margin-bottom: 28px;
-      text-align: center;
-    }
-
-    .bio-stat-item strong {
-      display: block;
-      font-size: 1.15rem;
-      color: var(--primary-cyan);
-      margin-bottom: 2px;
-    }
-
-    .bio-stat-item span {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-    }
-
-    .auth-actions-group {
+    .clean-demo-pills {
       display: flex;
-      gap: 14px;
-      justify-content: center;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
-    .btn-logout {
-      background: rgba(255, 70, 85, 0.15);
-      border: 1px solid rgba(255, 70, 85, 0.4);
-      color: var(--accent-coral);
-      padding: 12px 24px;
-      border-radius: var(--radius-sm);
+    .clean-demo-pill {
+      background: #1E293B;
+      border: 1px solid #334155;
+      color: #E2E8F0;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+
+    .clean-demo-pill:hover {
+      background: #334155;
+      color: #FFFFFF;
+      border-color: #475569;
+    }
+
+    /* Firebase Status Badge */
+    .fb-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+
+    .fb-badge.connected {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34D399;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .fb-badge.offline {
+      background: rgba(239, 68, 68, 0.12);
+      color: #F87171;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .fb-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .btn-nav-outline {
+      background: transparent;
+      border: 1px solid #334155;
+      color: #CBD5E1;
+      padding: 6px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-nav-outline:hover {
+      background: #1E293B;
+      color: #FFFFFF;
+      border-color: #475569;
+    }
+
+    /* Logged In State */
+    .clean-logged-in-box {
+      padding: 36px 28px;
+      text-align: center;
+    }
+
+    .clean-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #2563EB;
+      color: #FFFFFF;
+      font-size: 1.8rem;
       font-weight: 700;
-      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+    }
+
+    .clean-user-title {
+      font-size: 1.35rem;
+      margin: 0 0 4px 0;
+      color: #F8FAFC;
+    }
+
+    .clean-user-email {
+      color: #94A3B8;
+      font-size: 0.9rem;
+      margin: 0 0 20px 0;
+    }
+
+    .clean-biometrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      background: #0F172A;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px 10px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .clean-bio-item strong {
+      display: block;
+      font-size: 1.1rem;
+      color: #38BDF8;
+      margin-bottom: 2px;
+    }
+
+    .clean-bio-item span {
+      font-size: 0.75rem;
+      color: #94A3B8;
+    }
+
+    .btn-clean-logout {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #F87171;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      font-family: inherit;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: var(--transition-fast);
+      transition: all 0.2s ease;
     }
 
-    .btn-logout:hover {
-      background: var(--accent-coral);
+    .btn-clean-logout:hover {
+      background: #EF4444;
       color: #FFFFFF;
-      box-shadow: 0 0 20px rgba(255, 70, 85, 0.4);
-      transform: translateY(-2px);
     }
 
-    @media (max-width: 640px) {
-      .biometrics-summary-grid {
+    @media (max-width: 540px) {
+      .form-row-2, .form-row-3 {
+        grid-template-columns: 1fr;
+      }
+      .clean-biometrics-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
+      }
+      .auth-clean-tab-pane {
+        padding: 24px 16px;
       }
     }
   </style>
 </head>
-<body class="dark-mode">
+<body>
 
   <div class="auth-page-wrapper">
     <!-- Header Navigation -->
     <header class="auth-page-header">
-      <div class="container auth-header-container">
-        <a href="index.html" class="brand-logo">
-          <div class="logo-icon">
-            <i class="fa-solid fa-shoe-prints"></i>
-            <span class="pulse-dot"></span>
-          </div>
-          <div class="brand-text">
-            <span class="brand-name">KINETI<span class="highlight">POD</span></span>
-            <span class="brand-tagline">SMART GAIT & REHAB INTELLIGENCE</span>
-          </div>
+      <div class="auth-header-container">
+        <a href="index.html" class="brand-logo-clean">
+          <i class="fa-solid fa-shoe-prints"></i>
+          <span>KINETI<b>POD</b></span>
         </a>
 
-        <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
           <span id="firebaseStatusBadge" class="fb-badge offline">
-            <span class="fb-dot"></span> <i class="fa-solid fa-fire"></i> Firebase Ready
+            <span class="fb-dot"></span> <i class="fa-solid fa-fire"></i> เชื่อมต่อ Firebase
           </span>
-          <a href="index.html" class="btn btn-sm btn-outline">
-            <i class="fa-solid fa-house"></i> กลับสู่หน้าหลัก
+          <a href="index.html" class="btn-nav-outline">
+            <i class="fa-solid fa-house"></i> หน้าหลัก
           </a>
         </div>
       </div>
@@ -198,59 +455,59 @@
 
     <!-- Main Content Area -->
     <main class="auth-page-main">
-      <div class="auth-standalone-card">
+      <div class="auth-clean-card">
 
         <!-- VIEW 1: NOT LOGGED IN (LOGIN / SIGN UP FORM) -->
         <div id="authGuestView">
           <!-- Auth Navigation Tabs -->
-          <div class="auth-tabs-nav">
-            <button class="auth-tab-btn active" id="tabBtnLogin" onclick="showAuthTab('login')">
-              <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ (Log In)
+          <div class="auth-clean-tabs">
+            <button class="auth-clean-tab-btn active" id="tabBtnLogin" onclick="showAuthTab('login')">
+              <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
             </button>
-            <button class="auth-tab-btn" id="tabBtnRegister" onclick="showAuthTab('register')">
-              <i class="fa-solid fa-user-plus"></i> สมัครสมาชิก & บันทึกสุขภาพ
+            <button class="auth-clean-tab-btn" id="tabBtnRegister" onclick="showAuthTab('register')">
+              <i class="fa-solid fa-user-plus"></i> สมัครสมาชิก
             </button>
-            <button class="auth-tab-btn" id="tabBtnReset" onclick="showAuthTab('reset')" style="display: none;">
+            <button class="auth-clean-tab-btn" id="tabBtnReset" onclick="showAuthTab('reset')" style="display: none;">
               <i class="fa-solid fa-key"></i> รีเซ็ตรหัสผ่าน
             </button>
           </div>
 
           <!-- TAB 1: LOGIN -->
-          <div class="auth-tab-pane active" id="paneLogin">
-            <div style="text-align: center; margin-bottom: 22px;">
-              <h2 style="font-size: 1.4rem; margin-bottom: 6px;">เข้าสู่ระบบสมาชิก</h2>
-              <p style="font-size: 0.88rem; color: var(--text-secondary);">เข้าสู่ระบบผ่าน Firebase เพื่อซิงค์ข้อมูลการวิ่งและสถิติส่วนบุคคล</p>
+          <div class="auth-clean-tab-pane active" id="paneLogin">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <h2 style="font-size: 1.35rem; margin: 0 0 6px 0; color: #FFFFFF;">เข้าสู่ระบบสมาชิก</h2>
+              <p style="font-size: 0.88rem; color: #94A3B8; margin: 0;">เข้าสู่ระบบเพื่อจัดการข้อมูลและสถิติการวิ่ง</p>
             </div>
 
             <form onsubmit="handlePageLogin(event)">
-              <div class="form-group">
+              <div class="clean-form-group">
                 <label>อีเมล (Email) *</label>
-                <input type="email" id="pLoginEmail" placeholder="เช่น runner.pro@gmail.com" required value="runner.pro@gmail.com">
+                <input type="email" id="pLoginEmail" class="clean-input" placeholder="example@gmail.com" required value="runner.pro@gmail.com">
               </div>
 
-              <div class="form-group">
+              <div class="clean-form-group">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                   <label style="margin-bottom: 0;">รหัสผ่าน (Password) *</label>
-                  <a href="javascript:void(0)" onclick="showAuthTab('reset')" style="font-size: 0.8rem; color: var(--primary-cyan);">ลืมรหัสผ่าน?</a>
+                  <a href="javascript:void(0)" onclick="showAuthTab('reset')" style="font-size: 0.8rem; color: #38BDF8; text-decoration: none;">ลืมรหัสผ่าน?</a>
                 </div>
                 <div style="position: relative;">
-                  <input type="password" id="pLoginPassword" placeholder="กรอกรหัสผ่าน 6 ตัวขึ้นไป" required value="123456" style="padding-right: 40px;">
-                  <button type="button" onclick="togglePasswordVisibility('pLoginPassword', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-secondary); cursor: pointer;">
+                  <input type="password" id="pLoginPassword" class="clean-input" placeholder="กรอกรหัสผ่าน" required value="123456" style="padding-right: 40px;">
+                  <button type="button" onclick="togglePasswordVisibility('pLoginPassword', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94A3B8; cursor: pointer;">
                     <i class="fa-regular fa-eye"></i>
                   </button>
                 </div>
               </div>
 
-              <div style="text-align: center; margin-top: 16px;">
-                <button type="submit" class="btn btn-primary btn-glow w-100" style="padding: 14px; font-size: 1rem; justify-content: center;">
-                  <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ (Log In with Firebase)
+              <div style="margin-top: 20px;">
+                <button type="submit" class="btn-clean-primary">
+                  <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
                 </button>
               </div>
             </form>
 
-            <div class="auth-divider"><span>หรือเข้าสู่ระบบด้วย</span></div>
+            <div class="clean-auth-divider"><span>หรือเข้าสู่ระบบด้วย</span></div>
 
-            <!-- Google Sign-In -->
+            <!-- Google Sign-In Button -->
             <button type="button" class="google-auth-btn" onclick="handlePageGoogleLogin()">
               <span class="google-btn-icon-box">
                 <svg viewBox="0 0 24 24">
@@ -260,36 +517,36 @@
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                 </svg>
               </span>
-              <span class="google-btn-text">เข้าสู่ระบบด้วย Google Account</span>
+              <span class="google-btn-text">เข้าสู่ระบบด้วย Google</span>
               <span class="google-btn-badge">1-Click</span>
             </button>
 
             <!-- Quick Demo Accounts -->
-            <div class="demo-login-box">
-              <div class="demo-login-title"><i class="fa-solid fa-flask"></i> ทดสอบล็อกอินด่วน (Quick Demo):</div>
-              <div class="demo-pills-row">
-                <button type="button" class="demo-pill-btn" onclick="quickFillPage('runner.pro@gmail.com', '123456')">
+            <div class="clean-demo-box">
+              <div class="clean-demo-title"><i class="fa-solid fa-flask"></i> บัญชีทดสอบด่วน:</div>
+              <div class="clean-demo-pills">
+                <button type="button" class="clean-demo-pill" onclick="quickFillPage('runner.pro@gmail.com', '123456')">
                   🏃 นักวิ่งซ้อมประจำ
                 </button>
-                <button type="button" class="demo-pill-btn" onclick="quickFillPage('vipada.rehab@yahoo.com', '123456')">
+                <button type="button" class="clean-demo-pill" onclick="quickFillPage('vipada.rehab@yahoo.com', '123456')">
                   🩹 ผู้ป่วยกายภาพ
                 </button>
-                <button type="button" class="demo-pill-btn" onclick="quickFillPage('coach.thanapol@speedrun.th', '123456')">
+                <button type="button" class="clean-demo-pill" onclick="quickFillPage('coach.thanapol@speedrun.th', '123456')">
                   🥇 โค้ชวิ่งทีมชาติ
                 </button>
               </div>
             </div>
 
-            <div style="text-align: center; margin-top: 18px; font-size: 0.85rem; color: var(--text-secondary);">
-              ยังไม่มีบัญชีผู้ใช้งาน? <a href="javascript:void(0)" onclick="showAuthTab('register')" style="color: var(--primary-cyan); font-weight: 600;">สมัครสมาชิกที่นี่</a>
+            <div style="text-align: center; margin-top: 18px; font-size: 0.85rem; color: #94A3B8;">
+              ยังไม่มีบัญชีผู้ใช้งาน? <a href="javascript:void(0)" onclick="showAuthTab('register')" style="color: #38BDF8; font-weight: 600; text-decoration: none;">สมัครสมาชิกใหม่</a>
             </div>
           </div>
 
           <!-- TAB 2: REGISTER -->
-          <div class="auth-tab-pane" id="paneRegister">
+          <div class="auth-clean-tab-pane" id="paneRegister">
             <div style="text-align: center; margin-bottom: 18px;">
-              <h2 style="font-size: 1.4rem; margin-bottom: 6px;">สมัครสมาชิก & บันทึกสุขภาพ</h2>
-              <p style="font-size: 0.88rem; color: var(--text-secondary);">สร้างบัญชี Firebase พร้อมบันทึกข้อมูลสรีระเพื่อตั้งค่าเซนเซอร์ 16-Axis IMU</p>
+              <h2 style="font-size: 1.35rem; margin: 0 0 6px 0; color: #FFFFFF;">สมัครสมาชิก</h2>
+              <p style="font-size: 0.88rem; color: #94A3B8; margin: 0;">สร้างบัญชีใหม่เพื่อเริ่มบันทึกข้อมูลการวิ่ง</p>
             </div>
 
             <!-- Quick Google Register -->
@@ -302,158 +559,157 @@
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                 </svg>
               </span>
-              <span class="google-btn-text">สมัครสมาชิกด่วนด้วย Google Account</span>
+              <span class="google-btn-text">สมัครด่วนด้วย Google</span>
               <span class="google-btn-badge">รวดเร็ว</span>
             </button>
 
-            <div class="auth-divider"><span>หรือกรอกแบบฟอร์มสมัครสมาชิก</span></div>
+            <div class="clean-auth-divider"><span>หรือกรอกข้อมูลสมัครสมาชิก</span></div>
 
             <form onsubmit="handlePageRegister(event)">
               <div class="form-row-2">
-                <div class="form-group">
+                <div class="clean-form-group">
                   <label>ชื่อ-นามสกุล *</label>
-                  <input type="text" id="pRegName" placeholder="เช่น กิตติศักดิ์ พัฒนาการ" required value="นักวิ่งมือใหม่ สุขภาพดี">
+                  <input type="text" id="pRegName" class="clean-input" placeholder="เช่น กิตติศักดิ์ พัฒนาการ" required value="นักวิ่งมือใหม่">
                 </div>
-                <div class="form-group">
+                <div class="clean-form-group">
                   <label>อีเมล (Email) *</label>
-                  <input type="email" id="pRegEmail" placeholder="example@gmail.com" required value="newrunner@gmail.com">
+                  <input type="email" id="pRegEmail" class="clean-input" placeholder="example@gmail.com" required value="newrunner@gmail.com">
                 </div>
               </div>
 
               <div class="form-row-2">
-                <div class="form-group">
-                  <label>รหัสผ่าน (Password) *</label>
-                  <input type="password" id="pRegPassword" placeholder="ตั้งรหัสผ่าน 6 ตัวขึ้นไป" required value="123456">
+                <div class="clean-form-group">
+                  <label>รหัสผ่าน *</label>
+                  <input type="password" id="pRegPassword" class="clean-input" placeholder="รหัสผ่าน 6 ตัวขึ้นไป" required value="123456">
                 </div>
-                <div class="form-group">
+                <div class="clean-form-group">
                   <label>ยืนยันรหัสผ่าน *</label>
-                  <input type="password" id="pRegConfirmPassword" placeholder="กรอกรหัสผ่านอีกครั้ง" required value="123456">
+                  <input type="password" id="pRegConfirmPassword" class="clean-input" placeholder="กรอกรหัสผ่านอีกครั้ง" required value="123456">
                 </div>
               </div>
 
               <!-- Biometrics Health Box -->
-              <div class="customer-health-box">
-                <div class="health-box-title">
-                  <i class="fa-solid fa-heart-pulse text-cyan"></i>
-                  <span>ข้อมูลสรีระ (Biometrics) สำหรับบันทึกเข้า Firestore</span>
+              <div class="clean-box-section">
+                <div class="clean-box-title">
+                  <i class="fa-solid fa-heart-pulse"></i>
+                  <span>ข้อมูลสุขภาพ & สรีระ (สำหรับเซนเซอร์)</span>
                 </div>
 
                 <div class="form-row-3">
-                  <div class="form-group">
-                    <label>เพศ (Gender) *</label>
-                    <select id="pRegGender" class="custom-select" style="width: 100%; padding: 10px;">
-                      <option value="ชาย" selected>ชาย (Male)</option>
-                      <option value="หญิง">หญิง (Female)</option>
-                      <option value="อื่นๆ">อื่นๆ / ไม่ระบุ</option>
+                  <div class="clean-form-group">
+                    <label>เพศ *</label>
+                    <select id="pRegGender" class="clean-input">
+                      <option value="ชาย" selected>ชาย</option>
+                      <option value="หญิง">หญิง</option>
+                      <option value="อื่นๆ">อื่นๆ</option>
                     </select>
                   </div>
 
-                  <div class="form-group">
-                    <label>วัน เดือน ปี เกิด *</label>
-                    <input type="date" id="pRegBirthDate" value="1996-06-20" required onchange="autoCalcPageAge(this.value)">
+                  <div class="clean-form-group">
+                    <label>วันเกิด *</label>
+                    <input type="date" id="pRegBirthDate" class="clean-input" value="1996-06-20" required onchange="autoCalcPageAge(this.value)">
                   </div>
 
-                  <div class="form-group">
+                  <div class="clean-form-group">
                     <label>อายุ (ปี) *</label>
-                    <input type="number" id="pRegAge" min="1" max="120" value="30" required placeholder="เช่น 30">
+                    <input type="number" id="pRegAge" class="clean-input" min="1" max="120" value="30" required placeholder="30">
                   </div>
                 </div>
 
                 <div class="form-row-3">
-                  <div class="form-group">
-                    <label>น้ำหนักตัว (กก.) *</label>
-                    <input type="number" step="0.5" id="pRegWeight" value="62.5" required placeholder="เช่น 62.5">
+                  <div class="clean-form-group">
+                    <label>น้ำหนัก (กก.) *</label>
+                    <input type="number" step="0.5" id="pRegWeight" class="clean-input" value="62.5" required placeholder="62.5">
                   </div>
-                  <div class="form-group">
+                  <div class="clean-form-group">
                     <label>ส่วนสูง (ซม.)</label>
-                    <input type="number" id="pRegHeight" value="170" placeholder="เช่น 170">
+                    <input type="number" id="pRegHeight" class="clean-input" value="170" placeholder="170">
                   </div>
-                  <div class="form-group">
+                  <div class="clean-form-group">
                     <label>กลุ่มผู้ใช้งาน</label>
-                    <select id="pRegCustomerType" class="custom-select" style="width: 100%; padding: 10px;">
+                    <select id="pRegCustomerType" class="clean-input">
                       <option value="นักวิ่งซ้อมประจำ">นักวิ่งซ้อมประจำ</option>
-                      <option value="ผู้ป่วยพักฟื้น/กายภาพ">ผู้ป่วยกายภาพ/ฟื้นฟู</option>
+                      <option value="ผู้ป่วยพักฟื้น/กายภาพ">ผู้ป่วยกายภาพ</option>
                       <option value="นักกีฬา">นักกีฬา</option>
                     </select>
                   </div>
                 </div>
               </div>
 
-              <div style="text-align: center; margin-top: 16px;">
-                <button type="submit" class="btn btn-primary btn-glow w-100" style="padding: 14px; font-size: 1rem; justify-content: center;">
-                  <i class="fa-solid fa-user-plus"></i> สมัครสมาชิก & บันทึกเข้า Firebase Firestore
+              <div style="margin-top: 16px;">
+                <button type="submit" class="btn-clean-primary">
+                  <i class="fa-solid fa-user-plus"></i> ยืนยันสมัครสมาชิก
                 </button>
               </div>
             </form>
 
-            <div style="text-align: center; margin-top: 16px; font-size: 0.85rem; color: var(--text-secondary);">
-              มีบัญชีอยู่แล้ว? <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: var(--primary-cyan); font-weight: 600;">เข้าสู่ระบบที่นี่</a>
+            <div style="text-align: center; margin-top: 16px; font-size: 0.85rem; color: #94A3B8;">
+              มีบัญชีอยู่แล้ว? <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: #38BDF8; font-weight: 600; text-decoration: none;">เข้าสู่ระบบที่นี่</a>
             </div>
           </div>
 
           <!-- TAB 3: RESET PASSWORD -->
-          <div class="auth-tab-pane" id="paneReset">
+          <div class="auth-clean-tab-pane" id="paneReset">
             <div style="text-align: center; margin-bottom: 20px;">
-              <h2 style="font-size: 1.4rem; margin-bottom: 6px;">รีเซ็ตรหัสผ่าน</h2>
-              <p style="font-size: 0.88rem; color: var(--text-secondary);">กรอกอีเมลของคุณเพื่อรับลิงก์ตั้งรหัสผ่านใหม่ผ่าน Firebase</p>
+              <h2 style="font-size: 1.35rem; margin: 0 0 6px 0; color: #FFFFFF;">รีเซ็ตรหัสผ่าน</h2>
+              <p style="font-size: 0.88rem; color: #94A3B8; margin: 0;">กรอกอีเมลเพื่อรับลิงก์ตั้งรหัสผ่านใหม่</p>
             </div>
 
             <form onsubmit="handlePageResetPassword(event)">
-              <div class="form-group">
+              <div class="clean-form-group">
                 <label>อีเมลที่ลงทะเบียนไว้ *</label>
-                <input type="email" id="pResetEmail" placeholder="example@gmail.com" required value="runner.pro@gmail.com">
+                <input type="email" id="pResetEmail" class="clean-input" placeholder="example@gmail.com" required value="runner.pro@gmail.com">
               </div>
 
-              <div style="text-align: center; margin-top: 16px;">
-                <button type="submit" class="btn btn-primary w-100" style="padding: 14px; font-size: 1rem; justify-content: center;">
-                  <i class="fa-solid fa-paper-plane"></i> ส่งลิงก์รีเซ็ตรหัสผ่าน (Firebase)
+              <div style="margin-top: 16px;">
+                <button type="submit" class="btn-clean-primary">
+                  <i class="fa-solid fa-paper-plane"></i> ส่งลิงก์รีเซ็ตรหัสผ่าน
                 </button>
               </div>
             </form>
 
             <div style="text-align: center; margin-top: 18px; font-size: 0.85rem;">
-              <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: var(--text-secondary);"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเข้าสู่ระบบ</a>
+              <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: #94A3B8; text-decoration: none;"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเข้าสู่ระบบ</a>
             </div>
           </div>
         </div>
 
         <!-- VIEW 2: LOGGED IN (USER PROFILE & LOGOUT VIEW) -->
-        <div id="authLoggedInView" class="logged-in-card" style="display: none;">
-          <div class="profile-hero-avatar" id="pageUserAvatar">KP</div>
-          <div class="user-badge-status">
-            <i class="fa-solid fa-circle-check"></i> เข้าสู่ระบบ Firebase สำเร็จ
+        <div id="authLoggedInView" class="clean-logged-in-box" style="display: none;">
+          <div class="clean-avatar" id="pageUserAvatar">KP</div>
+          <div class="fb-badge connected" style="margin-bottom: 12px;">
+            <i class="fa-solid fa-circle-check"></i> เข้าสู่ระบบเรียบร้อย
           </div>
           
-          <h2 class="user-profile-title" id="pageUserName">คุณกิตติศักดิ์ พัฒนาการ</h2>
-          <p class="user-profile-email" id="pageUserEmail">runner.pro@gmail.com</p>
+          <h2 class="clean-user-title" id="pageUserName">คุณกิตติศักดิ์ พัฒนาการ</h2>
+          <p class="clean-user-email" id="pageUserEmail">runner.pro@gmail.com</p>
 
           <!-- User Biometrics Summary -->
-          <div class="biometrics-summary-grid">
-            <div class="bio-stat-item">
+          <div class="clean-biometrics-grid">
+            <div class="clean-bio-item">
               <strong id="pageUserGender">ชาย</strong>
               <span>เพศ</span>
             </div>
-            <div class="bio-stat-item">
-              <strong id="pageUserAge">32</strong>
+            <div class="clean-bio-item">
+              <strong id="pageUserAge">30</strong>
               <span>อายุ (ปี)</span>
             </div>
-            <div class="bio-stat-item">
-              <strong id="pageUserWeight">68.5 kg</strong>
-              <span>น้ำหนัก</span>
+            <div class="clean-bio-item">
+              <strong id="pageUserWeight">65.0</strong>
+              <span>น้ำหนัก (กก.)</span>
             </div>
-            <div class="bio-stat-item">
+            <div class="clean-bio-item">
               <strong id="pageUserType">นักวิ่ง</strong>
-              <span>ประเภท</span>
+              <span>กลุ่มผู้ใช้</span>
             </div>
           </div>
 
-          <!-- Actions -->
-          <div class="auth-actions-group">
-            <a href="index.html" class="btn btn-primary btn-glow">
-              <i class="fa-solid fa-shoe-prints"></i> ไปที่หน้าร้าน / สั่งซื้อสินค้า
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="index.html" class="btn-clean-primary" style="width: auto; text-decoration: none; padding: 10px 22px;">
+              <i class="fa-solid fa-chart-line"></i> ไปยัง Dashboard
             </a>
-            <button class="btn-logout" onclick="handlePageLogout()">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ (Log Out)
+            <button type="button" class="btn-clean-logout" onclick="handlePageLogout()">
+              <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
             </button>
           </div>
         </div>
@@ -463,42 +719,48 @@
   </div>
 
   <!-- Toast Notification Container -->
-  <div class="toast-container" id="toastContainer"></div>
+  <div id="toastContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px;"></div>
 
-  <!-- Scripts -->
   <script src="firebase-service.js"></script>
+
   <script>
-    // Page Auth Handler Scripts
     document.addEventListener("DOMContentLoaded", () => {
       checkPageAuthState();
     });
 
     function checkPageAuthState() {
-      const user = currentUserProfile || JSON.parse(localStorage.getItem("kinetipod_current_user") || "null");
+      const user = currentUserProfile;
       const guestView = document.getElementById("authGuestView");
       const loggedInView = document.getElementById("authLoggedInView");
 
-      if (user) {
-        guestView.style.display = "none";
-        loggedInView.style.display = "block";
+      if (user && user.email) {
+        if (guestView) guestView.style.display = "none";
+        if (loggedInView) loggedInView.style.display = "block";
 
-        const initials = (user.name || "U").slice(0, 2).toUpperCase();
-        document.getElementById("pageUserAvatar").innerText = initials;
-        document.getElementById("pageUserName").innerText = user.name || "ผู้ใช้งาน";
-        document.getElementById("pageUserEmail").innerText = user.email || "-";
-        document.getElementById("pageUserGender").innerText = user.gender || "ชาย";
-        document.getElementById("pageUserAge").innerText = (user.age || "30") + " ปี";
-        document.getElementById("pageUserWeight").innerText = (user.weight || "65") + " kg";
-        document.getElementById("pageUserType").innerText = user.customerType || "นักวิ่ง";
+        const nameEl = document.getElementById("pageUserName");
+        const emailEl = document.getElementById("pageUserEmail");
+        const avatarEl = document.getElementById("pageUserAvatar");
+        const genderEl = document.getElementById("pageUserGender");
+        const ageEl = document.getElementById("pageUserAge");
+        const weightEl = document.getElementById("pageUserWeight");
+        const typeEl = document.getElementById("pageUserType");
+
+        if (nameEl) nameEl.textContent = user.name || "ผู้ใช้งาน KINETIPOD";
+        if (emailEl) emailEl.textContent = user.email;
+        if (avatarEl) avatarEl.textContent = (user.name || user.email).slice(0, 2).toUpperCase();
+        if (genderEl) genderEl.textContent = user.gender || "ชาย";
+        if (ageEl) ageEl.textContent = user.age || "30";
+        if (weightEl) weightEl.textContent = (user.weight || 65).toFixed(1);
+        if (typeEl) typeEl.textContent = user.customerType || "นักวิ่ง";
       } else {
-        guestView.style.display = "block";
-        loggedInView.style.display = "none";
+        if (guestView) guestView.style.display = "block";
+        if (loggedInView) loggedInView.style.display = "none";
       }
     }
 
     function showAuthTab(tab) {
-      document.querySelectorAll(".auth-tab-pane").forEach(p => p.classList.remove("active"));
-      document.querySelectorAll(".auth-tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".auth-clean-tab-pane").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".auth-clean-tab-btn").forEach(b => b.classList.remove("active"));
 
       if (tab === "login") {
         document.getElementById("paneLogin").classList.add("active");
@@ -533,7 +795,7 @@
     function quickFillPage(email, password) {
       document.getElementById("pLoginEmail").value = email;
       document.getElementById("pLoginPassword").value = password;
-      showToast("กรอกบัญชีทดสอบเรียบร้อย กดเข้าสู่ระบบได้ทันที", "info");
+      showToast("กรอกข้อมูลตัวอย่างเรียบร้อย กดเข้าสู่ระบบได้ทันที", "info");
     }
 
     async function handlePageLogin(event) {
@@ -552,6 +814,7 @@
       }
     }
 
+    // เมื่อกดสมัครสมาชิก -> บันทึกเข้า Firebase -> ย้อนกลับมาที่หน้า Login ทันที
     async function handlePageRegister(event) {
       event.preventDefault();
       const name = document.getElementById("pRegName").value.trim();
@@ -560,7 +823,7 @@
       const confirmPassword = document.getElementById("pRegConfirmPassword").value;
 
       if (password !== confirmPassword) {
-        alert("รหัสผ่านไม่ตรงกัน!");
+        alert("รหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง");
         return;
       }
 
@@ -568,8 +831,8 @@
         name,
         gender: document.getElementById("pRegGender").value,
         birthDate: document.getElementById("pRegBirthDate").value,
-        age: parseInt(document.getElementById("pRegAge").value, 10),
-        weight: parseFloat(document.getElementById("pRegWeight").value),
+        age: parseInt(document.getElementById("pRegAge").value, 10) || 25,
+        weight: parseFloat(document.getElementById("pRegWeight").value) || 60,
         height: parseFloat(document.getElementById("pRegHeight").value) || 170,
         customerType: document.getElementById("pRegCustomerType").value
       };
@@ -577,8 +840,24 @@
       try {
         if (typeof firebaseSignUp === "function") {
           const user = await firebaseSignUp(email, password, profileData);
-          showToast(`🎉 สมัครสมาชิกและบันทึกข้อมูลสุขภาพคุณ ${user.name} เข้า Firebase สำเร็จ!`, "success");
-          setTimeout(() => checkPageAuthState(), 400);
+          
+          // ออกจากระบบอัตโนมัติ เพื่อให้ผู้ใช้กลับมาล็อกอินที่หน้า Login ตามที่ต้องการ
+          if (typeof firebaseSignOut === "function") {
+            await firebaseSignOut();
+          }
+
+          // นำอีเมลที่เพิ่งสมัครมากรอกในช่อง Login ให้โดยอัตโนมัติ
+          const loginEmail = document.getElementById("pLoginEmail");
+          const loginPass = document.getElementById("pLoginPassword");
+          if (loginEmail) loginEmail.value = email;
+          if (loginPass) {
+            loginPass.value = "";
+            setTimeout(() => loginPass.focus(), 250);
+          }
+
+          // สลับกลับมาที่แท็บ เข้าสู่ระบบ (Login) ทันที
+          showAuthTab("login");
+          showToast(`🎉 สมัครสมาชิกคุณ ${name} สำเร็จ! กรุณากรอกรหัสผ่านเพื่อเข้าสู่ระบบ`, "success");
         }
       } catch (error) {
         alert("สมัครสมาชิกไม่สำเร็จ: " + (error.message || "เกิดข้อผิดพลาด"));
@@ -612,7 +891,7 @@
     async function handlePageLogout() {
       if (typeof firebaseSignOut === "function") {
         await firebaseSignOut();
-        showToast("🚪 ออกจากระบบ Firebase เรียบร้อยแล้ว", "info");
+        showToast("🚪 ออกจากระบบเรียบร้อยแล้ว", "info");
         setTimeout(() => checkPageAuthState(), 300);
       }
     }
@@ -621,8 +900,20 @@
       const container = document.getElementById("toastContainer");
       if (!container) return;
       const toast = document.createElement("div");
-      toast.className = `toast toast-${type}`;
-      toast.innerHTML = `<i class="fa-solid fa-circle-info text-cyan"></i> <span>${message}</span>`;
+      toast.style.background = "#1E293B";
+      toast.style.color = "#F8FAFC";
+      toast.style.border = "1px solid #334155";
+      toast.style.borderRadius = "8px";
+      toast.style.padding = "12px 18px";
+      toast.style.boxShadow = "0 8px 20px rgba(0,0,0,0.4)";
+      toast.style.fontSize = "0.9rem";
+      toast.style.display = "flex";
+      toast.style.alignItems = "center";
+      toast.style.gap = "8px";
+      toast.style.animation = "fadeIn 0.2s ease";
+      
+      const icon = type === "success" ? "fa-circle-check text-green" : "fa-circle-info text-blue";
+      toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
       container.appendChild(toast);
       setTimeout(() => toast.remove(), 3500);
     }
