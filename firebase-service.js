@@ -253,7 +253,7 @@ function ensureGoogleOAuthDOM() {
             </div>
 
             <h1 class="google-signin-header-title">ลงชื่อเข้าใช้</h1>
-            <p class="google-signin-subdesc">ด้วยบัญชี Google ของคุณ บัญชีนี้จะพร้อมใช้งานกับแอปอื่นๆ ของ Google ในเบราว์เซอร์</p>
+            <p class="google-signin-subdesc">ด้วยบัญชี Google เพื่อไปยัง Gmail บัญชีนี้จะพร้อมใช้งานกับแอปอื่นๆ ของ Google ในเบราว์เซอร์</p>
           </div>
 
           <!-- Right Column -->
