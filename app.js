@@ -1251,130 +1251,226 @@ function resetWizard() {
 }
 
 // ==========================================
-// 11. QUICK VIEW & PRODUCT MODAL (ON-SHOE & POD DUAL VIEW)
+// 11. SHOPEE-STYLE PRODUCT DETAIL & RECOMMENDATION ENGINE
 // ==========================================
+
+let modalSelectedQty = 1;
 
 function openProductQuickView(productId, activeView = "shoe") {
   const prod = PRODUCTS_DATA.find(p => p.id === productId);
   if (!prod) return;
 
+  modalSelectedQty = 1;
   const discountPercent = Math.round(((prod.originalPrice - prod.price) / prod.originalPrice) * 100);
   const currentImg = (activeView === "shoe") ? (prod.shoeImage || prod.image) : prod.image;
   const isShoe = (activeView === "shoe");
 
   const content = document.getElementById("productModalContent");
   content.innerHTML = `
-    <!-- Left Column: Visual Display & Switcher -->
-    <div class="modal-visual-col">
-      <!-- View Switcher Tabs -->
-      <div class="modal-view-switcher">
-        <button class="modal-switch-btn ${isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'shoe')">
-          <i class="fa-solid fa-shoe-prints"></i> ติดตั้งบนรองเท้า (On-Shoe)
-        </button>
-        <button class="modal-switch-btn ${!isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'pod')">
-          <i class="fa-solid fa-microchip"></i> ตัวเครื่องเซนเซอร์ (Pod Device)
-        </button>
-      </div>
-
-      <!-- Main Visual Frame -->
-      <div class="modal-img-container">
-        <img src="${currentImg}" alt="${prod.name}" class="modal-prod-image">
-        
-        <!-- Interactive Badge Overlay -->
-        ${isShoe ? `
-          <div class="modal-img-badge on-shoe">
-            <span class="live-dot pulse-anim"></span>
-            <span><i class="fa-solid fa-bolt text-amber"></i> แสดงมุมมอง Foot Pod ติดบนรองเท้าจริง</span>
-          </div>
-          <div class="modal-shoe-hud">
-            <div class="hud-pill"><i class="fa-solid fa-shield-check text-green"></i> Dual-Lock Clip แน่นหนา</div>
-            <div class="hud-pill"><i class="fa-solid fa-wifi text-cyan"></i> Live 100Hz IMU</div>
-            <div class="hud-pill"><i class="fa-solid fa-water text-cyan"></i> IP68 กันน้ำ 100%</div>
-          </div>
-        ` : `
-          <div class="modal-img-badge pod-view">
-            <i class="fa-solid fa-microchip text-cyan"></i>
-            <span>ฮาร์ดแวร์ Foot Pod Sensor น้ำหนักเบาพิเศษ</span>
-          </div>
-        `}
-      </div>
-
-      <!-- Thumbnail Switchers -->
-      <div class="modal-thumbs-row">
-        <div class="modal-thumb-box ${isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'shoe')">
-          <img src="${prod.shoeImage || prod.image}" alt="On Shoe View">
-          <span>มุมมองติดบนรองเท้า</span>
+    <!-- Top Shopee Official Shop Bar -->
+    <div class="shopee-store-topbar">
+      <div class="shopee-store-info">
+        <div class="store-avatar-circle">
+          <i class="fa-solid fa-shoe-prints"></i>
         </div>
-        <div class="modal-thumb-box ${!isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'pod')">
-          <img src="${prod.image}" alt="Pod View">
-          <span>มุมมองตัวเครื่อง Foot Pod</span>
+        <div>
+          <div class="store-name-line">
+            <strong>KINETIPOD™ Official Store</strong>
+            <span class="mall-badge">Mall</span>
+            <span class="verified-badge"><i class="fa-solid fa-circle-check"></i> ร้านค้าทางการ</span>
+          </div>
+          <div class="store-meta-line">
+            <span class="online-tag"><span class="dot-green"></span> ออนไลน์</span>
+            <span class="sep">|</span>
+            <span>คะแนนร้านค้า 4.9/5</span>
+            <span class="sep">|</span>
+            <span>อัตราการตอบกลับ 99%</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-chat-seller" onclick="openAdminChat(${prod.id})">
+        <i class="fa-regular fa-comment-dots text-coral"></i> แชทกับร้านค้า / ติดต่อ Admin
+      </button>
+    </div>
+
+    <!-- Main 2-Column Product Layout -->
+    <div class="modal-body-grid">
+      <!-- Left Column: Visual Display & Switcher -->
+      <div class="modal-visual-col">
+        <!-- View Switcher Tabs -->
+        <div class="modal-view-switcher">
+          <button class="modal-switch-btn ${isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'shoe')">
+            <i class="fa-solid fa-shoe-prints"></i> มุมมองติดบนรองเท้า (On-Shoe)
+          </button>
+          <button class="modal-switch-btn ${!isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'pod')">
+            <i class="fa-solid fa-microchip"></i> ตัวเครื่องเซนเซอร์ (Pod Device)
+          </button>
+        </div>
+
+        <!-- Main Visual Frame -->
+        <div class="modal-img-container">
+          <img src="${currentImg}" alt="${prod.name}" class="modal-prod-image">
+          
+          <!-- Interactive Badge Overlay -->
+          ${isShoe ? `
+            <div class="modal-img-badge on-shoe">
+              <span class="live-dot pulse-anim"></span>
+              <span><i class="fa-solid fa-bolt text-amber"></i> มุมมอง Foot Pod ติดตั้งบนรองเท้าจริง</span>
+            </div>
+            <div class="modal-shoe-hud">
+              <div class="hud-pill"><i class="fa-solid fa-shield-check text-green"></i> Dual-Lock Clip แน่นหนา</div>
+              <div class="hud-pill"><i class="fa-solid fa-wifi text-cyan"></i> Live 100Hz IMU</div>
+              <div class="hud-pill"><i class="fa-solid fa-water text-cyan"></i> IP68 กันน้ำ 100%</div>
+            </div>
+          ` : `
+            <div class="modal-img-badge pod-view">
+              <i class="fa-solid fa-microchip text-cyan"></i>
+              <span>ฮาร์ดแวร์ Foot Pod Sensor น้ำหนักเบาพิเศษ</span>
+            </div>
+          `}
+        </div>
+
+        <!-- Thumbnail Switchers -->
+        <div class="modal-thumbs-row">
+          <div class="modal-thumb-box ${isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'shoe')">
+            <img src="${prod.shoeImage || prod.image}" alt="On Shoe View">
+            <span>มุมมองติดบนรองเท้า</span>
+          </div>
+          <div class="modal-thumb-box ${!isShoe ? 'active' : ''}" onclick="openProductQuickView(${prod.id}, 'pod')">
+            <img src="${prod.image}" alt="Pod View">
+            <span>มุมมองตัวเครื่อง Foot Pod</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Info, Specs & Actions -->
+      <div class="modal-prod-info">
+        <div class="modal-badge-row">
+          <span class="prod-category">${prod.categoryLabel}</span>
+          ${prod.badges.includes("bestseller") ? '<span class="badge-tag bestseller"><i class="fa-solid fa-fire"></i> ขายดีอันดับ 1</span>' : ''}
+          ${prod.badges.includes("medical") ? '<span class="badge-tag medical"><i class="fa-solid fa-certificate"></i> เกรดการแพทย์</span>' : ''}
+          <span class="badge-tag runner"><i class="fa-solid fa-truck-fast"></i> จัดส่งฟรี</span>
+        </div>
+
+        <h2 class="modal-title">${prod.name}</h2>
+        
+        <div class="prod-rating-row">
+          <span class="prod-stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+          </span>
+          <span class="prod-rating-num">${prod.rating}</span>
+          <span class="sep">|</span>
+          <span class="prod-sold-count"><strong>${prod.reviewsCount}</strong> รีวิว</span>
+          <span class="sep">|</span>
+          <span class="prod-sold-count"><strong>${prod.soldCount}</strong> ขายแล้ว</span>
+        </div>
+
+        <!-- Shopee Price Highlight Box -->
+        <div class="shopee-price-card">
+          <div class="price-left">
+            <span class="shopee-current-price">฿${prod.price.toLocaleString()}</span>
+            <span class="shopee-original-price">฿${prod.originalPrice.toLocaleString()}</span>
+            ${discountPercent > 0 ? `<span class="shopee-discount-tag">ลด ${discountPercent}%</span>` : ''}
+          </div>
+          <div class="voucher-promo-hint">
+            <i class="fa-solid fa-ticket text-coral"></i>
+            <span>โค้ดลดเพิ่มสูงสุด ฿500</span>
+          </div>
+        </div>
+
+        <div class="modal-highlight-note">
+          <i class="fa-solid fa-circle-check text-cyan"></i>
+          <span><strong>ความเข้ากันได้ 100%:</strong> ออกแบบให้ติดกับเชือกรองเท้าหรือส้นรองเท้าวิ่งได้ทุกแบรนด์ (Nike, Adidas, Hoka, Asics ฯลฯ) หนีบแน่นไม่หลุด</span>
+        </div>
+
+        <p class="modal-desc">${prod.desc}</p>
+
+        <!-- Technical Specs Summary -->
+        <h4 class="specs-sec-title">
+          <i class="fa-solid fa-sliders text-cyan"></i> ข้อมูลสเปกทางเทคนิค (Specifications):
+        </h4>
+        <div class="modal-specs-list">
+          ${prod.specs.map(s => `
+            <div class="modal-spec-item">
+              <span>${s.label}:</span>
+              <strong>${s.val}</strong>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Shopee Quantity Selector -->
+        <div class="shopee-quantity-picker-row">
+          <span class="qty-picker-label">จำนวน:</span>
+          <div class="shopee-qty-ctrl">
+            <button class="shopee-qty-btn" onclick="changeModalQty(-1)">-</button>
+            <input type="text" id="modalQtyInput" value="1" readonly>
+            <button class="shopee-qty-btn" onclick="changeModalQty(1)">+</button>
+          </div>
+          <span class="stock-available-text"><i class="fa-solid fa-boxes-stacked"></i> มีสินค้าพร้อมส่ง (ศูนย์ไทย)</span>
+        </div>
+
+        <!-- Shopee Bottom Action Buttons Bar -->
+        <div class="shopee-modal-actions">
+          <button class="btn-shopee-chat" onclick="openAdminChat(${prod.id})" title="แชทกับ Admin">
+            <i class="fa-regular fa-comments"></i>
+            <span>แชทกับร้านค้า</span>
+          </button>
+          <button class="btn-shopee-addcart" onclick="addToCartWithModalQty(${prod.id})">
+            <i class="fa-solid fa-cart-plus"></i>
+            <span>เพิ่มไปยังรถเข็น</span>
+          </button>
+          <button class="btn-shopee-buynow" onclick="buyNowWithModalQty(${prod.id})">
+            <i class="fa-solid fa-bolt"></i>
+            <span>ซื้อสินค้า</span>
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- Right Column: Info, Specs & Actions -->
-    <div class="modal-prod-info">
-      <div class="modal-badge-row">
-        <span class="prod-category">${prod.categoryLabel}</span>
-        ${prod.badges.includes("bestseller") ? '<span class="badge-tag bestseller"><i class="fa-solid fa-fire"></i> ขายดีอันดับ 1</span>' : ''}
-        ${prod.badges.includes("medical") ? '<span class="badge-tag medical"><i class="fa-solid fa-certificate"></i> เกรดการแพทย์</span>' : ''}
-      </div>
-
-      <h2 class="modal-title">${prod.name}</h2>
-      
-      <div class="prod-rating-row">
-        <span class="prod-stars">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-        </span>
-        <span class="prod-rating-num">${prod.rating}</span>
-        <span class="prod-sold-count">(${prod.reviewsCount} รีวิว | ${prod.soldCount} ยอดขาย)</span>
-      </div>
-
-      <div class="modal-price-card">
-        <div class="rec-price-row" style="margin-bottom: 0;">
-          <span class="rec-price-main">฿${prod.price.toLocaleString()}</span>
-          <span class="rec-price-old">฿${prod.originalPrice.toLocaleString()}</span>
-          ${discountPercent > 0 ? `<span class="badge-tag discount">ลดพิเศษ ${discountPercent}%</span>` : ''}
+    <!-- Shopee-Style Recommended Products Slider Section -->
+    <div class="shopee-recommend-section">
+      <div class="shopee-rec-header">
+        <div class="rec-header-title">
+          <i class="fa-solid fa-sparkles text-coral"></i>
+          <strong>สินค้าที่คุณอาจจะชอบ (Shopee Recommend)</strong>
+          <span class="rec-sub">เลื่อนดูอุปกรณ์รุ่นอื่นที่น่าสนใจ</span>
         </div>
-        <div class="modal-stock-status">
-          <i class="fa-solid fa-circle-check text-green"></i> มีสินค้าพร้อมส่ง (ศูนย์ไทย จัดส่งใน 24 ชม.)
+        <div class="rec-arrows-nav">
+          <button class="rec-arrow-btn" onclick="slideRecCarousel('left')" title="เลื่อนซ้าย"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="rec-arrow-btn" onclick="slideRecCarousel('right')" title="เลื่อนขวา"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
       </div>
 
-      <div class="modal-highlight-note">
-        <i class="fa-solid fa-circle-check text-cyan"></i>
-        <span><strong>ความเข้ากันได้ 100%:</strong> ออกแบบให้ติดกับเชือกรองเท้าหรือส้นรองเท้าวิ่งได้ทุกแบรนด์ (Nike, Adidas, Hoka, Asics, ฯลฯ) ไม่หลุดขณะวิ่ง</span>
-      </div>
-
-      <p class="modal-desc">${prod.desc}</p>
-
-      <h4 class="specs-sec-title">
-        <i class="fa-solid fa-sliders text-cyan"></i> ข้อมูลสเปกทางเทคนิค (Technical Specifications):
-      </h4>
-      <div class="modal-specs-list">
-        ${prod.specs.map(s => `
-          <div class="modal-spec-item">
-            <span>${s.label}:</span>
-            <strong>${s.val}</strong>
-          </div>
-        `).join('')}
-      </div>
-
-      <!-- Main Action Buttons -->
-      <div class="modal-action-buttons">
-        <button class="btn btn-primary btn-glow btn-modal-buy" onclick="directBuyNow(${prod.id})">
-          <i class="fa-solid fa-bolt"></i> สั่งซื้อทันที / ชำระเงิน
-        </button>
-        <button class="btn btn-outline btn-modal-cart" onclick="addToCart(${prod.id}); closeProductModal();">
-          <i class="fa-solid fa-cart-plus"></i> เพิ่มลงตะกร้า
-        </button>
-        <button class="btn btn-glass icon-btn-compare" title="เปรียบเทียบสเปก" onclick="toggleCompare(${prod.id}); closeProductModal();">
-          <i class="fa-solid fa-code-compare"></i>
-        </button>
+      <div class="shopee-rec-slider-track" id="shopeeRecSlider">
+        ${PRODUCTS_DATA.filter(p => p.id !== prod.id).map(p => {
+          const discountPct = Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100);
+          return `
+            <div class="shopee-rec-card" onclick="openProductQuickView(${p.id})">
+              <div class="shopee-rec-img-wrap">
+                <img src="${p.image}" alt="${p.name}" loading="lazy">
+                ${discountPct > 0 ? `<span class="rec-discount-pill">ลด ${discountPct}%</span>` : ''}
+              </div>
+              <div class="shopee-rec-card-body">
+                <h5 class="shopee-rec-card-title">${p.name}</h5>
+                <div class="shopee-rec-prices">
+                  <span class="shopee-rec-price">฿${p.price.toLocaleString()}</span>
+                  <span class="shopee-rec-old">฿${p.originalPrice.toLocaleString()}</span>
+                </div>
+                <div class="shopee-rec-meta">
+                  <span class="rec-rating"><i class="fa-solid fa-star text-amber"></i> ${p.rating}</span>
+                  <span class="rec-sold">ขายแล้ว ${p.soldCount}</span>
+                </div>
+                <button class="btn-rec-quick-add" onclick="event.stopPropagation(); addToCart(${p.id});" title="เพิ่มลงตะกร้า">
+                  <i class="fa-solid fa-cart-plus"></i> ลงตะกร้า
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('')}
       </div>
     </div>
   `;
@@ -1383,13 +1479,26 @@ function openProductQuickView(productId, activeView = "shoe") {
   document.body.style.overflow = "hidden";
 }
 
-function directBuyNow(productId) {
+function changeModalQty(delta) {
+  modalSelectedQty += delta;
+  if (modalSelectedQty < 1) modalSelectedQty = 1;
+  if (modalSelectedQty > 99) modalSelectedQty = 99;
+  const input = document.getElementById("modalQtyInput");
+  if (input) input.value = modalSelectedQty;
+}
+
+function addToCartWithModalQty(productId) {
+  addToCart(productId, modalSelectedQty);
+  closeProductModal();
+}
+
+function buyNowWithModalQty(productId) {
   const prod = PRODUCTS_DATA.find(p => p.id === productId);
   if (!prod) return;
 
   const existing = cart.find(item => item.id === productId);
   if (existing) {
-    existing.qty += 1;
+    existing.qty += modalSelectedQty;
   } else {
     cart.push({
       id: prod.id,
@@ -1397,7 +1506,7 @@ function directBuyNow(productId) {
       price: prod.price,
       originalPrice: prod.originalPrice,
       image: prod.image,
-      qty: 1
+      qty: modalSelectedQty
     });
   }
 
@@ -1405,12 +1514,146 @@ function directBuyNow(productId) {
   updateCartUI();
   closeProductModal();
   openCheckoutModal();
-  showToast(`เพิ่ม "${prod.name}" และเปิดหน้าชำระเงินเรียบร้อยแล้ว`, "success");
+  showToast(`เพิ่ม "${prod.name}" จำนวน ${modalSelectedQty} ชิ้น และเปิดหน้าชำระเงินเรียบร้อยแล้ว`, "success");
+}
+
+function slideRecCarousel(direction) {
+  const slider = document.getElementById("shopeeRecSlider");
+  if (!slider) return;
+  const scrollAmount = 300;
+  if (direction === "left") {
+    slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+  } else {
+    slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  }
+}
+
+function directBuyNow(productId) {
+  buyNowWithModalQty(productId);
 }
 
 function closeProductModal() {
   document.getElementById("productModalOverlay").classList.remove("active");
   document.body.style.overflow = "";
+}
+
+// ==========================================
+// 12. SHOPEE-STYLE ADMIN LIVE CHAT SYSTEM
+// ==========================================
+
+let currentChatProduct = null;
+let chatMessages = [];
+
+function openAdminChat(productId = null) {
+  if (productId) {
+    currentChatProduct = PRODUCTS_DATA.find(p => p.id === productId);
+  }
+  
+  const pinnedBox = document.getElementById("chatPinnedProduct");
+  if (pinnedBox) {
+    if (currentChatProduct) {
+      pinnedBox.style.display = "flex";
+      pinnedBox.innerHTML = `
+        <img src="${currentChatProduct.image}" alt="${currentChatProduct.name}">
+        <div class="pinned-info">
+          <strong class="pinned-title">${currentChatProduct.name}</strong>
+          <div class="pinned-price">฿${currentChatProduct.price.toLocaleString()} <del>฿${currentChatProduct.originalPrice.toLocaleString()}</del></div>
+        </div>
+        <button class="btn btn-sm btn-primary" onclick="sendProductLinkToAdmin(${currentChatProduct.id})">
+          <i class="fa-solid fa-paper-plane"></i> ส่งลิงก์สินค้านี้
+        </button>
+      `;
+    } else {
+      pinnedBox.style.display = "none";
+    }
+  }
+
+  if (chatMessages.length === 0) {
+    chatMessages.push({
+      sender: "admin",
+      text: "สวัสดีครับ! KINETIPOD™ Official Store ยินดีให้บริการครับ สนใจสอบถามสเปกอุปกรณ์ Foot Pod หรือโปรโมชั่นตัวไหน สอบถามแอดมินได้ตลอดเวลาเลยครับ 😊",
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    });
+  }
+
+  renderAdminChatMessages();
+  document.getElementById("adminChatModalOverlay").classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closeAdminChat() {
+  document.getElementById("adminChatModalOverlay").classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+function renderAdminChatMessages() {
+  const container = document.getElementById("chatMessagesContainer");
+  if (!container) return;
+  container.innerHTML = chatMessages.map(msg => `
+    <div class="chat-bubble-row ${msg.sender}">
+      ${msg.sender === "admin" ? '<div class="chat-avatar-admin"><i class="fa-solid fa-store"></i></div>' : ''}
+      <div class="chat-bubble-content">
+        <div class="chat-bubble ${msg.sender}">${msg.text}</div>
+        <span class="chat-time">${msg.time}</span>
+      </div>
+    </div>
+  `).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendAdminChatMessage(customText = null) {
+  const input = document.getElementById("adminChatInput");
+  const text = customText || (input ? input.value.trim() : "");
+  if (!text) return;
+
+  const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  chatMessages.push({
+    sender: "user",
+    text: text,
+    time: nowTime
+  });
+
+  if (input) input.value = "";
+  renderAdminChatMessages();
+
+  // Simulated smart response from admin
+  setTimeout(() => {
+    generateAdminReply(text);
+  }, 600);
+}
+
+function sendQuickAdminQuestion(qText) {
+  sendAdminChatMessage(qText);
+}
+
+function sendProductLinkToAdmin(productId) {
+  const prod = PRODUCTS_DATA.find(p => p.id === productId);
+  if (!prod) return;
+  sendAdminChatMessage(`สนใจสอบถามข้อมูลสินค้าตัวนี้ครับ: ${prod.name} (ราคา ฿${prod.price.toLocaleString()})`);
+}
+
+function generateAdminReply(userText) {
+  let reply = "ขอบพระคุณสำหรับข้อความครับ ทีมงานแอดมินพร้อมให้คำแนะนำและช่วยเหลือครับ!";
+  const lower = userText.toLowerCase();
+
+  if (lower.includes("พร้อมส่ง") || lower.includes("ของมีไหม") || lower.includes("สต็อก")) {
+    reply = "สินค้าทุกรายการมีของพร้อมส่งจากคลังศูนย์ไทยทันทีครับ! สั่งซื้อวันนี้ก่อน 15:00 น. จัดส่งออกให้รอบเย็นวันนี้เลยครับ 📦⚡";
+  } else if (lower.includes("รองเท้า") || lower.includes("รุ่น") || lower.includes("ใส่กับ")) {
+    reply = "ตัวเซนเซอร์ Foot Pod ของ KINETIPOD ใช้ระบบ Dual-Lock Clip หนีบได้กับรองเท้าวิ่งทุกรุ่นและทุกแบรนด์ครับ (เช่น Nike, Adidas, Hoka, Asics, Saucony ฯลฯ) น้ำหนักเบาเพียง 12g ไม่หลุดขณะวิ่งแน่นอนครับ 👟";
+  } else if (lower.includes("เก็บเงินปลายทาง") || lower.includes("cod") || lower.includes("ปลายทาง")) {
+    reply = "มีบริการเก็บเงินปลายทาง (COD) ฟรีค่าธรรมเนียมครับ! สามารถเลือกชำระแบบเก็บปลายทางในหน้าชำระเงิน และสามารถเปิดเช็คสินค้าก่อนชำระเงินกับพนักงานได้เลยครับ 💰";
+  } else if (lower.includes("ส่วนลด") || lower.includes("โค้ด") || lower.includes("โปร")) {
+    reply = "ตอนนี้มีโค้ดส่วนลดพิเศษ 'KINETI500' ลดทันที ฿500 (เมื่อสั่งซื้อ ฿2,500 ขึ้นไป) และโค้ด 'PHYSIOCARE' ลด 15% สามารถกดรับหรือกรอกในตะกร้าได้เลยครับ! 🎁";
+  } else if (lower.includes("ประกัน") || lower.includes("เคลม")) {
+    reply = "สินค้าของ KINETIPOD รับประกันศูนย์ไทย 2 ปีเต็มครับ หากมีปัญหาจากการผลิต เปลี่ยนเครื่องใหม่ให้ทันทีใน 30 วันแรกครับ 🛡️";
+  }
+
+  chatMessages.push({
+    sender: "admin",
+    text: reply,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+  renderAdminChatMessages();
 }
 
 // ==========================================
@@ -1499,10 +1742,28 @@ function toggleWishlist(productId) {
 }
 
 // ==========================================
-// 13. CHECKOUT & PROMPTPAY QR SIMULATOR
+// ==========================================
+// 13. CHECKOUT & PROMPTPAY QR / COD ENGINE
 // ==========================================
 
 let selectedPayMethod = "promptpay";
+let selectedShippingCost = 0;
+let selectedShippingType = "standard";
+
+function selectShippingOption(type, cost) {
+  selectedShippingType = type;
+  selectedShippingCost = cost;
+  document.querySelectorAll(".ship-option").forEach(opt => {
+    const radio = opt.querySelector(`input[value="${type}"]`);
+    if (radio) {
+      radio.checked = true;
+      opt.classList.add("active");
+    } else {
+      opt.classList.remove("active");
+    }
+  });
+  updateCheckoutCalculations();
+}
 
 function selectPayOption(method) {
   selectedPayMethod = method;
@@ -1525,12 +1786,16 @@ function selectPayOption(method) {
       discountAmount = Math.round(subtotal * (parseFloat(appliedVoucher.discount) / 100));
     }
   }
-  const shipping = (subtotal >= 1500 || (appliedVoucher && appliedVoucher.code === "FREESHIP")) ? 0 : 60;
-  const grandTotal = Math.max(0, subtotal - discountAmount + shipping);
+  const baseShipping = (subtotal >= 1500 || (appliedVoucher && appliedVoucher.code === "FREESHIP")) ? 0 : 60;
+  const totalShipping = baseShipping + selectedShippingCost;
+  const grandTotal = Math.max(0, subtotal - discountAmount + totalShipping);
 
   if (method === "promptpay") {
     detailView.innerHTML = `
       <div class="promptpay-box text-center">
+        <div class="pay-method-badge text-cyan">
+          <i class="fa-solid fa-qrcode"></i> โอนเงินผ่านธนาคาร / สแกน PromptPay QR Code
+        </div>
         <p class="qr-intro">สแกน QR Code ด้วยแอปธนาคารใดก็ได้เพื่อชำระเงินทันที</p>
         <div class="qr-mockup">
           <div class="qr-frame">
@@ -1538,9 +1803,48 @@ function selectPayOption(method) {
             <div class="qr-badge">PromptPay</div>
           </div>
           <div class="qr-amount-show">
-            ยอดชำระ: <strong class="highlight-cyan">฿${grandTotal.toLocaleString()}</strong>
+            ยอดที่ต้องโอนชำระ: <strong class="highlight-cyan">฿${grandTotal.toLocaleString()}</strong>
           </div>
         </div>
+
+        <div class="bank-transfer-info-card">
+          <div class="bank-row">
+            <span>ธนาคาร:</span>
+            <strong><i class="fa-solid fa-building-columns text-green"></i> ธนาคารกสิกรไทย (KBANK)</strong>
+          </div>
+          <div class="bank-row">
+            <span>เลขที่บัญชี:</span>
+            <strong class="copyable-account" onclick="navigator.clipboard.writeText('1428992145'); showToast('คัดลอกเลขบัญชี 142-8-99214-5 แล้ว', 'success');">
+              142-8-99214-5 <i class="fa-regular fa-copy text-cyan" title="คลิกเพื่อคัดลอก"></i>
+            </strong>
+          </div>
+          <div class="bank-row">
+            <span>ชื่อบัญชี:</span>
+            <strong>บจก. ไคเนติพ็อด อินโนเวชั่น (KinetiPod Innovation Co., Ltd.)</strong>
+          </div>
+        </div>
+
+        <div class="slip-upload-wrapper">
+          <button type="button" class="btn btn-sm btn-outline w-100" onclick="simulateSlipUpload()">
+            <i class="fa-solid fa-file-arrow-up"></i> แนบหลักฐานสลิปการโอนเงิน (จำลอง)
+          </button>
+          <div id="slipUploadStatus" style="margin-top: 8px;"></div>
+        </div>
+      </div>
+    `;
+  } else if (method === "cod") {
+    detailView.innerHTML = `
+      <div class="cod-detail-box">
+        <div class="cod-amount-badge">
+          <span><i class="fa-solid fa-hand-holding-dollar text-green"></i> ยอดเงินสดที่ต้องเตรียมชำระเมื่อพัสดุถึงหน้าบ้าน:</span>
+          <strong class="highlight-coral" style="font-size: 1.5rem; display: block; margin-top: 4px;">฿${grandTotal.toLocaleString()}</strong>
+        </div>
+
+        <ul class="cod-perks-list">
+          <li><i class="fa-solid fa-circle-check text-green"></i> <strong>ฟรีค่าธรรมเนียม:</strong> ไม่มีบวกค่าบริการเก็บเงินปลายทางเพิ่มเติม</li>
+          <li><i class="fa-solid fa-circle-check text-green"></i> <strong>มั่นใจ 100%:</strong> สามารถเปิดตรวจเช็คกล่องพัสดุก่อนส่งมอบเงินสดให้พนักงานจัดส่งได้</li>
+          <li><i class="fa-solid fa-truck-fast text-cyan"></i> <strong>โทรแจ้งล่วงหน้า:</strong> พนักงานส่ง Flash / Kerry จะโทรนัดหมายล่วงหน้าก่อนเข้าส่ง 30 นาที</li>
+        </ul>
       </div>
     `;
   } else if (method === "credit") {
@@ -1562,25 +1866,23 @@ function selectPayOption(method) {
         </div>
       </div>
     `;
-  } else if (method === "cod") {
-    detailView.innerHTML = `
-      <div style="padding: 15px; text-align: center; color: var(--text-secondary);">
-        <i class="fa-solid fa-hand-holding-dollar text-green" style="font-size: 2rem; margin-bottom: 8px;"></i>
-        <p>ชำระเงินสดหรือโอนจ่ายผ่านพนักงานส่งพัสดุเมื่อได้รับสินค้าถึงหน้าบ้าน</p>
-      </div>
-    `;
   }
 }
 
-function openCheckoutModal() {
-  const summaryBox = document.getElementById("checkoutItemsSummary");
-  const subtotalElem = document.getElementById("coSubtotal");
-  const discountRow = document.getElementById("coDiscountRow");
-  const discountElem = document.getElementById("coDiscount");
-  const shippingElem = document.getElementById("coShipping");
-  const grandTotalElem = document.getElementById("coGrandTotal");
-  const amountShow = document.getElementById("checkoutAmountShow");
+function simulateSlipUpload() {
+  const slipStatus = document.getElementById("slipUploadStatus");
+  if (slipStatus) {
+    slipStatus.innerHTML = `
+      <div class="slip-uploaded-box">
+        <i class="fa-solid fa-circle-check text-green"></i>
+        <span>แนบสลิปเรียบร้อย: <strong>kbank_slip_2026.jpg</strong> (ระบบตรวจสอบยอดเงินตรงกับบิล)</span>
+      </div>
+    `;
+    showToast("แนบสลิปการโอนเงินเรียบร้อยแล้ว", "success");
+  }
+}
 
+function updateCheckoutCalculations() {
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
   let discountAmount = 0;
   if (appliedVoucher) {
@@ -1591,22 +1893,19 @@ function openCheckoutModal() {
   }
 
   const isFreeShipping = (subtotal >= 1500) || (appliedVoucher && appliedVoucher.code === "FREESHIP");
-  const shipping = isFreeShipping ? 0 : 60;
-  const grandTotal = Math.max(0, subtotal - discountAmount + shipping);
+  const baseShipping = isFreeShipping ? 0 : 60;
+  const totalShipping = baseShipping + selectedShippingCost;
+  const grandTotal = Math.max(0, subtotal - discountAmount + totalShipping);
 
-  if (summaryBox) {
-    summaryBox.innerHTML = cart.map(item => `
-      <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 6px;">
-        <span>${item.name} x ${item.qty}</span>
-        <strong>฿${(item.price * item.qty).toLocaleString()}</strong>
-      </div>
-    `).join('');
-  }
+  const subtotalElem = document.getElementById("coSubtotal");
+  const discountRow = document.getElementById("coDiscountRow");
+  const discountElem = document.getElementById("coDiscount");
+  const shippingElem = document.getElementById("coShipping");
+  const grandTotalElem = document.getElementById("coGrandTotal");
 
   if (subtotalElem) subtotalElem.innerText = `฿${subtotal.toLocaleString()}`;
-  if (shippingElem) shippingElem.innerText = shipping === 0 ? "ฟรี (Free)" : `฿${shipping}`;
+  if (shippingElem) shippingElem.innerText = totalShipping === 0 ? "ฟรี (Free)" : `฿${totalShipping}`;
   if (grandTotalElem) grandTotalElem.innerText = `฿${grandTotal.toLocaleString()}`;
-  if (amountShow) amountShow.innerText = `฿${grandTotal.toLocaleString()}`;
 
   if (discountRow && discountElem) {
     if (discountAmount > 0) {
@@ -1618,6 +1917,21 @@ function openCheckoutModal() {
   }
 
   selectPayOption(selectedPayMethod);
+}
+
+function openCheckoutModal() {
+  const summaryBox = document.getElementById("checkoutItemsSummary");
+
+  if (summaryBox) {
+    summaryBox.innerHTML = cart.map(item => `
+      <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 6px;">
+        <span>${item.name} x ${item.qty}</span>
+        <strong>฿${(item.price * item.qty).toLocaleString()}</strong>
+      </div>
+    `).join('');
+  }
+
+  updateCheckoutCalculations();
   document.getElementById("checkoutModalOverlay").classList.add("active");
   document.body.style.overflow = "hidden";
 }
@@ -1631,6 +1945,8 @@ function processOrderPlacement() {
   const name = document.getElementById("custName").value.trim();
   const phone = document.getElementById("custPhone").value.trim();
   const address = document.getElementById("custAddress").value.trim();
+  const email = document.getElementById("custEmail") ? document.getElementById("custEmail").value.trim() : "runner@email.com";
+  const note = document.getElementById("deliveryNote") ? document.getElementById("deliveryNote").value.trim() : "-";
 
   if (!name || !phone || !address) {
     showToast("กรุณากรอกข้อมูลชื่อ เบอร์โทร และที่อยู่จัดส่งให้ครบถ้วน", "warning");
@@ -1646,18 +1962,23 @@ function processOrderPlacement() {
       discountAmount = Math.round(subtotal * (parseFloat(appliedVoucher.discount) / 100));
     }
   }
-  const shipping = (subtotal >= 1500 || (appliedVoucher && appliedVoucher.code === "FREESHIP")) ? 0 : 60;
-  const grandTotal = Math.max(0, subtotal - discountAmount + shipping);
+  const baseShipping = (subtotal >= 1500 || (appliedVoucher && appliedVoucher.code === "FREESHIP")) ? 0 : 60;
+  const totalShipping = baseShipping + selectedShippingCost;
+  const grandTotal = Math.max(0, subtotal - discountAmount + totalShipping);
+
+  const payLabel = selectedPayMethod === "cod" ? "เก็บเงินปลายทาง (COD)" : selectedPayMethod === "promptpay" ? "โอนเงิน / PromptPay QR" : "บัตรเครดิต/เดบิต";
+  const shipLabel = selectedShippingType === "sameday" ? "Express Same-Day (ส่งด่วนในวัน)" : "Standard Delivery (Flash / Kerry 1-2 วัน)";
 
   // Success summary details
   document.getElementById("successOrderId").innerText = orderId;
   const successSummary = document.getElementById("successSummaryBox");
   if (successSummary) {
     successSummary.innerHTML = `
-      <div style="margin-bottom: 8px;"><strong>ผู้สั่งซื้อ:</strong> ${name} (${phone})</div>
+      <div style="margin-bottom: 8px;"><strong>ผู้รับพัสดุ:</strong> ${name} (โทร. ${phone})</div>
       <div style="margin-bottom: 8px;"><strong>สถานที่จัดส่ง:</strong> ${address}</div>
-      <div style="margin-bottom: 8px;"><strong>ช่องทางชำระเงิน:</strong> ${selectedPayMethod.toUpperCase()} (ชำระเรียบร้อย)</div>
-      <div style="margin-bottom: 8px;"><strong>ยอดชำระสุทธิ:</strong> <span class="highlight-cyan">฿${grandTotal.toLocaleString()}</span></div>
+      <div style="margin-bottom: 8px;"><strong>บริการจัดส่ง:</strong> ${shipLabel} (หมายเหตุ: ${note})</div>
+      <div style="margin-bottom: 8px;"><strong>ช่องทางชำระเงิน:</strong> <span class="highlight-cyan">${payLabel}</span></div>
+      <div style="margin-bottom: 8px;"><strong>ยอดสุทธิทั้งหมด:</strong> <span class="highlight-cyan" style="font-size: 1.2rem; font-weight: 800;">฿${grandTotal.toLocaleString()}</span></div>
       <div><strong>การรับประกัน:</strong> ประกันศูนย์ไทย 2 ปีเต็ม (เริ่มคุ้มครองทันที)</div>
     `;
   }

@@ -1169,8 +1169,70 @@
   <div class="modal-overlay" id="productModalOverlay">
     <div class="product-quick-modal" id="productModal">
       <button class="modal-close-btn" id="productModalCloseBtn">&times;</button>
-      <div class="modal-body-grid" id="productModalContent">
+      <div id="productModalContent">
         <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Shopee-Style Admin Live Chat Modal -->
+  <div class="modal-overlay" id="adminChatModalOverlay">
+    <div class="admin-chat-modal" id="adminChatModal">
+      <!-- Chat Header -->
+      <div class="chat-modal-header">
+        <div class="chat-shop-info">
+          <div class="chat-shop-avatar">
+            <i class="fa-solid fa-store text-cyan"></i>
+            <span class="online-indicator"></span>
+          </div>
+          <div>
+            <div class="chat-shop-name">
+              <strong>KINETIPOD™ Official Store</strong>
+              <span class="official-badge"><i class="fa-solid fa-circle-check"></i> Official</span>
+            </div>
+            <span class="chat-shop-status">ออนไลน์ • ตอบกลับภายใน 5 นาที</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button class="chat-icon-btn" title="โทรสอบถาม Call Center: 02-123-4567" onclick="showToast('สายด่วน KINETIPOD Call Center: 02-123-4567 (จันทร์-อาทิตย์ 08:00 - 20:00 น.)', 'info')">
+            <i class="fa-solid fa-phone"></i>
+          </button>
+          <button class="modal-close-btn chat-close-btn" onclick="closeAdminChat()">&times;</button>
+        </div>
+      </div>
+
+      <!-- Pinned Product In Chat -->
+      <div class="chat-pinned-product" id="chatPinnedProduct">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Chat Messages Container -->
+      <div class="chat-messages-container" id="chatMessagesContainer">
+        <!-- Message stream injected via JS -->
+      </div>
+
+      <!-- Quick Question Chips -->
+      <div class="chat-quick-chips" id="chatQuickChips">
+        <button class="quick-chip" onclick="sendQuickAdminQuestion('สินค้าชิ้นนี้มีของพร้อมส่งไหมครับ?')">
+          📦 มีของพร้อมส่งไหม?
+        </button>
+        <button class="quick-chip" onclick="sendQuickAdminQuestion('ใช้กับรองเท้าวิ่งแบบไหนได้บ้าง?')">
+          👟 ใช้กับรองเท้าแบบไหนได้บ้าง?
+        </button>
+        <button class="quick-chip" onclick="sendQuickAdminQuestion('มีบริการเก็บเงินปลายทาง (COD) ไหม?')">
+          💰 เก็บเงินปลายทางได้ไหม?
+        </button>
+        <button class="quick-chip" onclick="sendQuickAdminQuestion('ขอโค้ดส่วนลดพิเศษสำหรับสั่งซื้อตอนนี้')">
+          🎁 ขอโค้ดส่วนลด
+        </button>
+      </div>
+
+      <!-- Chat Input Area -->
+      <div class="chat-input-area">
+        <input type="text" id="adminChatInput" placeholder="พิมพ์ข้อความสอบถามแอดมิน..." onkeypress="if(event.key === 'Enter') sendAdminChatMessage()">
+        <button class="chat-send-btn" onclick="sendAdminChatMessage()">
+          <i class="fa-solid fa-paper-plane"></i> ส่ง
+        </button>
       </div>
     </div>
   </div>
@@ -1186,7 +1248,7 @@
     </div>
   </aside>
 
-  <!-- Checkout Modal -->
+  <!-- Checkout Modal (Pre-Delivery Details & Payment Options) -->
   <div class="modal-overlay" id="checkoutModalOverlay">
     <div class="checkout-modal" id="checkoutModal">
       <button class="modal-close-btn" id="checkoutModalCloseBtn">&times;</button>
@@ -1194,46 +1256,80 @@
         <div class="checkout-header">
           <i class="fa-solid fa-shield-check text-cyan"></i>
           <div>
-            <h3>ยืนยันการสั่งซื้อ & ชำระเงินที่ปลอดภัย</h3>
-            <p>ระบบเข้ารหัส SSL 256-bit มาตรฐานสากล</p>
+            <h3>ตรวจสอบรายละเอียดก่อนส่งสินค้า & ชำระเงิน</h3>
+            <p>ระบบเข้ารหัสความปลอดภัย SSL 256-bit มาตรฐานสากล</p>
           </div>
         </div>
 
         <div class="checkout-grid">
-          <!-- Form Left -->
+          <!-- Form Left: Pre-Delivery Details & Payment -->
           <div class="checkout-form-col">
-            <h4 class="form-sec-title"><i class="fa-solid fa-truck-fast"></i> ข้อมูลผู้รับและการจัดส่ง</h4>
             
-            <div class="form-row-2">
-              <div class="form-group">
-                <label>ชื่อ-นามสกุล *</label>
-                <input type="text" id="custName" placeholder="เช่น สมชาย ใจดี" required value="กิตติศักดิ์ พัฒนาการ">
+            <!-- SECTION 1: รายละเอียดผู้รับและที่อยู่จัดส่ง -->
+            <div class="checkout-section-card">
+              <h4 class="form-sec-title">
+                <i class="fa-solid fa-location-dot text-coral"></i> 1. ข้อมูลผู้รับและที่อยู่จัดส่งพัสดุ
+              </h4>
+              
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>ชื่อ-นามสกุล ผู้รับ *</label>
+                  <input type="text" id="custName" placeholder="เช่น สมชาย ใจดี" required value="กิตติศักดิ์ พัฒนาการ">
+                </div>
+                <div class="form-group">
+                  <label>เบอร์โทรศัพท์ติดต่อ *</label>
+                  <input type="tel" id="custPhone" placeholder="08x-xxx-xxxx" required value="089-123-4567">
+                </div>
               </div>
+
               <div class="form-group">
-                <label>เบอร์โทรศัพท์ *</label>
-                <input type="tel" id="custPhone" placeholder="08x-xxx-xxxx" required value="089-123-4567">
+                <label>อีเมล (สำหรับรับใบเสร็จและแจ้งเลข Tracking พัสดุ) *</label>
+                <input type="email" id="custEmail" placeholder="example@email.com" required value="runner.pro@gmail.com">
+              </div>
+
+              <div class="form-group">
+                <label>ที่อยู่จัดส่งพัสดุ (บ้านเลขที่, ถนน, แขวง/ตำบล, เขต/อำเภอ, จังหวัด, รหัสไปรษณีย์) *</label>
+                <textarea id="custAddress" rows="2" placeholder="ที่อยู่จัดส่งพัสดุ">123/45 ถนนสุขุมวิท 71 แขวงพระโขนงเหนือ เขตวัฒนา กรุงเทพฯ 10110</textarea>
+              </div>
+
+              <div class="form-group">
+                <label><i class="fa-regular fa-comment-dots text-cyan"></i> ข้อความหมายเหตุถึงพนักงานจัดส่ง (ถ้ามี)</label>
+                <input type="text" id="deliveryNote" placeholder="เช่น ฝากไว้ที่ป้อมยาม, โทรแจ้งล่วงหน้า 30 นาที, วางหน้าประตูห้อง" value="โทรแจ้งล่วงหน้าก่อนเข้าส่ง">
+              </div>
+
+              <!-- Shipping Method Selection -->
+              <div class="form-group">
+                <label><i class="fa-solid fa-truck-fast text-green"></i> เลือกบริการจัดส่งสินค้า</label>
+                <div class="shipping-method-options">
+                  <label class="ship-option active" onclick="selectShippingOption('standard', 0)">
+                    <input type="radio" name="shipOption" value="standard" checked>
+                    <div>
+                      <strong><i class="fa-solid fa-box text-cyan"></i> Standard Delivery (Flash / Kerry Express)</strong>
+                      <span>จัดส่งด่วนถึงภายใน 1-2 วันทำการ • ตรวจสอบสถานะพัสดุได้</span>
+                    </div>
+                    <span class="ship-cost-badge free">จัดส่งฟรี</span>
+                  </label>
+                  <label class="ship-option" onclick="selectShippingOption('sameday', 80)">
+                    <input type="radio" name="shipOption" value="sameday">
+                    <div>
+                      <strong><i class="fa-solid fa-bolt text-amber"></i> Express Same-Day (ส่งด่วนภายในวัน)</strong>
+                      <span>เฉพาะ กทม. และปริมณฑล (สั่งก่อน 14:00 น.)</span>
+                    </div>
+                    <span class="ship-cost-badge">+฿80</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group checkbox-group">
+                <label class="custom-checkbox">
+                  <input type="checkbox" id="taxInvoiceReq">
+                  <span class="checkmark"></span>
+                  <span>ต้องการใบเสร็จรับเงิน/ใบกำกับภาษีเต็มรูปแบบ (เพื่อเบิกประกัน/ลดหย่อนภาษี)</span>
+                </label>
               </div>
             </div>
 
-            <div class="form-group">
-              <label>อีเมล (สำหรับรับใบเสร็จและเลขติดตาม) *</label>
-              <input type="email" id="custEmail" placeholder="example@email.com" required value="runner.pro@gmail.com">
-            </div>
-
-            <div class="form-group">
-              <label>ที่อยู่จัดส่ง *</label>
-              <textarea id="custAddress" rows="2" placeholder="บ้านเลขที่, ถนน, แขวง/ตำบล, เขต/อำเภอ, จังหวัด, รหัสไปรษณีย์">123/45 ถนนสุขุมวิท 71 แขวงพระโขนงเหนือ เขตวัฒนา กรุงเทพฯ 10110</textarea>
-            </div>
-
-            <div class="form-group checkbox-group">
-              <label class="custom-checkbox">
-                <input type="checkbox" id="taxInvoiceReq">
-                <span class="checkmark"></span>
-                <span>ต้องการใบเสร็จรับเงิน/ใบกำกับภาษีเต็มรูปแบบ (เพื่อเบิกประกัน/ลดหย่อนภาษี)</span>
-              </label>
-            </div>
-
-            <!-- Customer Biometrics & Health Data for Firebase -->
+            <!-- SECTION 2: ข้อมูลสรีระและสุขภาพ -->
             <div class="customer-health-box">
               <div class="health-box-title">
                 <i class="fa-solid fa-heart-pulse text-cyan"></i>
@@ -1273,56 +1369,55 @@
               </div>
             </div>
 
-            <!-- Payment Method Tabs -->
-            <h4 class="form-sec-title mt-4"><i class="fa-solid fa-wallet"></i> เลือกช่องทางชำระเงิน</h4>
-            <div class="payment-method-selector">
-              <label class="pay-option active" onclick="selectPayOption('promptpay')">
-                <input type="radio" name="payMethod" value="promptpay" checked>
-                <i class="fa-solid fa-qrcode text-cyan"></i>
-                <div>
-                  <strong>Thai QR PromptPay</strong>
-                  <span>สแกนจ่ายผ่านทุกแอปธนาคาร ฟรีค่าธรรมเนียม</span>
-                </div>
-              </label>
-
-              <label class="pay-option" onclick="selectPayOption('credit')">
-                <input type="radio" name="payMethod" value="credit">
-                <i class="fa-solid fa-credit-card text-coral"></i>
-                <div>
-                  <strong>บัตรเครดิต / เดบิต</strong>
-                  <span>VISA, Mastercard, JCB (ผ่อน 0% สูงสุด 10 ด.)</span>
-                </div>
-              </label>
-
-              <label class="pay-option" onclick="selectPayOption('cod')">
-                <input type="radio" name="payMethod" value="cod">
-                <i class="fa-solid fa-hand-holding-dollar text-green"></i>
-                <div>
-                  <strong>เก็บเงินปลายทาง (COD)</strong>
-                  <span>ชำระเมื่อพนักงานนำส่งถึงหน้าบ้าน</span>
-                </div>
-              </label>
-            </div>
-
-            <!-- Dynamic Payment Detail Display -->
-            <div class="payment-details-view" id="paymentDetailsView">
-              <div class="promptpay-box text-center">
-                <p class="qr-intro">สแกน QR Code ด้วยแอปธนาคารใดก็ได้เพื่อชำระเงินทันที</p>
-                <div class="qr-mockup">
-                  <div class="qr-frame">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=KINETIPOD-PAY-ORDER-9921" alt="QR Code PromptPay" class="qr-image">
-                    <div class="qr-badge">PromptPay</div>
+            <!-- SECTION 3: เลือกวิธีการชำระเงิน (โอนเงิน หรือ เก็บเงินปลายทาง) -->
+            <div class="checkout-section-card">
+              <h4 class="form-sec-title">
+                <i class="fa-solid fa-wallet text-cyan"></i> 2. เลือกวิธีการชำระเงิน (Payment Method)
+              </h4>
+              
+              <div class="payment-method-selector">
+                <!-- Choice 1: โอนเงิน / PromptPay -->
+                <label class="pay-option active" onclick="selectPayOption('promptpay')">
+                  <input type="radio" name="payMethod" value="promptpay" checked>
+                  <i class="fa-solid fa-qrcode text-cyan"></i>
+                  <div>
+                    <strong>โอนเงิน / Thai QR PromptPay</strong>
+                    <span>สแกน QR Code จ่ายผ่านทุกแอปธนาคาร ฟรีค่าธรรมเนียม</span>
                   </div>
-                  <div class="qr-amount-show">
-                    ยอดชำระ: <strong class="highlight-cyan" id="checkoutAmountShow">฿0</strong>
+                  <span class="pay-badge-rec">ยอดนิยม</span>
+                </label>
+
+                <!-- Choice 2: เก็บเงินปลายทาง (COD) -->
+                <label class="pay-option" onclick="selectPayOption('cod')">
+                  <input type="radio" name="payMethod" value="cod">
+                  <i class="fa-solid fa-hand-holding-dollar text-green"></i>
+                  <div>
+                    <strong>เก็บเงินปลายทาง (Cash on Delivery - COD)</strong>
+                    <span>ชำระเงินสดกับพนักงานส่งของเมื่อได้รับสินค้าถึงหน้าบ้าน</span>
                   </div>
-                </div>
+                  <span class="pay-badge-free">ฟรีค่าธรรมเนียม</span>
+                </label>
+
+                <!-- Choice 3: บัตรเครดิต/เดบิต -->
+                <label class="pay-option" onclick="selectPayOption('credit')">
+                  <input type="radio" name="payMethod" value="credit">
+                  <i class="fa-solid fa-credit-card text-coral"></i>
+                  <div>
+                    <strong>บัตรเครดิต / เดบิต</strong>
+                    <span>VISA, Mastercard, JCB (ผ่อน 0% สูงสุด 10 เดือน)</span>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Dynamic Payment Detail Display -->
+              <div class="payment-details-view" id="paymentDetailsView">
+                <!-- Dynamic Content via selectPayOption -->
               </div>
             </div>
 
           </div>
 
-          <!-- Summary Right -->
+          <!-- Summary Right Column -->
           <div class="checkout-summary-col">
             <h4 class="form-sec-title"><i class="fa-solid fa-receipt"></i> สรุปคำสั่งซื้อ</h4>
             <div class="checkout-items-summary" id="checkoutItemsSummary">
