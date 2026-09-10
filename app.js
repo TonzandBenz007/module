@@ -2124,7 +2124,7 @@ async function handlePasswordResetSubmit(event) {
 function toggleUserAuthDropdownOrOpenModal() {
   const user = currentUserProfile;
   if (!user) {
-    openAuthModal("login");
+    window.location.href = "login.html";
   } else {
     const menu = document.getElementById("userDropdownMenu");
     if (menu) {
@@ -2137,10 +2137,15 @@ function toggleUserAuthDropdownOrOpenModal() {
 async function handleUserLogout() {
   if (typeof firebaseSignOut === "function") {
     await firebaseSignOut();
-    const menu = document.getElementById("userDropdownMenu");
-    if (menu) menu.style.display = "none";
-    showToast("ออกจากระบบ Firebase เรียบร้อยแล้ว", "info");
   }
+  const menu = document.getElementById("userDropdownMenu");
+  if (menu) menu.style.display = "none";
+  if (typeof showToast === "function") {
+    showToast("🚪 ออกจากระบบเรียบร้อยแล้ว กำลังกลับสู่หน้าเข้าสู่ระบบ...", "info");
+  }
+  setTimeout(() => {
+    window.location.href = "login.html";
+  }, 350);
 }
 
 // Update User UI in Header
