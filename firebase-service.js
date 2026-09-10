@@ -6,15 +6,15 @@
  * - Real-time Firestore Listeners & Offline LocalStorage Fallback
  */
 
-// Default Firebase Configuration
-// ผู้ใช้สามารถนำค่า config จาก Firebase Console มาวางแทนที่ด้านล่างนี้ได้
+// Live Firebase Configuration for project: module-ba2c1
 let firebaseConfig = {
-  apiKey: "AIzaSyDemoKey-KINETIPOD-REPLACE_WITH_YOUR_KEY",
-  authDomain: "kinetipod-health.firebaseapp.com",
-  projectId: "kinetipod-health",
-  storageBucket: "kinetipod-health.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef123456"
+  apiKey: "AIzaSyCPzWx_P_3mZ_-oobzaZb8twNfEq-VPtFA",
+  authDomain: "module-ba2c1.firebaseapp.com",
+  projectId: "module-ba2c1",
+  storageBucket: "module-ba2c1.firebasestorage.app",
+  messagingSenderId: "732162698110",
+  appId: "1:732162698110:web:c7c03f03968cc1f253212f",
+  measurementId: "G-QW11LKKST5"
 };
 
 // Check if user saved custom config in localStorage
