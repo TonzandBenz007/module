@@ -482,7 +482,7 @@
             <form onsubmit="handlePageLogin(event)">
               <div class="clean-form-group">
                 <label>อีเมล (Email) *</label>
-                <input type="email" id="pLoginEmail" class="clean-input" placeholder="example@gmail.com" required value="runner.pro@gmail.com">
+                <input type="email" id="pLoginEmail" class="clean-input" placeholder="example@gmail.com" required>
               </div>
 
               <div class="clean-form-group">
@@ -491,7 +491,7 @@
                   <a href="javascript:void(0)" onclick="showAuthTab('reset')" style="font-size: 0.8rem; color: #38BDF8; text-decoration: none;">ลืมรหัสผ่าน?</a>
                 </div>
                 <div style="position: relative;">
-                  <input type="password" id="pLoginPassword" class="clean-input" placeholder="กรอกรหัสผ่าน" required value="123456" style="padding-right: 40px;">
+                  <input type="password" id="pLoginPassword" class="clean-input" placeholder="กรอกรหัสผ่าน" required style="padding-right: 40px;">
                   <button type="button" onclick="togglePasswordVisibility('pLoginPassword', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94A3B8; cursor: pointer;">
                     <i class="fa-regular fa-eye"></i>
                   </button>
@@ -521,23 +521,7 @@
               <span class="google-btn-badge">1-Click</span>
             </button>
 
-            <!-- Quick Demo Accounts -->
-            <div class="clean-demo-box">
-              <div class="clean-demo-title"><i class="fa-solid fa-flask"></i> บัญชีทดสอบด่วน:</div>
-              <div class="clean-demo-pills">
-                <button type="button" class="clean-demo-pill" onclick="quickFillPage('runner.pro@gmail.com', '123456')">
-                  🏃 นักวิ่งซ้อมประจำ
-                </button>
-                <button type="button" class="clean-demo-pill" onclick="quickFillPage('vipada.rehab@yahoo.com', '123456')">
-                  🩹 ผู้ป่วยกายภาพ
-                </button>
-                <button type="button" class="clean-demo-pill" onclick="quickFillPage('coach.thanapol@speedrun.th', '123456')">
-                  🥇 โค้ชวิ่งทีมชาติ
-                </button>
-              </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 18px; font-size: 0.85rem; color: #94A3B8;">
+            <div style="text-align: center; margin-top: 24px; font-size: 0.88rem; color: #94A3B8;">
               ยังไม่มีบัญชีผู้ใช้งาน? <a href="javascript:void(0)" onclick="showAuthTab('register')" style="color: #38BDF8; font-weight: 600; text-decoration: none;">สมัครสมาชิกใหม่</a>
             </div>
           </div>
@@ -569,22 +553,22 @@
               <div class="form-row-2">
                 <div class="clean-form-group">
                   <label>ชื่อ-นามสกุล *</label>
-                  <input type="text" id="pRegName" class="clean-input" placeholder="เช่น กิตติศักดิ์ พัฒนาการ" required value="นักวิ่งมือใหม่">
+                  <input type="text" id="pRegName" class="clean-input" placeholder="เช่น กิตติศักดิ์ พัฒนาการ" required>
                 </div>
                 <div class="clean-form-group">
                   <label>อีเมล (Email) *</label>
-                  <input type="email" id="pRegEmail" class="clean-input" placeholder="example@gmail.com" required value="newrunner@gmail.com">
+                  <input type="email" id="pRegEmail" class="clean-input" placeholder="example@gmail.com" required>
                 </div>
               </div>
 
               <div class="form-row-2">
                 <div class="clean-form-group">
                   <label>รหัสผ่าน *</label>
-                  <input type="password" id="pRegPassword" class="clean-input" placeholder="รหัสผ่าน 6 ตัวขึ้นไป" required value="123456">
+                  <input type="password" id="pRegPassword" class="clean-input" placeholder="รหัสผ่าน 6 ตัวขึ้นไป" required>
                 </div>
                 <div class="clean-form-group">
                   <label>ยืนยันรหัสผ่าน *</label>
-                  <input type="password" id="pRegConfirmPassword" class="clean-input" placeholder="กรอกรหัสผ่านอีกครั้ง" required value="123456">
+                  <input type="password" id="pRegConfirmPassword" class="clean-input" placeholder="กรอกรหัสผ่านอีกครั้ง" required>
                 </div>
               </div>
 

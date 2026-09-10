@@ -261,7 +261,7 @@ function ensureGoogleOAuthDOM() {
             <div>
               <!-- Material Floating Outlined Input -->
               <div class="google-floating-wrap">
-                <input type="text" id="googleEmailInput" class="google-floating-input" value="runner.pro@gmail.com" placeholder=" " autofocus onkeydown="if(event.key === 'Enter') handleGoogleOAuthNextSubmit()">
+                <input type="text" id="googleEmailInput" class="google-floating-input" placeholder=" " autofocus onkeydown="if(event.key === 'Enter') handleGoogleOAuthNextSubmit()">
                 <label class="google-floating-label">อีเมลหรือโทรศัพท์</label>
               </div>
 
@@ -270,22 +270,6 @@ function ensureGoogleOAuthDOM() {
               <p class="google-guest-mode-note">
                 หากไม่ใช่คอมพิวเตอร์ของคุณ ให้ใช้โหมดผู้มาเยือนเพื่อลงชื่อเข้าใช้แบบส่วนตัว <a href="javascript:void(0)" onclick="alert('โหมดผู้มาเยือน: ระบบจะไม่บันทึกประวัติการท่องเว็บไว้ในอุปกรณ์นี้')">ดูข้อมูลเพิ่มเติมเกี่ยวกับการใช้โหมดผู้มาเยือน</a>
               </p>
-
-              <!-- Quick Demo Account Suggestions -->
-              <div class="google-quick-accounts-strip">
-                <div class="google-quick-title"><i class="fa-solid fa-user-check"></i> หรือเลือกบัญชีด่วน:</div>
-                <div class="google-quick-items">
-                  <button type="button" class="google-quick-acc-btn" onclick="fillAndSubmitGoogleEmail('runner.pro@gmail.com', 'กิตติศักดิ์ พัฒนาการ', 'ชาย', 32, 68.5, '1994-08-12', 'นักวิ่งซ้อมประจำ')">
-                    🏃 runner.pro@gmail.com
-                  </button>
-                  <button type="button" class="google-quick-acc-btn" onclick="fillAndSubmitGoogleEmail('vipada.health@gmail.com', 'พญ. วิภาดา มณีรัตน์', 'หญิง', 38, 54.0, '1988-11-25', 'ผู้ป่วยพักฟื้น/กายภาพ')">
-                    🩺 vipada.health@gmail.com
-                  </button>
-                  <button type="button" class="google-quick-acc-btn" onclick="fillAndSubmitGoogleEmail('coach.thanapol@gmail.com', 'โค้ชธนพล สปีดรันเนอร์', 'ชาย', 36, 64.0, '1990-03-19', 'นักวิ่งซ้อมประจำ')">
-                    🥇 coach.thanapol@gmail.com
-                  </button>
-                </div>
-              </div>
             </div>
 
             <!-- Bottom Action Row -->
