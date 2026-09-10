@@ -562,47 +562,6 @@
             <div style="text-align: center; margin-top: 18px; font-size: 0.88rem;">
               <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: #64748B; text-decoration: none;"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเข้าสู่ระบบ</a>
             </div>
-          </div>
-        </div>
-
-        <!-- VIEW 2: LOGGED IN (USER PROFILE & LOGOUT VIEW) -->
-        <div id="authLoggedInView" class="clean-logged-in-box" style="display: none;">
-          <div class="clean-avatar" id="pageUserAvatar">KP</div>
-          <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: #DCFCE7; color: #15803D; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px;">
-            <i class="fa-solid fa-circle-check"></i> เข้าสู่ระบบเรียบร้อย
-          </div>
-          
-          <h2 class="clean-user-title" id="pageUserName">คุณกิตติศักดิ์ พัฒนาการ</h2>
-          <p class="clean-user-email" id="pageUserEmail">runner.pro@gmail.com</p>
-
-          <!-- User Biometrics Summary -->
-          <div class="clean-biometrics-grid">
-            <div class="clean-bio-item">
-              <strong id="pageUserGender">ชาย</strong>
-              <span>เพศ</span>
-            </div>
-            <div class="clean-bio-item">
-              <strong id="pageUserAge">30</strong>
-              <span>อายุ (ปี)</span>
-            </div>
-            <div class="clean-bio-item">
-              <strong id="pageUserWeight">65.0</strong>
-              <span>น้ำหนัก (กก.)</span>
-            </div>
-            <div class="clean-bio-item">
-              <strong id="pageUserType">นักวิ่ง</strong>
-              <span>กลุ่มผู้ใช้</span>
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-            <a href="index.html" class="btn-clean-primary" style="width: auto; text-decoration: none; padding: 10px 22px;">
-              <i class="fa-solid fa-chart-line"></i> ไปยัง Dashboard
-            </a>
-            <button type="button" class="btn-clean-logout" onclick="handlePageLogout()">
-              <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
-            </button>
-          </div>
         </div>
 
       </div>
@@ -621,31 +580,9 @@
 
     function checkPageAuthState() {
       const user = currentUserProfile;
-      const guestView = document.getElementById("authGuestView");
-      const loggedInView = document.getElementById("authLoggedInView");
-
+      // หากผู้ใช้ล็อกอินอยู่แล้ว ให้เด้งไปที่หน้า Dashboard (index.html) ทันที
       if (user && user.email) {
-        if (guestView) guestView.style.display = "none";
-        if (loggedInView) loggedInView.style.display = "block";
-
-        const nameEl = document.getElementById("pageUserName");
-        const emailEl = document.getElementById("pageUserEmail");
-        const avatarEl = document.getElementById("pageUserAvatar");
-        const genderEl = document.getElementById("pageUserGender");
-        const ageEl = document.getElementById("pageUserAge");
-        const weightEl = document.getElementById("pageUserWeight");
-        const typeEl = document.getElementById("pageUserType");
-
-        if (nameEl) nameEl.textContent = user.name || "ผู้ใช้งาน KINETIPOD";
-        if (emailEl) emailEl.textContent = user.email;
-        if (avatarEl) avatarEl.textContent = (user.name || user.email).slice(0, 2).toUpperCase();
-        if (genderEl) genderEl.textContent = user.gender || "ชาย";
-        if (ageEl) ageEl.textContent = user.age || "30";
-        if (weightEl) weightEl.textContent = (user.weight || 65).toFixed(1);
-        if (typeEl) typeEl.textContent = user.customerType || "นักวิ่ง";
-      } else {
-        if (guestView) guestView.style.display = "block";
-        if (loggedInView) loggedInView.style.display = "none";
+        window.location.replace("index.html");
       }
     }
 
@@ -691,8 +628,11 @@
       try {
         if (typeof firebaseSignIn === "function") {
           const user = await firebaseSignIn(email, password);
-          showToast(`👋 ยินดีต้อนรับคุณ ${user.name || user.email} เข้าสู่ระบบสำเร็จ!`, "success");
-          setTimeout(() => checkPageAuthState(), 400);
+          showToast(`👋 ยินดีต้อนรับคุณ ${user.name || user.email} กำลังเข้าสู่แดชบอร์ด...`, "success");
+          // เด้งไปหน้า Dashboard ทันที
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 400);
         }
       } catch (error) {
         alert("เข้าสู่ระบบไม่สำเร็จ: " + (error.message || "กรุณาตรวจสอบอีเมลและรหัสผ่าน"));
@@ -754,8 +694,11 @@
         if (typeof firebaseSignInWithGoogle === "function") {
           const user = await firebaseSignInWithGoogle();
           if (user) {
-            showToast(`🎉 เข้าสู่ระบบด้วย Google สำเร็จ! ยินดีต้อนรับคุณ ${user.name}`, "success");
-            setTimeout(() => checkPageAuthState(), 300);
+            showToast(`🎉 เข้าสู่ระบบด้วย Google สำเร็จ! กำลังเข้าสู่แดชบอร์ด...`, "success");
+            // เด้งไปหน้า Dashboard ทันที
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 400);
           }
         }
       } catch (e) {
@@ -777,7 +720,6 @@
       if (typeof firebaseSignOut === "function") {
         await firebaseSignOut();
         showToast("🚪 ออกจากระบบเรียบร้อยแล้ว", "info");
-        setTimeout(() => checkPageAuthState(), 300);
       }
     }
 
