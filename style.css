@@ -4203,37 +4203,88 @@ section {
   padding: 0 12px;
 }
 
-.social-auth-btn {
+/* Premium Google Sign-In Button Component */
+.google-auth-btn, .social-auth-btn {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 13px 18px;
+  padding: 13px 20px;
   background: #FFFFFF;
   color: #1F2937;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-sm);
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius-md, 12px);
+  font-family: 'Plus Jakarta Sans', 'Prompt', sans-serif;
   font-weight: 600;
   font-size: 0.95rem;
+  letter-spacing: 0.2px;
   cursor: pointer;
-  transition: var(--transition-fast);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.social-auth-btn:hover {
-  background: #F8FAFC;
+.google-auth-btn::before, .social-auth-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+}
+
+.google-auth-btn:hover, .social-auth-btn:hover {
+  background: #FFFFFF;
+  color: #111827;
+  border-color: #4285F4;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 24px rgba(66, 133, 244, 0.25), 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.social-auth-btn:active {
-  transform: translateY(0);
+.google-auth-btn:hover::before, .social-auth-btn:hover::before {
+  left: 140%;
+  transition: all 0.75s ease-in-out;
 }
 
-.social-auth-btn i, .social-auth-btn .google-icon-svg {
-  color: #EA4335;
-  font-size: 1.15rem;
+.google-auth-btn:active, .social-auth-btn:active {
+  transform: scale(0.985) translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.google-btn-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.google-btn-icon-box svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.google-btn-text {
+  flex-grow: 0;
+}
+
+.google-btn-badge {
+  font-size: 0.72rem;
+  background: #EFF6FF;
+  color: #2563EB;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin-left: auto;
 }
 
 .w-100 {
