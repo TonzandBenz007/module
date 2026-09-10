@@ -90,7 +90,6 @@
               <li><a href="login.html"><i class="fa-solid fa-right-to-bracket text-cyan"></i> หน้า Login / Logout (login.html)</a></li>
               <li><a href="javascript:void(0)" onclick="openCustomerProfileModal()"><i class="fa-solid fa-user-pen text-cyan"></i> โปรไฟล์ & ข้อมูลสรีระ</a></li>
               <li><a href="javascript:void(0)" onclick="openCustomersDrawer()"><i class="fa-solid fa-database text-green"></i> ฐานข้อมูลลูกค้า Firebase</a></li>
-              <li><a href="#gait-sandbox"><i class="fa-solid fa-chart-line text-amber"></i> ประวัติ Gait Simulator</a></li>
               <li class="menu-divider"></li>
               <li><a href="javascript:void(0)" onclick="handleUserLogout()" class="text-coral"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a></li>
             </ul>
@@ -147,7 +146,6 @@
           <li><a href="#bmc-solutions" class="nav-link"><i class="fa-solid fa-person-running"></i> เจาะลึก 2 กลุ่มนักวิ่ง (BMC)</a></li>
           <li><a href="#watch-vs-pod" class="nav-link"><i class="fa-solid fa-code-compare"></i> นาฬิกา vs Foot Pod</a></li>
           <li><a href="#revenue-models" class="nav-link highlight-link"><i class="fa-solid fa-tags"></i> 3 รูปแบบ ซื้อ / เช่า / AI Pro</a></li>
-          <li><a href="#gait-sandbox" class="nav-link highlight-link-alt"><i class="fa-solid fa-chart-line"></i> จำลองวิเคราะห์องศาข้อเท้า & เตือนสด</a></li>
         </ul>
       </div>
     </nav>
@@ -213,9 +211,6 @@
           <div class="hero-cta-group">
             <a href="#revenue-models" class="btn btn-primary btn-glow">
               <i class="fa-solid fa-bag-shopping"></i> ดูแพ็กเกจ ซื้อ / เช่า / AI Coach
-            </a>
-            <a href="#gait-sandbox" class="btn btn-glass">
-              <i class="fa-solid fa-play"></i> ทดสอบวัดองศา & ฟังเสียงเตือน
             </a>
             <a href="#watch-vs-pod" class="btn btn-outline">
               <i class="fa-solid fa-code-compare"></i> ทำไมนาฬิกาทั่วไปทำไม่ได้?
@@ -298,8 +293,8 @@
 
             <div class="hud-footer">
               <span class="hud-status"><i class="fa-solid fa-bell text-cyan"></i> Audio Alert: "ฟอร์มลงเท้าสมดุล รอบขาเหมาะสม"</span>
-              <button class="btn btn-sm btn-cyan" onclick="document.querySelector('#gait-sandbox').scrollIntoView({behavior:'smooth'})">
-                เปิดห้องแล็บจำลอง <i class="fa-solid fa-arrow-right"></i>
+              <button class="btn btn-sm btn-cyan" onclick="document.querySelector('#catalog').scrollIntoView({behavior:'smooth'})">
+                ดูสินค้าทั้งหมด <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
           </div>
@@ -783,177 +778,6 @@
     </div>
   </section>
 
-  <!-- Interactive Live Gait & Force Plate Sandbox Simulator -->
-  <section class="gait-sandbox-section" id="gait-sandbox">
-    <div class="container">
-      <div class="section-header text-center">
-        <span class="section-badge"><i class="fa-solid fa-microchip"></i> INTERACTIVE LAB SANDBOX</span>
-        <h2 class="section-title">ห้องแล็บจำลองการวิเคราะห์ Gait & แรงกด Real-Time</h2>
-        <p class="section-subtitle">ทดลองกดเปลี่ยนสถานการณ์ด้านล่าง เพื่อดูการประมวลผลข้อมูลของเซนเซอร์ติดรองเท้า KINETIPOD แบบสดๆ</p>
-      </div>
-
-      <div class="sandbox-dashboard">
-        <!-- Preset Scenario Selector -->
-        <div class="scenario-bar">
-          <span class="scenario-title"><i class="fa-solid fa-flask"></i> เลือกสถานการณ์จำลอง:</span>
-          <div class="scenario-buttons">
-            <button class="scenario-btn active" data-scenario="marathon">
-              <i class="fa-solid fa-person-running"></i> นักวิ่งฟูลมาราธอน (Sub-3 Pacing)
-            </button>
-            <button class="scenario-btn" data-scenario="knee-rehab">
-              <i class="fa-solid fa-crutch"></i> ผู้ป่วยทำกายภาพหลังผ่าตัดเข่า
-            </button>
-            <button class="scenario-btn" data-scenario="heel-strike">
-              <i class="fa-solid fa-shoe-prints"></i> การลงน้ำหนักผิดรูป (Heel Strike & Overpronation)
-            </button>
-            <button class="scenario-btn" data-scenario="sprint">
-              <i class="fa-solid fa-bolt"></i> นักกีฬาสปรินต์ 100 เมตร (Max Acceleration)
-            </button>
-          </div>
-        </div>
-
-        <!-- Visualizer Grid -->
-        <div class="sandbox-main-grid">
-          
-          <!-- Left: Pressure Heatmap Simulation -->
-          <div class="sandbox-card heatmap-card">
-            <div class="card-title-row">
-              <h4><i class="fa-solid fa-fire"></i> Dynamic Foot Pressure Heatmap</h4>
-              <span class="badge-live"><span class="blink-dot"></span> 100 FPS STREAM</span>
-            </div>
-            
-            <div class="foot-heatmaps-wrapper">
-              <div class="foot-column">
-                <span class="foot-side-title">เท้าซ้าย (Left Foot)</span>
-                <div class="foot-canvas-wrap">
-                  <canvas id="leftFootCanvas" width="160" height="300"></canvas>
-                </div>
-                <div class="foot-pressure-stat" id="leftFootStat">
-                  <span>แรงกดเฉลี่ย: <strong>1,420 N</strong></span>
-                  <span>สมดุล: <strong class="text-cyan">50.2%</strong></span>
-                </div>
-              </div>
-
-              <div class="foot-column">
-                <span class="foot-side-title">เท้าขวา (Right Foot)</span>
-                <div class="foot-canvas-wrap">
-                  <canvas id="rightFootCanvas" width="160" height="300"></canvas>
-                </div>
-                <div class="foot-pressure-stat" id="rightFootStat">
-                  <span>แรงกดเฉลี่ย: <strong>1,410 N</strong></span>
-                  <span>สมดุล: <strong class="text-cyan">49.8%</strong></span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Heatmap Legend -->
-            <div class="heatmap-legend">
-              <span>แรงกดต่ำ (0 kPa)</span>
-              <div class="gradient-bar"></div>
-              <span>แรงกดสูง (500+ kPa)</span>
-            </div>
-          </div>
-
-          <!-- Middle: Realtime Waveform Chart -->
-          <div class="sandbox-card waveform-card">
-            <div class="card-title-row">
-              <h4><i class="fa-solid fa-wave-square"></i> Ground Reaction Force & Pronation Waveform</h4>
-              <span class="badge-sensor-id">Sensor ID: #KP-99824</span>
-            </div>
-            
-            <div class="chart-canvas-wrap">
-              <canvas id="waveformCanvas" width="500" height="220"></canvas>
-            </div>
-
-            <div class="chart-metrics-summary" id="chartMetricsSummary">
-              <div class="summary-item">
-                <span class="s-label">Ground Contact Time (GCT)</span>
-                <span class="s-val highlight-cyan" id="gctVal">212 ms</span>
-              </div>
-              <div class="summary-item">
-                <span class="s-label">Vertical Oscillation</span>
-                <span class="s-val highlight-green" id="oscVal">6.8 cm</span>
-              </div>
-              <div class="summary-item">
-                <span class="s-label">Pronation Angle</span>
-                <span class="s-val highlight-amber" id="pronationVal">-2.4° (Neutral)</span>
-              </div>
-              <div class="summary-item">
-                <span class="s-label">Symmetry Index</span>
-                <span class="s-val highlight-coral" id="symmetryVal">98.4%</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: AI Diagnostic & Physical Therapy Guidance -->
-          <div class="sandbox-card advice-card">
-            <div class="card-title-row">
-              <h4><i class="fa-solid fa-robot"></i> KINETI-AI Bio-Analysis</h4>
-              <span class="ai-status-pill">ประมวลผลแม่นยำ 99.4%</span>
-            </div>
-
-            <div class="ai-assessment-box" id="aiAssessmentBox">
-              <div class="ai-score-row">
-                <div class="score-circle">
-                  <span class="score-num" id="aiScoreNum">94</span>
-                  <span class="score-total">/100</span>
-                </div>
-                <div class="score-meta">
-                  <strong id="aiScoreTitle">ฟอร์มการวิ่งยอดเยี่ยม (Optimal Form)</strong>
-                  <p id="aiScoreDesc">การลงน้ำหนักกลางเท้าสมดุล ไร้แรงกระแทกเกินเกณฑ์ที่หัวเข่า</p>
-                </div>
-              </div>
-
-              <div class="ai-feedback-list" id="aiFeedbackList">
-                <div class="feedback-item positive">
-                  <i class="fa-solid fa-circle-check"></i>
-                  <span>สมดุลการก้าวเท้าซ้าย-ขวาอยู่ในเกณฑ์มาตรฐานสากล (< 1% ต่าง)</span>
-                </div>
-                <div class="feedback-item note">
-                  <i class="fa-solid fa-circle-info"></i>
-                  <span>รอบขา (Cadence) เฉลี่ย 182 SPM ช่วยประหยัดพลังงานได้ถึง 14%</span>
-                </div>
-              </div>
-
-              <div class="recommended-action-box" id="aiRecommendedProduct">
-                <span class="rec-badge">อุปกรณ์ที่เหมาะสมที่สุด:</span>
-                <div class="rec-prod-snippet">
-                  <img src="./assets/kinetipod_pro_run_1789023215190.jpg" alt="KinetiPod Pro-Run V4" class="rec-thumb">
-                  <div>
-                    <strong>KinetiPod Pro-Run V4</strong>
-                    <span class="rec-price">฿2,890 <del>฿3,590</del></span>
-                  </div>
-                  <button class="btn btn-sm btn-cyan" onclick="quickAddToCart(1)">สั่งซื้อเลย</button>
-                </div>
-              </div>
-
-              <!-- Live Audio Alert Simulator Widget (BMC Feature) -->
-              <div class="audio-alert-box">
-                <div class="audio-alert-title">
-                  <i class="fa-solid fa-volume-high text-cyan"></i>
-                  <span>ทดลองฟังเสียง Audio Alert สดจากแอป:</span>
-                </div>
-                <div class="audio-buttons-row">
-                  <button class="sound-demo-btn" onclick="playAudioAlertDemo('good')">
-                    <i class="fa-solid fa-play"></i> ✅ ฟอร์มสมดุล 50:50
-                  </button>
-                  <button class="sound-demo-btn warning" onclick="playAudioAlertDemo('pronation')">
-                    <i class="fa-solid fa-triangle-exclamation"></i> ⚠️ ข้อเท้าบิด Overpronation
-                  </button>
-                  <button class="sound-demo-btn warning" onclick="playAudioAlertDemo('heel')">
-                    <i class="fa-solid fa-triangle-exclamation"></i> ⚠️ ลงส้นเท้าหนักเกินไป
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Mobile App & Tele-Rehab Ecosystem -->
   <section class="app-sync-section" id="app-sync">
     <div class="container">
@@ -1249,7 +1073,6 @@
           <ul class="footer-links">
             <li><a href="login.html"><i class="fa-solid fa-user-lock text-cyan"></i> เข้าสู่ระบบ & ออกจากระบบ (login.html)</a></li>
             <li><a href="#needs-finder">ระบบ AI แนะนำรุ่นสินค้า</a></li>
-            <li><a href="#gait-sandbox">ห้องแล็บจำลอง Gait Simulator</a></li>
             <li><a href="#clinical-section">งานวิจัยและมาตรฐานการแพทย์</a></li>
             <li><a href="#faq">การรับประกันและนโยบายคืนสินค้า</a></li>
             <li><a href="#app-sync">ดาวน์โหลดแอป KinetiPod App</a></li>
