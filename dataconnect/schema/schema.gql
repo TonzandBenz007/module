@@ -1,0 +1,32 @@
+type User @table {
+  email: String!
+  displayName: String
+  avatarUrl: String
+}
+
+type Project @table {
+  title: String!
+  owner: User!
+  description: String
+  colorCode: String
+}
+
+type Task @table {
+  title: String!
+  status: String!
+  project: Project!
+  dueDate: Date
+  priority: Int
+  description: String
+}
+
+type Tag @table {
+  name: String!
+  user: User!
+  color: String
+}
+
+type TaskTag @table(key: ["task", "tag"]) {
+  task: Task!
+  tag: Tag!
+}

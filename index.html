@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KINETIPOD™ | อุปกรณ์ติดรองเท้าอัจฉริยะ สำหรับนักวิ่ง นักกีฬา และกายภาพบำบัด</title>
+  <meta name="description" content="นวัตกรรมเซนเซอร์ติดรองเท้า Gait Sensor & Rehab Foot Pod วิเคราะห์ท่าวิ่ง แรงกดฝ่าเท้า องศาข้อเท้า และฟื้นฟูกายภาพบำบัดแบบ Real-time">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase SDK (Compat Version for Web) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="dark-mode">
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-left">
+        <span><i class="fa-solid fa-truck-fast"></i> จัดส่งฟรีทั่วประเทศ & ประกันศูนย์ไทย 2 ปีเต็ม</span>
+        <span class="bar-separator">|</span>
+        <span id="firebaseStatusBadge" class="fb-badge offline" onclick="openFirebaseSettingsModal()" title="คลิกเพื่อตั้งค่า Firebase Config">
+          <span class="fb-dot"></span> <i class="fa-solid fa-fire"></i> กำลังเชื่อมต่อ Firebase...
+        </span>
+      </div>
+      <div class="top-bar-right">
+        <a href="javascript:void(0)" onclick="openCustomersDrawer()"><i class="fa-solid fa-database text-cyan"></i> ฐานข้อมูลลูกค้า (Firebase)</a>
+        <a href="#marketplace-channels"><i class="fa-solid fa-store"></i> Shopee | Lazada | TikTok Shop</a>
+        <div class="lang-switch">
+          <button class="lang-btn active" data-lang="th">TH</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="main-header" id="mainHeader">
+    <div class="container header-content">
+      <a href="#" class="brand-logo">
+        <div class="logo-icon">
+          <i class="fa-solid fa-shoe-prints"></i>
+          <span class="pulse-dot"></span>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">KINETI<span class="highlight">POD</span></span>
+          <span class="brand-tagline">SMART ANKLE & GAIT INTELLIGENCE</span>
+        </div>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="header-search">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="searchInput" placeholder="ค้นหา: วัดองศาข้อเท้า, เพซในร่ม, เช่าอุปกรณ์, โค้ช AI, กายภาพ...">
+          <button class="search-btn" id="searchSubmitBtn">ค้นหา</button>
+        </div>
+        <div class="search-tags">
+          <span class="tag-item" data-search="องศาข้อเท้า">#วัดองศาข้อเท้า</span>
+          <span class="tag-item" data-search="เพซในร่ม">#Paceลู่วิ่งในร่ม</span>
+          <span class="tag-item" data-search="เช่า">#เช่าฟื้นฟูกายภาพ</span>
+          <span class="tag-item" data-search="เตือนเสียง">#เตือนฟอร์มวิ่งสด</span>
+        </div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="header-actions">
+        <!-- User Account / Firebase Auth Button -->
+        <div class="user-auth-wrap" id="userAuthNavWrap">
+          <button class="action-btn auth-login-btn" id="loginBtnNav" onclick="toggleUserAuthDropdownOrOpenModal()" title="เข้าสู่ระบบ / สมาชิก">
+            <div id="userNavAvatarSlot"><i class="fa-solid fa-circle-user text-cyan"></i></div>
+            <span class="action-label" id="userNavLabel">เข้าสู่ระบบ</span>
+          </button>
+          
+          <!-- User Dropdown Menu when Logged In -->
+          <div class="user-dropdown-menu" id="userDropdownMenu" style="display: none;">
+            <div class="user-dropdown-header">
+              <div class="user-avatar-circle" id="userDropdownAvatar">KP</div>
+              <div class="user-info-text">
+                <strong id="userDropdownName">ชื่อผู้ใช้งาน</strong>
+                <span id="userDropdownEmail">user@email.com</span>
+              </div>
+            </div>
+            <ul class="user-menu-list">
+              <li><a href="login.html"><i class="fa-solid fa-right-to-bracket text-cyan"></i> หน้า Login / Logout (login.html)</a></li>
+              <li><a href="javascript:void(0)" onclick="openCustomerProfileModal()"><i class="fa-solid fa-user-pen text-cyan"></i> โปรไฟล์ & ข้อมูลสรีระ</a></li>
+              <li><a href="javascript:void(0)" onclick="openCustomersDrawer()"><i class="fa-solid fa-database text-green"></i> ฐานข้อมูลลูกค้า Firebase</a></li>
+              <li><a href="#gait-sandbox"><i class="fa-solid fa-chart-line text-amber"></i> ประวัติ Gait Simulator</a></li>
+              <li class="menu-divider"></li>
+              <li><a href="javascript:void(0)" onclick="handleUserLogout()" class="text-coral"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Customer Profile Register Button -->
+        <button class="action-btn" id="customerProfileBtn" onclick="openCustomerProfileModal()" title="ลงทะเบียนข้อมูลลูกค้า / สุขภาพ">
+          <i class="fa-solid fa-id-card-clip text-cyan"></i>
+          <span class="action-label">ลงทะเบียนสุขภาพ</span>
+        </button>
+
+        <!-- Customer Database List Button -->
+        <button class="action-btn" id="customerDatabaseBtn" onclick="openCustomersDrawer()" title="ดูข้อมูลลูกค้าใน Firebase">
+          <i class="fa-solid fa-users-gear text-green"></i>
+          <span class="action-badge" id="customersCountBadge">3</span>
+          <span class="action-label">รายชื่อลูกค้า</span>
+        </button>
+
+        <button class="action-btn" id="compareToggleBtn" title="เปรียบเทียบสเปก">
+          <i class="fa-solid fa-code-compare"></i>
+          <span class="action-badge" id="compareCount">0</span>
+          <span class="action-label">เปรียบเทียบ</span>
+        </button>
+
+        <button class="action-btn" id="wishlistToggleBtn" title="สินค้าที่ถูกใจ">
+          <i class="fa-regular fa-heart"></i>
+          <span class="action-badge" id="wishlistCount">0</span>
+          <span class="action-label">ถูกใจ</span>
+        </button>
+
+        <button class="action-btn cart-btn-action" id="cartToggleBtn" title="ตะกร้าสินค้า">
+          <div class="cart-icon-wrap">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span class="action-badge cart-badge-pulse" id="cartCount">0</span>
+          </div>
+          <div class="cart-btn-info">
+            <span class="action-label">ตะกร้าสินค้า</span>
+            <span class="cart-total-preview" id="cartTotalNav">฿0</span>
+          </div>
+        </button>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Nav Links -->
+    <nav class="sub-nav">
+      <div class="container sub-nav-content">
+        <ul class="nav-links">
+          <li><a href="#catalog" class="nav-link active" data-category="all"><i class="fa-solid fa-layer-group"></i> สินค้าทั้งหมด</a></li>
+          <li><a href="#bmc-solutions" class="nav-link"><i class="fa-solid fa-person-running"></i> เจาะลึก 2 กลุ่มนักวิ่ง (BMC)</a></li>
+          <li><a href="#watch-vs-pod" class="nav-link"><i class="fa-solid fa-code-compare"></i> นาฬิกา vs Foot Pod</a></li>
+          <li><a href="#revenue-models" class="nav-link highlight-link"><i class="fa-solid fa-tags"></i> 3 รูปแบบ ซื้อ / เช่า / AI Pro</a></li>
+          <li><a href="#gait-sandbox" class="nav-link highlight-link-alt"><i class="fa-solid fa-chart-line"></i> จำลองวิเคราะห์องศาข้อเท้า & เตือนสด</a></li>
+          <li><a href="login.html" class="nav-link highlight-link"><i class="fa-solid fa-right-to-bracket text-cyan"></i> หน้า Log in / Log out</a></li>
+          <li><a href="javascript:void(0)" onclick="openCustomerProfileModal()" class="nav-link"><i class="fa-solid fa-user-plus text-cyan"></i> ฟอร์มลงทะเบียนลูกค้า</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero">
+    <div class="hero-bg-glow"></div>
+    <div class="container hero-container">
+      <div class="hero-grid">
+        
+        <!-- Left: Hero Copy & Value Props -->
+        <div class="hero-text-content">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            <span>NEXT-GEN SMART FOOT POD SENSOR & RUNNING BIOMECHANICS</span>
+          </div>
+
+          <h1 class="hero-title">
+            เซนเซอร์ตรวจจับองศาข้อเท้าแบบเรียลไทม์<br>
+            <span class="gradient-text">วิเคราะห์ฟอร์มการงอ/บิดของเท้า</span><br>
+            ที่นาฬิกาวิ่งทั่วไปทำไม่ได้
+          </h1>
+
+          <p class="hero-subtitle">
+            นวัตกรรม Foot Pod เซนเซอร์ติดรองเท้า 100Hz IMU ความแม่นยำสูง วัด <strong>Pace และระยะทางแม่นยำแม้บนลู่วิ่งในร่ม</strong> 
+            พร้อมระบบ <strong>Audio Biofeedback แจ้งเตือนผ่านแอปทันที</strong> เมื่อลงเท้าผิดรูป เพื่อฟอร์มวิ่งที่สมบูรณ์และป้องกันการบาดเจ็บ
+          </p>
+
+          <!-- Metrics Row from Value Propositions -->
+          <div class="hero-specs-row">
+            <div class="spec-pill">
+              <i class="fa-solid fa-compass-drafting text-cyan"></i>
+              <div>
+                <strong>องศาข้อเท้า Real-Time</strong>
+                <span>วัด Pronation/Dorsiflexion</span>
+              </div>
+            </div>
+            <div class="spec-pill">
+              <i class="fa-solid fa-person-walking-arrow-right text-green"></i>
+              <div>
+                <strong>Pace ลู่วิ่งแม่นยำ 99.8%</strong>
+                <span>วัดในร่มไร้ GPS เพี้ยน</span>
+              </div>
+            </div>
+            <div class="spec-pill">
+              <i class="fa-solid fa-volume-high text-amber"></i>
+              <div>
+                <strong>แจ้งเตือนเสียงสดในแอป</strong>
+                <span>เตือนทันทีเมื่อลงเท้าไม่สมดุล</span>
+              </div>
+            </div>
+            <div class="spec-pill">
+              <i class="fa-solid fa-shield-halved text-cyan"></i>
+              <div>
+                <strong>3 โมเดลครอบคลุม</strong>
+                <span>ซื้อขาด | เช่าฟื้นฟู | AI Coach</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="hero-cta-group">
+            <a href="#revenue-models" class="btn btn-primary btn-glow">
+              <i class="fa-solid fa-bag-shopping"></i> ดูแพ็กเกจ ซื้อ / เช่า / AI Coach
+            </a>
+            <a href="#gait-sandbox" class="btn btn-glass">
+              <i class="fa-solid fa-play"></i> ทดสอบวัดองศา & ฟังเสียงเตือน
+            </a>
+            <a href="#watch-vs-pod" class="btn btn-outline">
+              <i class="fa-solid fa-code-compare"></i> ทำไมนาฬิกาทั่วไปทำไม่ได้?
+            </a>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="hero-trust">
+            <div class="trust-avatars">
+              <i class="fa-solid fa-user-doctor"></i>
+              <i class="fa-solid fa-person-running"></i>
+              <i class="fa-solid fa-user-nurse"></i>
+            </div>
+            <div class="trust-text">
+              <div class="stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <span>4.95 / 5.0</span>
+              </div>
+              <p>ออกแบบร่วมกับ <strong>โค้ชวิ่งอาชีพ</strong> และ <strong>นักกายภาพบำบัด</strong> รองรับทั้งซ้อมประจำและผู้พักฟื้น</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Hero 3D HUD Visualizer -->
+        <div class="hero-visual-card">
+          <div class="visual-card-glass">
+            <div class="card-header-bar">
+              <div class="live-indicator">
+                <span class="blink-dot"></span> LIVE SENSOR STREAM (100Hz)
+              </div>
+              <div class="sensor-mode-select">
+                <button class="hud-mode-btn active" data-mode="runner">🏃 โหมดนักวิ่งซ้อมประจำ</button>
+                <button class="hud-mode-btn" data-mode="physio">🩹 โหมดฟื้นฟูป้องกันเจ็บ</button>
+                <button class="hud-mode-btn" data-mode="elder">⚡ โหมดลู่วิ่งในร่ม</button>
+              </div>
+            </div>
+
+            <!-- Shoe Sensor Image Display -->
+            <div class="shoe-preview-stage">
+              <img id="heroShoeImg" src="./assets/hero_smart_shoe_sensor_1789023197347.jpg" alt="KinetiPod Smart Shoe Sensor" class="hero-shoe-image">
+              <div class="sensor-pointer-node" id="sensorNode">
+                <div class="pulse-ring"></div>
+                <div class="node-tooltip">
+                  <i class="fa-solid fa-microchip"></i> KINETIPOD FOOT POD
+                  <span class="node-val">16-AXIS IMU (BLE 5.4 LIVE)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Telemetry Gauges Floating Overlay -->
+            <div class="telemetry-grid">
+              <div class="hud-metric">
+                <span class="hud-label" id="metric1Label"><i class="fa-solid fa-compass-drafting text-cyan"></i> องศาข้อเท้า (Ankle Angle)</span>
+                <span class="hud-value highlight-cyan" id="metric1Value">-2.1° <small>Neutral</small></span>
+                <div class="hud-bar"><div class="hud-bar-fill" style="width: 88%;"></div></div>
+              </div>
+
+              <div class="hud-metric">
+                <span class="hud-label" id="metric2Label"><i class="fa-solid fa-scale-balanced text-green"></i> สมดุล ซ้าย/ขวา</span>
+                <span class="hud-value highlight-green" id="metric2Value">50.1% L / 49.9% R</span>
+                <div class="hud-bar"><div class="hud-bar-fill green-fill" style="width: 98%;"></div></div>
+              </div>
+
+              <div class="hud-metric">
+                <span class="hud-label" id="metric3Label"><i class="fa-solid fa-shoe-prints text-amber"></i> ฟอร์มการงอ/บิดของเท้า</span>
+                <span class="hud-value highlight-amber" id="metric3Value">Midfoot Strike (14°)</span>
+                <span class="hud-sub" id="metric3Sub">ไร้แรงบิด Pronation ผิดรูป</span>
+              </div>
+
+              <div class="hud-metric">
+                <span class="hud-label" id="metric4Label"><i class="fa-solid fa-person-running text-coral"></i> เพซลู่วิ่งในร่ม (Treadmill)</span>
+                <span class="hud-value highlight-coral" id="metric4Value">4:45 <small>min/km</small></span>
+                <span class="hud-sub" id="metric4Sub">แม่นยำสูง ไม่พึ่งสัญญาณ GPS</span>
+              </div>
+            </div>
+
+            <div class="hud-footer">
+              <span class="hud-status"><i class="fa-solid fa-bell text-cyan"></i> Audio Alert: "ฟอร์มลงเท้าสมดุล รอบขาเหมาะสม"</span>
+              <button class="btn btn-sm btn-cyan" onclick="document.querySelector('#gait-sandbox').scrollIntoView({behavior:'smooth'})">
+                เปิดห้องแล็บจำลอง <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Flash Sale & Shopee-Style Voucher Section -->
+  <section class="flash-voucher-section" id="flash-deals">
+    <div class="container">
+      <div class="flash-deal-box">
+        <div class="flash-header">
+          <div class="flash-title-wrap">
+            <span class="flash-icon"><i class="fa-solid fa-bolt-lightning"></i></span>
+            <div>
+              <h2 class="flash-heading">FLASH SALE พิเศษประจำวัน</h2>
+              <p class="flash-sub">จำกัดเฉพาะ 50 ออเดอร์แรกเท่านั้น รับสิทธิ์ตรวจสภาพท่าเดินฟรีผ่านคลินิกออนไลน์</p>
+            </div>
+          </div>
+          <div class="countdown-timer" id="flashTimer">
+            <span class="timer-label">สิ้นสุดในอีก:</span>
+            <div class="timer-digits">
+              <span class="digit-box" id="timerHours">05</span> :
+              <span class="digit-box" id="timerMins">42</span> :
+              <span class="digit-box" id="timerSecs">19</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Voucher Cards Carousel/Grid -->
+        <div class="vouchers-grid">
+          <div class="voucher-card">
+            <div class="voucher-left">
+              <span class="voucher-type">ส่วนลดพิเศษ</span>
+              <span class="voucher-amount">฿500</span>
+              <span class="voucher-min">ขั้นต่ำ ฿2,500</span>
+            </div>
+            <div class="voucher-right">
+              <strong>โค้ด: KINETI500</strong>
+              <p>ใช้ได้กับเซนเซอร์วิ่งและกายภาพทุกรุ่น</p>
+              <button class="claim-btn" data-code="KINETI500" onclick="claimVoucher('KINETI500', 500, 2500)">
+                <i class="fa-solid fa-ticket"></i> เก็บโค้ด
+              </button>
+            </div>
+          </div>
+
+          <div class="voucher-card">
+            <div class="voucher-left medical-tint">
+              <span class="voucher-type">กายภาพบำบัด</span>
+              <span class="voucher-amount">15% OFF</span>
+              <span class="voucher-min">ไม่มีขั้นต่ำ</span>
+            </div>
+            <div class="voucher-right">
+              <strong>โค้ด: PHYSIOCARE</strong>
+              <p>สำหรับรุ่น RehabGait & OrthoPressure</p>
+              <button class="claim-btn" data-code="PHYSIOCARE" onclick="claimVoucher('PHYSIOCARE', '15%', 0)">
+                <i class="fa-solid fa-ticket"></i> เก็บโค้ด
+              </button>
+            </div>
+          </div>
+
+          <div class="voucher-card">
+            <div class="voucher-left gold-tint">
+              <span class="voucher-type">ส่งฟรีทั่วไทย</span>
+              <span class="voucher-amount">FREE</span>
+              <span class="voucher-min">ขั้นต่ำ ฿1,000</span>
+            </div>
+            <div class="voucher-right">
+              <strong>โค้ด: FREESHIP</strong>
+              <p>ส่งด่วน Express 1-2 วันถึงหน้าบ้าน</p>
+              <button class="claim-btn" data-code="FREESHIP" onclick="claimVoucher('FREESHIP', 'FREE_SHIPPING', 1000)">
+                <i class="fa-solid fa-ticket"></i> เก็บโค้ด
+              </button>
+            </div>
+          </div>
+
+          <div class="voucher-card">
+            <div class="voucher-left runner-tint">
+              <span class="voucher-type">สายวิ่งมาราธอน</span>
+              <span class="voucher-amount">฿300</span>
+              <span class="voucher-min">ขั้นต่ำ ฿1,800</span>
+            </div>
+            <div class="voucher-right">
+              <strong>โค้ด: RUNNER300</strong>
+              <p>รับฟรีคลิปติดเชือกรองเท้าสำรอง 2 ชิ้น</p>
+              <button class="claim-btn" data-code="RUNNER300" onclick="claimVoucher('RUNNER300', 300, 1800)">
+                <i class="fa-solid fa-ticket"></i> เก็บโค้ด
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BMC CUSTOMER SEGMENTS & SOLUTIONS -->
+  <section class="bmc-solutions-section" id="bmc-solutions">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge"><i class="fa-solid fa-users-viewfinder"></i> TARGET CUSTOMER SEGMENTS</span>
+        <h2 class="section-title">ออกแบบมาเพื่อแก้ปัญหา 2 กลุ่มนักวิ่งโดยเฉพาะ</h2>
+        <p class="section-subtitle">
+          ตอบโจทย์ตั้งแต่ <strong>นักวิ่งซ้อมประจำที่ต้องการสถิติจริง</strong> ไปจนถึง <strong>นักวิ่งที่บาดเจ็บบ่อยหรือกำลังทำกายภาพบำบัด</strong>
+        </p>
+      </div>
+
+      <div class="bmc-segments-grid">
+        <!-- Segment 1: Regular Runners -->
+        <div class="bmc-segment-card runner-card">
+          <div class="segment-header">
+            <div class="segment-icon-badge">
+              <i class="fa-solid fa-person-running"></i>
+            </div>
+            <div class="segment-title-wrap">
+              <h3>นักวิ่งที่ซ้อมเป็นประจำ (Regular Runners)</h3>
+              <span class="segment-tagline">ซ้อมทั้งกลางแจ้ง (Outdoor) และบนลู่วิ่ง (Treadmill)</span>
+            </div>
+          </div>
+
+          <div class="segment-pain-points">
+            <div class="pain-title"><i class="fa-solid fa-triangle-exclamation"></i> ปัญหาที่พบบ่อย (Pain Points):</div>
+            <ul class="pain-list">
+              <li>นาฬิกา GPS วิ่งบนลู่วิ่งในร่มหรือในยิมวัดเพซและระยะทางเพี้ยน 15-30%</li>
+              <li>ไม่รู้รอบขา (Cadence), กำลังวัตต์ (Power), และ Ground Contact Time ที่แท้จริง</li>
+              <li>ไม่มีระบบเตือนฟอร์มสด ทำให้ซ้อมผิดท่าจนสะสมความล้า</li>
+            </ul>
+          </div>
+
+          <ul class="segment-solutions-list">
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong>วัด Pace & ระยะทางแม่นยำสูง แม้วิ่งในร่ม:</strong>
+                <p>เซนเซอร์ 100Hz IMU ประมวลผลการก้าวทุกมิลลิวินาที ไม่ต้องพึ่งพาสัญญาณ GPS</p>
+              </div>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong>วิเคราะห์รอบขา (Cadence) & กำลังวัตต์ (Power):</strong>
+                <p>แสดงข้อมูลแบบสดบนข้อมือ Garmin, Apple Watch, Strava ช่วยคุมเพซสม่ำเสมอ</p>
+              </div>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong>ชุมชน Runners Community & Virtual Challenges:</strong>
+                <p>แชร์กราฟสถิติ เปรียบเทียบฟอร์มกับเพื่อนนักวิ่ง และร่วมภารกิจในแอป</p>
+              </div>
+            </li>
+          </ul>
+
+          <button class="btn btn-primary w-100" onclick="document.querySelector('#revenue-models').scrollIntoView({behavior:'smooth'})">
+            <i class="fa-solid fa-cart-shopping"></i> ดูแพ็กเกจสำหรับนักวิ่งซ้อมประจำ
+          </button>
+        </div>
+
+        <!-- Segment 2: Injury Prevention & Rehab -->
+        <div class="bmc-segment-card rehab-card">
+          <div class="segment-header">
+            <div class="segment-icon-badge">
+              <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <div class="segment-title-wrap">
+              <h3>นักวิ่งที่บาดเจ็บบ่อย / ฟื้นฟูกายภาพ</h3>
+              <span class="segment-tagline">ต้องการปรับฟอร์ม ป้องกันอาการบาดเจ็บ & ปรับบุคลิกภาพ</span>
+            </div>
+          </div>
+
+          <div class="segment-pain-points">
+            <div class="pain-title"><i class="fa-solid fa-triangle-exclamation"></i> ปัญหาที่พบบ่อย (Pain Points):</div>
+            <ul class="pain-list">
+              <li>เจ็บเข่า (Runner's Knee), ITB, รองช้ำ หรือข้อเท้าพลิกซ้ำๆ ทำให้พลาดงานวิ่งสำคัญ</li>
+              <li>ลงน้ำหนักเท้าเอียงข้างใดข้างหนึ่งโดยไม่รู้ตัว (Asymmetric Gait)</li>
+              <li>ฟื้นฟูหลังผ่าตัดหรือกายภาพ แต่ไม่มีเครื่องมือวัดแรงกดที่บ้าน</li>
+            </ul>
+          </div>
+
+          <ul class="segment-solutions-list">
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong>ตรวจจับองศาข้อเท้าแบบเรียลไทม์ (Ankle Biomechanics):</strong>
+                <p>วัดการงอ/บิดของเท้า (Pronation/Supination) ที่นาฬิกาทั่วไปไม่สามารถทำได้</p>
+              </div>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong>Audio Biofeedback แจ้งเตือนเสียงทันทีขณะวิ่ง:</strong>
+                <p>ระบบส่งเสียงเตือนผ่านหูฟังทันทีเมื่อทิ้งน้ำหนักผิดรูปหรือก้าวไม่สมดุล</p>
+              </div>
+            </li>
+            <li>
+              <i class="fa-solid fa-circle-check"></i>
+              <div>
+                <strong>มีโมเดลเช่าระยะสั้น & ส่งรายงานถึงแพทย์:</strong>
+                <p>ประหยัดค่าใช้จ่ายด้วยระบบเช่า 1-3 เดือน พร้อมรายงานชีวกลศาสตร์ส่งตรงถึงนักกายภาพบำบัด</p>
+              </div>
+            </li>
+          </ul>
+
+          <button class="btn btn-green w-100" onclick="selectRevenuePlan('rental')">
+            <i class="fa-solid fa-rotate"></i> จองโมเดลเช่าระยะสั้นสำหรับผู้พักฟื้น
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON: SMARTWATCH VS KINETIPOD FOOT POD -->
+  <section class="watch-vs-pod-section" id="watch-vs-pod">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge"><i class="fa-solid fa-code-compare"></i> WHY FOOT POD?</span>
+        <h2 class="section-title">ทำไม "นาฬิกาวิ่งทั่วไป" ถึงวัดฟอร์มเท้าไม่ได้?</h2>
+        <p class="section-subtitle">
+          นาฬิกาอยู่บนข้อมือจึงไม่สามารถตรวจจับมุมองศาและแรงกระแทกที่ฝ่าเท้าได้ — KINETIPOD ติดอยู่ที่รองเท้าเพื่อความแม่นยำระดับ 100Hz
+        </p>
+      </div>
+
+      <div class="comp-table-card">
+        <div class="comp-table-wrap">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th style="width: 34%;">ฟีเจอร์การตรวจจับชีวกลศาสตร์</th>
+                <th style="width: 33%;">⌚ นาฬิกาวิ่ง GPS ทั่วไป (Smartwatch)</th>
+                <th style="width: 33%;" class="highlight-col"><i class="fa-solid fa-shoe-prints"></i> KINETIPOD Smart Foot Pod</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. ตรวจจับองศาข้อเท้า & การบิด (Pronation/Supination)</strong></td>
+                <td><span class="badge-comp-no"><i class="fa-solid fa-xmark"></i> ทำไม่ได้ (อยู่บนข้อมือ)</span></td>
+                <td class="highlight-col"><span class="badge-comp-yes"><i class="fa-solid fa-check"></i> ตรวจจับเรียลไทม์ (±0.1° Precision)</span></td>
+              </tr>
+              <tr>
+                <td><strong>2. ความแม่นยำ Pace & ระยะทางบนลู่วิ่งในร่ม (Treadmill)</strong></td>
+                <td><span class="badge-comp-warn"><i class="fa-solid fa-triangle-exclamation"></i> เพี้ยนสูง (ประมาณจากแกว่งแขน)</span></td>
+                <td class="highlight-col"><span class="badge-comp-yes"><i class="fa-solid fa-check"></i> แม่นยำ 99.8% ด้วย 100Hz IMU</span></td>
+              </tr>
+              <tr>
+                <td><strong>3. ระบบแจ้งเตือนเสียงทันทีเมื่อลงเท้าผิดรูป (Audio Alert)</strong></td>
+                <td><span class="badge-comp-no"><i class="fa-solid fa-xmark"></i> ไม่มีระบบเตือนฟอร์มเท้า</span></td>
+                <td class="highlight-col"><span class="badge-comp-yes"><i class="fa-solid fa-check"></i> เตือนสดผ่านหูฟังขณะวิ่งทันที</span></td>
+              </tr>
+              <tr>
+                <td><strong>4. วิเคราะห์สมดุลแรงกด ซ้าย-ขวา (Left/Right Symmetry)</strong></td>
+                <td><span class="badge-comp-warn"><i class="fa-solid fa-triangle-exclamation"></i> ดูได้คร่าวๆ (ต้องใส่สายคาดอก)</span></td>
+                <td class="highlight-col"><span class="badge-comp-yes"><i class="fa-solid fa-check"></i> วัดสมดุลแรงกระแทกและเวลาสัมผัสพื้น 3D</span></td>
+              </tr>
+              <tr>
+                <td><strong>5. วิเคราะห์จุดลงเท้า (Heel / Midfoot / Forefoot Strike)</strong></td>
+                <td><span class="badge-comp-no"><i class="fa-solid fa-xmark"></i> ทำไม่ได้</span></td>
+                <td class="highlight-col"><span class="badge-comp-yes"><i class="fa-solid fa-check"></i> แสดงโมเดล 3D และ Heatmap แรงกด</span></td>
+              </tr>
+              <tr>
+                <td><strong>6. โหมดเช่าระยะสั้นสำหรับผู้ป่วยพักฟื้นกายภาพ</strong></td>
+                <td><span class="badge-comp-no"><i class="fa-solid fa-xmark"></i> ไม่มีบริการเช่า</span></td>
+                <td class="highlight-col"><span class="badge-comp-yes"><i class="fa-solid fa-check"></i> มีโมเดลเช่า 1-3 เดือน ส่งคืนสะดวก</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 REVENUE STREAMS & PRICING PACKAGES (FROM BMC) -->
+  <section class="revenue-models-section" id="revenue-models">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge"><i class="fa-solid fa-hand-holding-dollar"></i> FLEXIBLE REVENUE MODELS</span>
+        <h2 class="section-title">3 รูปแบบการให้บริการ ตอบโจทย์ทุกความต้องการ</h2>
+        <p class="section-subtitle">
+          เลือกรูปแบบที่ใช่สำหรับคุณ: ซื้อขาดเป็นเจ้าของฮาร์ดแวร์, เช่าระยะสั้นสำหรับฟื้นฟูกายภาพ, หรือสมัครสมาชิก AI Running Coach Pro
+        </p>
+      </div>
+
+      <div class="revenue-grid">
+        <!-- Plan 1: Direct Purchase -->
+        <div class="rev-card featured">
+          <div class="rev-popular-badge">ขายดีอันดับ 1 สำหรับนักวิ่ง</div>
+          <div class="rev-badge-type"><i class="fa-solid fa-cart-shopping"></i> ซื้อขาดอุปกรณ์ฮาร์ดแวร์</div>
+          <h3 class="rev-title">KINETIPOD Pro-Run V4</h3>
+          <p class="rev-desc">สำหรับนักวิ่งที่ซ้อมเป็นประจำ ซื้อครั้งเดียว ใช้งานได้ตลอดชีพพร้อมอุปกรณ์ครบเซ็ต</p>
+          
+          <div class="rev-price-wrap">
+            <span class="rev-amount">฿2,890</span>
+            <span class="rev-period">/ เครื่อง (ปกติ ฿3,590)</span>
+          </div>
+
+          <ul class="rev-features-list">
+            <li><i class="fa-solid fa-check"></i> <span>อุปกรณ์ Foot Pod 16-Axis IMU (100Hz)</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>แท่นชาร์จแม่เหล็ก + คลิปหนีบ Dual-Lock 2 คู่</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>วัด Pace ในร่ม/ลู่วิ่ง & องศาข้อเท้า Real-time</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>ระบบแจ้งเตือนเสียง Audio Biofeedback สดในแอป</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>รับประกันศูนย์ไทย 2 ปีเต็ม + อัปเดตเฟิร์มแวร์ฟรีตลอดชีพ</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>เชื่อมต่อ Garmin, Strava, Apple Health</span></li>
+          </ul>
+
+          <button class="btn btn-primary btn-glow w-100" onclick="quickAddToCart(1)">
+            <i class="fa-solid fa-cart-plus"></i> สั่งซื้อแบบซื้อขาด (฿2,890)
+          </button>
+        </div>
+
+        <!-- Plan 2: Short-Term Rental for Rehab -->
+        <div class="rev-card">
+          <div class="rev-badge-type"><i class="fa-solid fa-rotate text-green"></i> โมเดลเช่าระยะสั้นสำหรับผู้พักฟื้น</div>
+          <h3 class="rev-title">Rehab Rental Plan</h3>
+          <p class="rev-desc">สำหรับผู้ป่วยพักฟื้นหลังผ่าตัดเข่า/ข้อเท้า หรือนักวิ่งที่ต้องการเช็กฟอร์มก่อนแข่ง</p>
+          
+          <div class="rev-price-wrap">
+            <span class="rev-amount text-green">฿490</span>
+            <span class="rev-period">/ เดือน (มัดจำ ฿1,000 คืนเมื่อส่งกลับ)</span>
+          </div>
+
+          <ul class="rev-features-list">
+            <li><i class="fa-solid fa-check"></i> <span>เช่าอุปกรณ์ RehabGait MediSense ครบชุด</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>ระบบตรวจวัดสมดุลแรงกดฝ่าเท้า & องศาข้อเท้า</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>รายงาน Tele-Rehab สรุปรายสัปดาห์ส่งตรงถึงแพทย์</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>ส่งฟรีถึงหน้าบ้าน พร้อมกล่องส่งคืนสะดวก</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>เปลี่ยนเป็นซื้อขาดได้โดยหักค่าเช่าที่จ่ายไปแล้ว</span></li>
+          </ul>
+
+          <button class="btn btn-green w-100" onclick="openRentalModal()">
+            <i class="fa-solid fa-calendar-check"></i> จองคิวเช่าอุปกรณ์ (฿490/ด.)
+          </button>
+        </div>
+
+        <!-- Plan 3: In-App AI Running Coach Pro -->
+        <div class="rev-card">
+          <div class="rev-badge-type"><i class="fa-solid fa-crown text-amber"></i> ฟีเจอร์พรีเมียมในแอป (In-App)</div>
+          <h3 class="rev-title">AI Running Coach Pro</h3>
+          <p class="rev-desc">เหมือนมีโค้ชวิ่งและนักกายภาพส่วนตัวคอยดูแล ปรับตารางซ้อมและวิเคราะห์ชีวกลศาสตร์</p>
+          
+          <div class="rev-price-wrap">
+            <span class="rev-amount text-amber">฿249</span>
+            <span class="rev-period">/ เดือน (หรือ ฿1,990 / ปี)</span>
+          </div>
+
+          <ul class="rev-features-list">
+            <li><i class="fa-solid fa-check"></i> <span>AI วิเคราะห์ Gait & ชีวกลศาสตร์แบบเจาะลึก 3 มิติ</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>โปรแกรมฝึกปรับท่าวิ่งเฉพาะบุคคล (Gait Retraining)</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>ตรวจจับความเสี่ยงบาดเจ็บล่วงหน้าจากความล้าสะสม</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>ตารางซ้อมมาราธอนแบบ Adaptive ตามสถิติการก้าว</span></li>
+            <li><i class="fa-solid fa-check"></i> <span>ทดลองใช้งานฟรี 14 วันแรก ยกเลิกได้ตลอดเวลา</span></li>
+          </ul>
+
+          <button class="btn btn-outline w-100" onclick="openSubscriptionModal()">
+            <i class="fa-solid fa-sparkles"></i> ทดลองใช้ AI Coach ฟรี 14 วัน
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive AI Needs Finder Section (Wizard) -->
+  <section class="needs-finder-section" id="needs-finder">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> AI SMART ADVISOR</span>
+        <h2 class="section-title">ค้นหาอุปกรณ์ที่เหมาะกับคุณที่สุด ใน 3 ขั้นตอน</h2>
+        <p class="section-subtitle">ไม่ว่าคุณจะเป็นนักวิ่งล่าสถิติ New PB, นักกีฬา, ผู้ป่วยฟื้นฟูข้อเข่า หรือผู้ดูแลผู้สูงอายุ ระบบจะแนะนำรุ่นที่แม่นยำและตรงจุดที่สุด</p>
+      </div>
+
+      <div class="wizard-container" id="wizardContainer">
+        <!-- Step Indicator -->
+        <div class="wizard-steps-indicator">
+          <div class="w-step active" id="wStepInd1"><span>1</span> กลุ่มผู้ใช้งาน</div>
+          <div class="w-step-line"></div>
+          <div class="w-step" id="wStepInd2"><span>2</span> ปัญหาหรือเป้าหมาย</div>
+          <div class="w-step-line"></div>
+          <div class="w-step" id="wStepInd3"><span>3</span> คำแนะนำที่ตรงใจ</div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="wizard-step-content active" id="wStep1">
+          <h3 class="step-title">เลือกกลุ่มเป้าหมายหรือบทบาทของคุณ:</h3>
+          <div class="options-grid">
+            <div class="option-card" data-role="runner" onclick="selectWizardOption(1, 'role', 'runner')">
+              <div class="option-icon"><i class="fa-solid fa-person-running"></i></div>
+              <h4>นักวิ่ง & ไตรกีฬา (Runners)</h4>
+              <p>ต้องการพัฒนาฟอร์มการวิ่ง วัดกำลังวัตต์ รอบขา และป้องกันอาการบาดเจ็บ ITB / ชินสปลินต์</p>
+            </div>
+
+            <div class="option-card" data-role="rehab" onclick="selectWizardOption(1, 'role', 'rehab')">
+              <div class="option-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+              <h4>ผู้ป่วยกายภาพบำบัด & ผ่าตัด (Rehab)</h4>
+              <p>ฟื้นฟูหลังผ่าตัดเข่า/ข้อเท้า/สะโพก หรือผู้ป่วยหลอดเลือดสมอง (Stroke) ต้องการฝึกเดินทิ้งน้ำหนัก</p>
+            </div>
+
+            <div class="option-card" data-role="sports" onclick="selectWizardOption(1, 'role', 'sports')">
+              <div class="option-icon"><i class="fa-solid fa-basketball"></i></div>
+              <h4>นักกีฬาประเภททีม & สปรินต์ (Athletes)</h4>
+              <p>วัดสปีด อัตราเร่ง แรงกระแทกจากการกระโดด สำหรับบาสเกตบอล, ฟุตบอล, แบดมินตัน</p>
+            </div>
+
+            <div class="option-card" data-role="elder" onclick="selectWizardOption(1, 'role', 'elder')">
+              <div class="option-icon"><i class="fa-solid fa-person-cane"></i></div>
+              <h4>ผู้สูงอายุ & ผู้ดูแล (Senior Balance)</h4>
+              <p>ตรวจจับการทรงตัว การสะดุด และมีระบบส่งสัญญาณเตือนการหกล้มอัตโนมัติถึงญาติ</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="wizard-step-content" id="wStep2">
+          <h3 class="step-title">เป้าหมายหลักที่คุณต้องการเน้นย้ำมากที่สุดคืออะไร?</h3>
+          <div class="options-grid" id="step2DynamicOptions">
+            <!-- Dynamic options injected by JS -->
+          </div>
+          <div class="wizard-nav-btns">
+            <button class="btn btn-outline" onclick="goToWizardStep(1)"><i class="fa-solid fa-arrow-left"></i> ย้อนกลับ</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Result -->
+        <div class="wizard-step-content" id="wStep3">
+          <div class="recommendation-result" id="recommendationResult">
+            <!-- Result injected by JS -->
+          </div>
+          <div class="wizard-nav-btns text-center">
+            <button class="btn btn-outline" onclick="resetWizard()"><i class="fa-solid fa-rotate-left"></i> ทำแบบประเมินใหม่</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product Catalog Section -->
+  <section class="catalog-section" id="catalog">
+    <div class="container">
+      <div class="catalog-header-wrap">
+        <div>
+          <span class="section-badge"><i class="fa-solid fa-store"></i> INNOVATIVE STORE</span>
+          <h2 class="section-title">อุปกรณ์ติดรองเท้าและเซนเซอร์อัจฉริยะ</h2>
+          <p class="section-subtitle">เลือกสรรเทคโนโลยีที่ดีที่สุดสำหรับเท้าของคุณ รับประกันศูนย์ไทยทุกชิ้น</p>
+        </div>
+
+        <!-- Category Filter Tabs -->
+        <div class="category-tabs" id="categoryTabs">
+          <button class="cat-tab active" data-filter="all"><i class="fa-solid fa-layer-group"></i> ทั้งหมด (<span id="countAll">6</span>)</button>
+          <button class="cat-tab" data-filter="running"><i class="fa-solid fa-person-running"></i> วิ่ง & มาราธอน</button>
+          <button class="cat-tab" data-filter="rehab"><i class="fa-solid fa-heart-pulse"></i> กายภาพ & ฟื้นฟู</button>
+          <button class="cat-tab" data-filter="sports"><i class="fa-solid fa-bolt"></i> กีฬา & สปรินต์</button>
+          <button class="cat-tab" data-filter="safety"><i class="fa-solid fa-shield-heart"></i> ความปลอดภัย</button>
+        </div>
+      </div>
+
+      <!-- Filters & Sorting Bar -->
+      <div class="filter-controls-bar">
+        <div class="filter-tags-left">
+          <span class="filter-label"><i class="fa-solid fa-sliders"></i> กรองด่วน:</span>
+          <button class="filter-chip active" data-feature="all">ทั้งหมด</button>
+          <button class="filter-chip" data-feature="medical">เกรดการแพทย์</button>
+          <button class="filter-chip" data-feature="wireless">ชาร์จไร้สาย</button>
+          <button class="filter-chip" data-feature="waterproof">IP68 กันน้ำ</button>
+          <button class="filter-chip" data-feature="bestseller">ยอดนิยม</button>
+        </div>
+
+        <div class="sort-control-right">
+          <label for="sortSelect">เรียงตาม:</label>
+          <select id="sortSelect" class="custom-select">
+            <option value="featured">สินค้าแนะนำ / ยอดนิยม</option>
+            <option value="price-asc">ราคา: ต่ำไปสูง</option>
+            <option value="price-desc">ราคา: สูงไปต่ำ</option>
+            <option value="rating">คะแนนรีวิวสูงสุด</option>
+            <option value="discount">ส่วนลดมากที่สุด</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="products-grid" id="productsGrid">
+        <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Live Gait & Force Plate Sandbox Simulator -->
+  <section class="gait-sandbox-section" id="gait-sandbox">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge"><i class="fa-solid fa-microchip"></i> INTERACTIVE LAB SANDBOX</span>
+        <h2 class="section-title">ห้องแล็บจำลองการวิเคราะห์ Gait & แรงกด Real-Time</h2>
+        <p class="section-subtitle">ทดลองกดเปลี่ยนสถานการณ์ด้านล่าง เพื่อดูการประมวลผลข้อมูลของเซนเซอร์ติดรองเท้า KINETIPOD แบบสดๆ</p>
+      </div>
+
+      <div class="sandbox-dashboard">
+        <!-- Preset Scenario Selector -->
+        <div class="scenario-bar">
+          <span class="scenario-title"><i class="fa-solid fa-flask"></i> เลือกสถานการณ์จำลอง:</span>
+          <div class="scenario-buttons">
+            <button class="scenario-btn active" data-scenario="marathon">
+              <i class="fa-solid fa-person-running"></i> นักวิ่งฟูลมาราธอน (Sub-3 Pacing)
+            </button>
+            <button class="scenario-btn" data-scenario="knee-rehab">
+              <i class="fa-solid fa-crutch"></i> ผู้ป่วยทำกายภาพหลังผ่าตัดเข่า
+            </button>
+            <button class="scenario-btn" data-scenario="heel-strike">
+              <i class="fa-solid fa-shoe-prints"></i> การลงน้ำหนักผิดรูป (Heel Strike & Overpronation)
+            </button>
+            <button class="scenario-btn" data-scenario="sprint">
+              <i class="fa-solid fa-bolt"></i> นักกีฬาสปรินต์ 100 เมตร (Max Acceleration)
+            </button>
+          </div>
+        </div>
+
+        <!-- Visualizer Grid -->
+        <div class="sandbox-main-grid">
+          
+          <!-- Left: Pressure Heatmap Simulation -->
+          <div class="sandbox-card heatmap-card">
+            <div class="card-title-row">
+              <h4><i class="fa-solid fa-fire"></i> Dynamic Foot Pressure Heatmap</h4>
+              <span class="badge-live"><span class="blink-dot"></span> 100 FPS STREAM</span>
+            </div>
+            
+            <div class="foot-heatmaps-wrapper">
+              <div class="foot-column">
+                <span class="foot-side-title">เท้าซ้าย (Left Foot)</span>
+                <div class="foot-canvas-wrap">
+                  <canvas id="leftFootCanvas" width="160" height="300"></canvas>
+                </div>
+                <div class="foot-pressure-stat" id="leftFootStat">
+                  <span>แรงกดเฉลี่ย: <strong>1,420 N</strong></span>
+                  <span>สมดุล: <strong class="text-cyan">50.2%</strong></span>
+                </div>
+              </div>
+
+              <div class="foot-column">
+                <span class="foot-side-title">เท้าขวา (Right Foot)</span>
+                <div class="foot-canvas-wrap">
+                  <canvas id="rightFootCanvas" width="160" height="300"></canvas>
+                </div>
+                <div class="foot-pressure-stat" id="rightFootStat">
+                  <span>แรงกดเฉลี่ย: <strong>1,410 N</strong></span>
+                  <span>สมดุล: <strong class="text-cyan">49.8%</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Heatmap Legend -->
+            <div class="heatmap-legend">
+              <span>แรงกดต่ำ (0 kPa)</span>
+              <div class="gradient-bar"></div>
+              <span>แรงกดสูง (500+ kPa)</span>
+            </div>
+          </div>
+
+          <!-- Middle: Realtime Waveform Chart -->
+          <div class="sandbox-card waveform-card">
+            <div class="card-title-row">
+              <h4><i class="fa-solid fa-wave-square"></i> Ground Reaction Force & Pronation Waveform</h4>
+              <span class="badge-sensor-id">Sensor ID: #KP-99824</span>
+            </div>
+            
+            <div class="chart-canvas-wrap">
+              <canvas id="waveformCanvas" width="500" height="220"></canvas>
+            </div>
+
+            <div class="chart-metrics-summary" id="chartMetricsSummary">
+              <div class="summary-item">
+                <span class="s-label">Ground Contact Time (GCT)</span>
+                <span class="s-val highlight-cyan" id="gctVal">212 ms</span>
+              </div>
+              <div class="summary-item">
+                <span class="s-label">Vertical Oscillation</span>
+                <span class="s-val highlight-green" id="oscVal">6.8 cm</span>
+              </div>
+              <div class="summary-item">
+                <span class="s-label">Pronation Angle</span>
+                <span class="s-val highlight-amber" id="pronationVal">-2.4° (Neutral)</span>
+              </div>
+              <div class="summary-item">
+                <span class="s-label">Symmetry Index</span>
+                <span class="s-val highlight-coral" id="symmetryVal">98.4%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: AI Diagnostic & Physical Therapy Guidance -->
+          <div class="sandbox-card advice-card">
+            <div class="card-title-row">
+              <h4><i class="fa-solid fa-robot"></i> KINETI-AI Bio-Analysis</h4>
+              <span class="ai-status-pill">ประมวลผลแม่นยำ 99.4%</span>
+            </div>
+
+            <div class="ai-assessment-box" id="aiAssessmentBox">
+              <div class="ai-score-row">
+                <div class="score-circle">
+                  <span class="score-num" id="aiScoreNum">94</span>
+                  <span class="score-total">/100</span>
+                </div>
+                <div class="score-meta">
+                  <strong id="aiScoreTitle">ฟอร์มการวิ่งยอดเยี่ยม (Optimal Form)</strong>
+                  <p id="aiScoreDesc">การลงน้ำหนักกลางเท้าสมดุล ไร้แรงกระแทกเกินเกณฑ์ที่หัวเข่า</p>
+                </div>
+              </div>
+
+              <div class="ai-feedback-list" id="aiFeedbackList">
+                <div class="feedback-item positive">
+                  <i class="fa-solid fa-circle-check"></i>
+                  <span>สมดุลการก้าวเท้าซ้าย-ขวาอยู่ในเกณฑ์มาตรฐานสากล (< 1% ต่าง)</span>
+                </div>
+                <div class="feedback-item note">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>รอบขา (Cadence) เฉลี่ย 182 SPM ช่วยประหยัดพลังงานได้ถึง 14%</span>
+                </div>
+              </div>
+
+              <div class="recommended-action-box" id="aiRecommendedProduct">
+                <span class="rec-badge">อุปกรณ์ที่เหมาะสมที่สุด:</span>
+                <div class="rec-prod-snippet">
+                  <img src="./assets/kinetipod_pro_run_1789023215190.jpg" alt="KinetiPod Pro-Run V4" class="rec-thumb">
+                  <div>
+                    <strong>KinetiPod Pro-Run V4</strong>
+                    <span class="rec-price">฿2,890 <del>฿3,590</del></span>
+                  </div>
+                  <button class="btn btn-sm btn-cyan" onclick="quickAddToCart(1)">สั่งซื้อเลย</button>
+                </div>
+              </div>
+
+              <!-- Live Audio Alert Simulator Widget (BMC Feature) -->
+              <div class="audio-alert-box">
+                <div class="audio-alert-title">
+                  <i class="fa-solid fa-volume-high text-cyan"></i>
+                  <span>ทดลองฟังเสียง Audio Alert สดจากแอป:</span>
+                </div>
+                <div class="audio-buttons-row">
+                  <button class="sound-demo-btn" onclick="playAudioAlertDemo('good')">
+                    <i class="fa-solid fa-play"></i> ✅ ฟอร์มสมดุล 50:50
+                  </button>
+                  <button class="sound-demo-btn warning" onclick="playAudioAlertDemo('pronation')">
+                    <i class="fa-solid fa-triangle-exclamation"></i> ⚠️ ข้อเท้าบิด Overpronation
+                  </button>
+                  <button class="sound-demo-btn warning" onclick="playAudioAlertDemo('heel')">
+                    <i class="fa-solid fa-triangle-exclamation"></i> ⚠️ ลงส้นเท้าหนักเกินไป
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mobile App & Tele-Rehab Ecosystem -->
+  <section class="app-sync-section" id="app-sync">
+    <div class="container">
+      <div class="app-sync-grid">
+        <div class="app-sync-image-wrap">
+          <img src="./assets/app_telemetry_showcase_1789023674549.jpg" alt="KinetiPod App Dashboard" class="app-showcase-img">
+          <div class="app-floating-badge badge-1">
+            <i class="fa-solid fa-wifi"></i> Bluetooth 5.4 Low Latency (2ms)
+          </div>
+          <div class="app-floating-badge badge-2">
+            <i class="fa-solid fa-user-doctor"></i> Tele-Rehab Cloud Report
+          </div>
+        </div>
+
+        <div class="app-sync-text">
+          <span class="section-badge"><i class="fa-solid fa-mobile-screen"></i> APP & CLOUD PLATFORM</span>
+          <h2 class="section-title">เชื่อมต่อครบทุกอุปกรณ์ ให้การวิ่งและฟื้นฟูง่ายกว่าเดิม</h2>
+          <p class="section-subtitle">
+            แอปพลิเคชัน <strong>KinetiPod GaitWise™</strong> ให้คุณเห็นข้อมูลการเดิน/วิ่งแบบ Real-time บนข้อมือ หรือมือถือ 
+            พร้อมระบบส่งรายงานอัตโนมัติให้คุณหมอหรือโค้ชดูได้ทันที
+          </p>
+
+          <div class="feature-checklist">
+            <div class="feat-item">
+              <div class="feat-icon"><i class="fa-solid fa-arrows-spin"></i></div>
+              <div>
+                <strong>Auto-Sync กับแพลตฟอร์มระดับโลก</strong>
+                <p>รองรับ Garmin Connect, Strava, Apple Health, TrainingPeaks และ Stryd ecosystem</p>
+              </div>
+            </div>
+
+            <div class="feat-item">
+              <div class="feat-icon"><i class="fa-solid fa-hospital-user"></i></div>
+              <div>
+                <strong>ระบบ Tele-Rehab สำหรับผู้ป่วยและแพทย์</strong>
+                <p>คนไข้ฝึกเดินที่บ้าน ระบบจะสร้างรายงานสรุปองศาข้อเท้าและแรงกด ส่งตรงถึงแพทย์ผู้ดูแลทุกสัปดาห์</p>
+              </div>
+            </div>
+
+            <div class="feat-item">
+              <div class="feat-icon"><i class="fa-solid fa-bell"></i></div>
+              <div>
+                <strong>Voice Audio Coaching แบบสดขณะวิ่ง/เดิน</strong>
+                <p>มีเสียงภาษาไทยคอยเตือน "รอบขาต่ำเกินไป", "ทิ้งน้ำหนักข้างซ้ายมากเกินไป" ผ่านหูฟังบลูทูธ</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="store-download-row">
+            <a href="#" class="store-badge"><i class="fa-brands fa-apple"></i> <span>Download on the<br><strong>App Store</strong></span></a>
+            <a href="#" class="store-badge"><i class="fa-brands fa-google-play"></i> <span>GET IT ON<br><strong>Google Play</strong></span></a>
+            <a href="#" class="store-badge"><i class="fa-solid fa-watch"></i> <span>Garmin IQ<br><strong>Compatible</strong></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RUNNERS COMMUNITY, CHANNELS & PARTNERSHIPS (FROM BMC) -->
+  <section class="community-section" id="community-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge"><i class="fa-solid fa-users"></i> RUNNERS COMMUNITY & CHANNELS</span>
+        <h2 class="section-title">สังคมนักวิ่ง & ช่องทางบริการที่ครอบคลุม</h2>
+        <p class="section-subtitle">
+          เชื่อมต่อกับเพื่อนนักวิ่งทั่วประเทศ แลกเปลี่ยนกราฟสถิติ ชาเลนจ์วิ่ง และพบกับเราได้ทั้งช่องทางออนไลน์และบูธในงานวิ่งมาราธอน
+        </p>
+      </div>
+
+      <div class="community-grid">
+        <div class="community-card">
+          <i class="fa-solid fa-chart-pie"></i>
+          <h4>แชร์กราฟ & สถิติชีวกลศาสตร์</h4>
+          <p>ส่งต่อรายงานฟอร์มการวิ่ง เปรียบเทียบเพซ ความยาวก้าว และสมดุลซ้าย-ขวากับกลุ่มเพื่อนในแอป</p>
+        </div>
+
+        <div class="community-card">
+          <i class="fa-solid fa-trophy"></i>
+          <h4>Weekly Virtual Challenges</h4>
+          <p>ร่วมสนุกกับภารกิจวิ่งประจำสัปดาห์ เช่น "Sub-4 Challenge", "Gait Symmetry 99%" ลุ้นรับของรางวัลและเหรียญดิจิทัล</p>
+        </div>
+
+        <div class="community-card">
+          <i class="fa-solid fa-handshake"></i>
+          <h4>พาร์ทเนอร์โค้ช & งานวิ่งมาราธอน</h4>
+          <p>ร่วมมือกับโค้ชวิ่งทีมชาติ คลินิกกายภาพบำบัด และสปอนเซอร์งานวิ่งมาราธอนชั้นนำเพื่อการทดสอบจริง</p>
+        </div>
+      </div>
+
+      <!-- Omnichannel Platforms from BMC -->
+      <div class="channels-bar-wrap" id="marketplace-channels">
+        <div class="channels-title">ช่องทางการสั่งซื้อ & ทดลองใช้งานจริง (Omnichannel Platforms)</div>
+        <div class="channels-list">
+          <a href="#catalog" class="channel-pill">
+            <i class="fa-solid fa-globe text-cyan"></i>
+            <span>หน้าเว็บไซต์หลัก (Official Website)</span>
+          </a>
+          <a href="#" class="channel-pill">
+            <i class="fa-solid fa-bag-shopping text-coral"></i>
+            <span>Shopee Mall Official</span>
+          </a>
+          <a href="#" class="channel-pill">
+            <i class="fa-solid fa-shop text-cyan"></i>
+            <span>Lazada LazMall</span>
+          </a>
+          <a href="#" class="channel-pill">
+            <i class="fa-brands fa-tiktok"></i>
+            <span>TikTok Shop LIVE</span>
+          </a>
+          <a href="#clinical-section" class="channel-pill">
+            <i class="fa-solid fa-tent text-green"></i>
+            <span>บูธในงาน Expo มาราธอนทั่วไทย</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clinical Validation & Doctor/Coach Reviews -->
+  <section class="clinical-section" id="clinical-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge"><i class="fa-solid fa-stethoscope"></i> CLINICAL & SCIENTIFIC BACKING</span>
+        <h2 class="section-title">ผ่านการทดสอบและรับรองโดยผู้เชี่ยวชาญ</h2>
+        <p class="section-subtitle">ความแม่นยำเทียบเท่าระบบกล้อง 3D Motion Capture และแผ่น Force Plate ในห้องวิจัย 99.4%</p>
+      </div>
+
+      <div class="clinical-cards-grid">
+        <div class="clinical-card">
+          <div class="expert-header">
+            <div class="expert-avatar"><i class="fa-solid fa-user-doctor"></i></div>
+            <div>
+              <h4>นพ. วริทธิ์ สุวรรณเวช</h4>
+              <span>แพทย์ผู้เชี่ยวชาญด้านเวชศาสตร์ฟื้นฟู & ออร์โธปิดิกส์</span>
+            </div>
+          </div>
+          <p class="quote-text">
+            "สำหรับคนไข้ผ่าตัดเปลี่ยนข้อเข่าและข้อเท้า ปัญหาใหญ่คือคนไข้มักไม่กล้าทิ้งน้ำหนักหรือทิ้งน้ำหนักผิดฝั่งโดยไม่รู้ตัว เซนเซอร์ติดรองเท้าตัวนี้ช่วยให้ผู้ป่วยเห็นตัวเลขแรงกดชัดเจน ช่วยให้ฟื้นตัวได้เร็วกว่าปกติถึง 40%"
+          </p>
+          <div class="expert-badge-footer">
+            <i class="fa-solid fa-certificate"></i> โรงพยาบาลชั้นนำในกรุงเทพฯ
+          </div>
+        </div>
+
+        <div class="clinical-card">
+          <div class="expert-header">
+            <div class="expert-avatar coach"><i class="fa-solid fa-person-running"></i></div>
+            <div>
+              <h4>โค้ช ธนพล นันทกานต์</h4>
+              <span>Head Coach ทีมวิ่งมาราธอนทีมชาติ & นักวิทยาศาสตร์การกีฬา</span>
+            </div>
+          </div>
+          <p class="quote-text">
+            "การวัดกำลังเป็นวัตต์ (Power) และ Ground Contact Time ผ่านพ็อดติดรองเท้านี้ แม่นยำกว่า GPS นาฬิกาหลายเท่า ช่วยให้นักกีฬาวิ่งคุมเพซได้สม่ำเสมอแม้ขึ้นทางชัน และลดอัตราการบาดเจ็บเอ็นร้อยหวายได้อย่างมีนัยสำคัญ"
+          </p>
+          <div class="expert-badge-footer">
+            <i class="fa-solid fa-medal"></i> อดีตนักกีฬาโอลิมปิกมาราธอน
+          </div>
+        </div>
+
+        <div class="clinical-card">
+          <div class="expert-header">
+            <div class="expert-avatar pt"><i class="fa-solid fa-hand-holding-medical"></i></div>
+            <div>
+              <h4>กภ. พัชรินทร์ รุ่งเรืองกิจ</h4>
+              <span>นักกายภาพบำบัดเฉพาะทางระบบประสาทและการทรงตัว</span>
+            </div>
+          </div>
+          <p class="quote-text">
+            "ระบบตรวจจับการสะดุดและเตือนการล้มของ StepSafe ElderGuard เป็นตัวช่วยที่ให้ความอุ่นใจกับทั้งผู้สูงอายุและลูกหลาน ใช้งานง่ายมากเพียงแค่หนีบไว้ข้างรองเท้า ไม่ต้องตั้งค่าซับซ้อนเลยค่ะ"
+          </p>
+          <div class="expert-badge-footer">
+            <i class="fa-solid fa-shield-halved"></i> คลินิกกายภาพบำบัด Smart Rehab
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Testimonials & Reviews -->
+  <section class="reviews-section" id="reviews">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge"><i class="fa-solid fa-comments"></i> REAL USER EXPERIENCES</span>
+        <h2 class="section-title">รีวิวจากผู้ใช้งานจริงกว่า 2,400+ ความคิดเห็น</h2>
+        <p class="section-subtitle">ความประทับใจจากนักวิ่งมาราธอน ผู้ป่วยกายภาพ และครอบครัว</p>
+      </div>
+
+      <div class="reviews-filter-bar">
+        <button class="rev-tab active" data-rev="all">ทั้งหมด (2,410)</button>
+        <button class="rev-tab" data-rev="photo">มีรูปภาพประกอบ (840)</button>
+        <button class="rev-tab" data-rev="runner">กลุ่มนักวิ่ง (1,250)</button>
+        <button class="rev-tab" data-rev="rehab">กลุ่มกายภาพบำบัด (980)</button>
+        <button class="rev-tab" data-rev="five-star">5 ดาว (2,310)</button>
+      </div>
+
+      <div class="reviews-grid" id="reviewsGrid">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-badge"><i class="fa-solid fa-circle-question"></i> FAQ</span>
+        <h2 class="section-title">คำถามที่พบบ่อย (FAQ)</h2>
+        <p class="section-subtitle">ข้อสงสัยเกี่ยวกับการใช้งาน การติดตั้ง และการรับประกัน</p>
+      </div>
+
+      <div class="faq-accordion" id="faqAccordion">
+        <div class="faq-item active">
+          <div class="faq-question">
+            <span><i class="fa-solid fa-circle-question text-cyan"></i> อุปกรณ์ติดรองเท้าหลุดง่ายหรือไม่ เมื่อวิ่งเร็วหรือลุยฝน?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            <p>อุปกรณ์ KINETIPOD ทุกรุ่นใช้ระบบล็อก <strong>Dual-Locking MechClip™</strong> ลิขสิทธิ์เฉพาะ ซึ่งยึดแน่นกับเชือกรองเท้าหรือขอบรองเท้าอย่างมั่นคง ไม่หลุดแม้สะดุด วิ่งสปรินต์ หรือกระโดด และมาตรฐานกันน้ำ IP68 สามารถวิ่งลุยฝน ข้ามแอ่งน้ำ หรือล้างทำความสะอาดได้ 100%</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span><i class="fa-solid fa-circle-question text-cyan"></i> หากใช้สำหรับการทำกายภาพบำบัด สามารถนำใบเสร็จไปเบิกประกันสุขภาพได้ไหม?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            <p><strong>สามารถขอใบเสร็จรับเงิน/ใบกำกับภาษีเต็มรูปแบบ พร้อมเอกสารรับรองมาตรฐานเครื่องมือแพทย์ (ISO 13485)</strong> ได้ในขั้นตอนชำระเงิน ซึ่งสามารถนำไปใช้ยื่นประกอบการเบิกประกันสุขภาพกลุ่ม (OPD/IPD อุปกรณ์เสริม) หรือสิทธิการรักษาตามเงื่อนไขของแต่ละกรมธรรม์ได้ครับ</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span><i class="fa-solid fa-circle-question text-cyan"></i> ใช้งานร่วมกับนาฬิกา Garmin, Apple Watch หรือ Suunto ได้อย่างไร?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            <p>เซนเซอร์รองรับทั้งสัญญาณ <strong>Bluetooth 5.4 Dual-Band</strong> และ <strong>ANT+</strong> คุณสามารถจับคู่เป็น Foot Pod / Running Dynamics Sensor ได้โดยตรงในเมนูเซนเซอร์ของนาฬิกา และข้อมูลรอบขา กำลังวัตต์ และระยะก้าวจะแสดงผลบนหน้าปัดนาฬิกาทันที</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span><i class="fa-solid fa-circle-question text-cyan"></i> สำหรับผู้สูงอายุ ใช้งานยากไหม ต้องให้ลูกหลานตั้งค่าให้ตลอดหรือไม่?</span>
+            <i class="fa-solid fa-chevron-down faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            <p>รุ่น StepSafe ElderGuard ออกแบบมาให้ <strong>"ติดแล้วลืมได้เลย" (Clip & Forget)</strong> ตัวเครื่องจะเปิดทำงานอัตโนมัติเมื่อตรวจพบการขยับ และเข้าสู่โหมดประหยัดพลังงานเมื่ออยู่นิ่ง ไม่จำเป็นต้องกดปุ่มเปิด-ปิดทุกวัน และสามารถเชื่อมต่อแอปของลูกหลานเพื่อรับการแจ้งเตือนได้โดยตรง</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col brand-col">
+          <a href="#" class="brand-logo footer-logo">
+            <div class="logo-icon"><i class="fa-solid fa-shoe-prints"></i></div>
+            <div class="brand-text">
+              <span class="brand-name">KINETI<span class="highlight">POD</span></span>
+              <span class="brand-tagline">SMART GAIT LAB THAILAND</span>
+            </div>
+          </a>
+          <p class="footer-about">
+            ผู้นำด้านเทคโนโลยีอุปกรณ์สวมใส่ติดรองเท้า วิเคราะห์การเคลื่อนไหว และนวัตกรรมฟื้นฟูกายภาพบำบัดอันดับ 1 ของประเทศไทย
+          </p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" aria-label="Line"><i class="fa-brands fa-line"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">หมวดหมู่สินค้า</h4>
+          <ul class="footer-links">
+            <li><a href="#catalog" onclick="filterCategory('running')">เซนเซอร์สำหรับนักวิ่ง & ไตรกีฬา</a></li>
+            <li><a href="#catalog" onclick="filterCategory('rehab')">อุปกรณ์กายภาพบำบัด & ฟื้นฟู</a></li>
+            <li><a href="#catalog" onclick="filterCategory('sports')">พ็อดวัดความเร็วและแรงกระโดด</a></li>
+            <li><a href="#catalog" onclick="filterCategory('safety')">เซนเซอร์เตือนกันล้มผู้สูงอายุ</a></li>
+            <li><a href="#catalog" onclick="filterCategory('all')">แผ่นวัดแรงกดฝ่าเท้าอัจฉริยะ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">บริการและช่วยเหลือ</h4>
+          <ul class="footer-links">
+            <li><a href="login.html"><i class="fa-solid fa-user-lock text-cyan"></i> เข้าสู่ระบบ & ออกจากระบบ (login.html)</a></li>
+            <li><a href="#needs-finder">ระบบ AI แนะนำรุ่นสินค้า</a></li>
+            <li><a href="#gait-sandbox">ห้องแล็บจำลอง Gait Simulator</a></li>
+            <li><a href="#clinical-section">งานวิจัยและมาตรฐานการแพทย์</a></li>
+            <li><a href="#faq">การรับประกันและนโยบายคืนสินค้า</a></li>
+            <li><a href="#app-sync">ดาวน์โหลดแอป KinetiPod App</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-title">ติดต่อเรา & ศูนย์บริการ</h4>
+          <p class="contact-line"><i class="fa-solid fa-location-dot"></i> อาคาร KinetiPod Health Tech Tower ชั้น 18 สาทร กรุงเทพฯ</p>
+          <p class="contact-line"><i class="fa-solid fa-phone"></i> 02-899-XXXX (ฝ่ายบริการลูกค้า)</p>
+          <p class="contact-line"><i class="fa-solid fa-envelope"></i> support@kinetipod.co.th</p>
+          <div class="payment-methods-footer">
+            <span>ช่องทางชำระเงิน:</span>
+            <div class="payment-icons">
+              <span class="pay-tag promptpay"><i class="fa-solid fa-qrcode"></i> PromptPay QR</span>
+              <span class="pay-tag visa"><i class="fa-brands fa-cc-visa"></i> VISA</span>
+              <span class="pay-tag mastercard"><i class="fa-brands fa-cc-mastercard"></i> Mastercard</span>
+              <span class="pay-tag installment">ผ่อน 0% 10 ด.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 KINETIPOD Thailand Co., Ltd. สงวนลิขสิทธิ์ทุกประการ | มาตรฐานเครื่องมือแพทย์สากล ISO 13485 & CE Medical Mark</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Shopping Cart Slide Drawer -->
+  <div class="cart-drawer-overlay" id="cartOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+      <div class="cart-title-wrap">
+        <i class="fa-solid fa-bag-shopping text-cyan"></i>
+        <h3>ตะกร้าสินค้าของคุณ (<span id="cartDrawerItemCount">0</span>)</h3>
+      </div>
+      <button class="drawer-close-btn" id="cartCloseBtn">&times;</button>
+    </div>
+
+    <!-- Free Shipping Progress Bar -->
+    <div class="free-shipping-bar-wrap">
+      <div class="shipping-info-text" id="shippingProgressText">
+        สั่งซื้ออีก <strong>฿1,500</strong> เพื่อรับสิทธิ์ <strong>จัดส่งฟรี!</strong>
+      </div>
+      <div class="shipping-progress-track">
+        <div class="shipping-progress-fill" id="shippingProgressBar" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Cart Items List -->
+    <div class="cart-items-body" id="cartItemsList">
+      <!-- Injected via JS -->
+    </div>
+
+    <!-- Cart Drawer Footer -->
+    <div class="cart-drawer-footer">
+      <!-- Voucher Promo Code Input -->
+      <div class="cart-promo-box">
+        <div class="promo-input-row">
+          <input type="text" id="cartPromoInput" placeholder="ใส่โค้ดส่วนลด เช่น KINETI500">
+          <button class="btn btn-sm btn-cyan" id="applyPromoBtn">ใช้โค้ด</button>
+        </div>
+        <div class="promo-feedback" id="promoFeedback"></div>
+      </div>
+
+      <!-- Price Breakdown -->
+      <div class="price-breakdown">
+        <div class="price-row">
+          <span>ยอดรวมสินค้า:</span>
+          <span id="cartSubtotalText">฿0</span>
+        </div>
+        <div class="price-row discount-row" id="cartDiscountRow" style="display: none;">
+          <span>ส่วนลดพิเศษ:</span>
+          <span class="text-coral" id="cartDiscountText">-฿0</span>
+        </div>
+        <div class="price-row">
+          <span>ค่าจัดส่ง (Express):</span>
+          <span id="cartShippingText">฿60</span>
+        </div>
+        <div class="price-row total-row">
+          <span>ยอดสุทธิ:</span>
+          <span class="cart-grand-total" id="cartGrandTotalText">฿0</span>
+        </div>
+      </div>
+
+      <!-- Checkout Button -->
+      <button class="btn btn-primary btn-checkout-drawer" id="openCheckoutModalBtn">
+        <i class="fa-solid fa-credit-card"></i> ไปที่หน้าชำระเงิน
+      </button>
+      <button class="btn btn-clear-cart" id="clearCartBtn">ล้างตะกร้า</button>
+    </div>
+  </aside>
+
+  <!-- Product Quick View Modal -->
+  <div class="modal-overlay" id="productModalOverlay">
+    <div class="product-quick-modal" id="productModal">
+      <button class="modal-close-btn" id="productModalCloseBtn">&times;</button>
+      <div class="modal-body-grid" id="productModalContent">
+        <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Drawer -->
+  <aside class="compare-drawer" id="compareDrawer">
+    <div class="compare-drawer-header">
+      <h4><i class="fa-solid fa-code-compare text-cyan"></i> เปรียบเทียบสเปกอุปกรณ์ (<span id="compareDrawerCount">0</span>/3)</h4>
+      <button class="drawer-close-btn" id="compareCloseBtn">&times;</button>
+    </div>
+    <div class="compare-table-wrap" id="compareTableWrap">
+      <!-- Injected via JS -->
+    </div>
+  </aside>
+
+  <!-- Checkout Modal -->
+  <div class="modal-overlay" id="checkoutModalOverlay">
+    <div class="checkout-modal" id="checkoutModal">
+      <button class="modal-close-btn" id="checkoutModalCloseBtn">&times;</button>
+      <div class="checkout-modal-content">
+        <div class="checkout-header">
+          <i class="fa-solid fa-shield-check text-cyan"></i>
+          <div>
+            <h3>ยืนยันการสั่งซื้อ & ชำระเงินที่ปลอดภัย</h3>
+            <p>ระบบเข้ารหัส SSL 256-bit มาตรฐานสากล</p>
+          </div>
+        </div>
+
+        <div class="checkout-grid">
+          <!-- Form Left -->
+          <div class="checkout-form-col">
+            <h4 class="form-sec-title"><i class="fa-solid fa-truck-fast"></i> ข้อมูลผู้รับและการจัดส่ง</h4>
+            
+            <div class="form-row-2">
+              <div class="form-group">
+                <label>ชื่อ-นามสกุล *</label>
+                <input type="text" id="custName" placeholder="เช่น สมชาย ใจดี" required value="กิตติศักดิ์ พัฒนาการ">
+              </div>
+              <div class="form-group">
+                <label>เบอร์โทรศัพท์ *</label>
+                <input type="tel" id="custPhone" placeholder="08x-xxx-xxxx" required value="089-123-4567">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>อีเมล (สำหรับรับใบเสร็จและเลขติดตาม) *</label>
+              <input type="email" id="custEmail" placeholder="example@email.com" required value="runner.pro@gmail.com">
+            </div>
+
+            <div class="form-group">
+              <label>ที่อยู่จัดส่ง *</label>
+              <textarea id="custAddress" rows="2" placeholder="บ้านเลขที่, ถนน, แขวง/ตำบล, เขต/อำเภอ, จังหวัด, รหัสไปรษณีย์">123/45 ถนนสุขุมวิท 71 แขวงพระโขนงเหนือ เขตวัฒนา กรุงเทพฯ 10110</textarea>
+            </div>
+
+            <div class="form-group checkbox-group">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="taxInvoiceReq">
+                <span class="checkmark"></span>
+                <span>ต้องการใบเสร็จรับเงิน/ใบกำกับภาษีเต็มรูปแบบ (เพื่อเบิกประกัน/ลดหย่อนภาษี)</span>
+              </label>
+            </div>
+
+            <!-- Customer Biometrics & Health Data for Firebase -->
+            <div class="customer-health-box">
+              <div class="health-box-title">
+                <i class="fa-solid fa-heart-pulse text-cyan"></i>
+                <span>ข้อมูลสรีระ & สุขภาพ (บันทึกเข้า Firebase เพื่อปรับจูนเซนเซอร์)</span>
+              </div>
+
+              <div class="form-row-3">
+                <div class="form-group">
+                  <label>เพศ (Gender) *</label>
+                  <select id="custGender" class="custom-select" style="width: 100%; padding: 10px;">
+                    <option value="ชาย" selected>ชาย (Male)</option>
+                    <option value="หญิง">หญิง (Female)</option>
+                    <option value="อื่นๆ">อื่นๆ / ไม่ระบุ</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>วัน เดือน ปี เกิด *</label>
+                  <input type="date" id="custBirthDate" value="1994-08-12" onchange="autoCalcCheckoutAge(this.value)">
+                </div>
+
+                <div class="form-group">
+                  <label>อายุ (ปี) *</label>
+                  <input type="number" id="custAge" min="1" max="120" value="32" placeholder="เช่น 32">
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>น้ำหนักตัว (กก. / kg) *</label>
+                  <input type="number" step="0.5" id="custWeight" value="68.5" placeholder="เช่น 68.5">
+                </div>
+                <div class="form-group">
+                  <label>ส่วนสูง (ซม. / cm)</label>
+                  <input type="number" id="custHeight" value="175" placeholder="เช่น 175">
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Method Tabs -->
+            <h4 class="form-sec-title mt-4"><i class="fa-solid fa-wallet"></i> เลือกช่องทางชำระเงิน</h4>
+            <div class="payment-method-selector">
+              <label class="pay-option active" onclick="selectPayOption('promptpay')">
+                <input type="radio" name="payMethod" value="promptpay" checked>
+                <i class="fa-solid fa-qrcode text-cyan"></i>
+                <div>
+                  <strong>Thai QR PromptPay</strong>
+                  <span>สแกนจ่ายผ่านทุกแอปธนาคาร ฟรีค่าธรรมเนียม</span>
+                </div>
+              </label>
+
+              <label class="pay-option" onclick="selectPayOption('credit')">
+                <input type="radio" name="payMethod" value="credit">
+                <i class="fa-solid fa-credit-card text-coral"></i>
+                <div>
+                  <strong>บัตรเครดิต / เดบิต</strong>
+                  <span>VISA, Mastercard, JCB (ผ่อน 0% สูงสุด 10 ด.)</span>
+                </div>
+              </label>
+
+              <label class="pay-option" onclick="selectPayOption('cod')">
+                <input type="radio" name="payMethod" value="cod">
+                <i class="fa-solid fa-hand-holding-dollar text-green"></i>
+                <div>
+                  <strong>เก็บเงินปลายทาง (COD)</strong>
+                  <span>ชำระเมื่อพนักงานนำส่งถึงหน้าบ้าน</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Dynamic Payment Detail Display -->
+            <div class="payment-details-view" id="paymentDetailsView">
+              <div class="promptpay-box text-center">
+                <p class="qr-intro">สแกน QR Code ด้วยแอปธนาคารใดก็ได้เพื่อชำระเงินทันที</p>
+                <div class="qr-mockup">
+                  <div class="qr-frame">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=KINETIPOD-PAY-ORDER-9921" alt="QR Code PromptPay" class="qr-image">
+                    <div class="qr-badge">PromptPay</div>
+                  </div>
+                  <div class="qr-amount-show">
+                    ยอดชำระ: <strong class="highlight-cyan" id="checkoutAmountShow">฿0</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Summary Right -->
+          <div class="checkout-summary-col">
+            <h4 class="form-sec-title"><i class="fa-solid fa-receipt"></i> สรุปคำสั่งซื้อ</h4>
+            <div class="checkout-items-summary" id="checkoutItemsSummary">
+              <!-- Injected via JS -->
+            </div>
+
+            <div class="checkout-calc-card">
+              <div class="c-row"><span>ราคาสินค้ารวม:</span><span id="coSubtotal">฿0</span></div>
+              <div class="c-row discount" id="coDiscountRow" style="display:none;"><span>ส่วนลด:</span><span id="coDiscount">-฿0</span></div>
+              <div class="c-row"><span>ค่าจัดส่งด่วน:</span><span id="coShipping">฿0</span></div>
+              <div class="c-row grand-total"><span>ยอดชำระทั้งหมด:</span><span id="coGrandTotal" class="highlight-cyan">฿0</span></div>
+            </div>
+
+            <div class="guarantee-box">
+              <i class="fa-solid fa-certificate text-green"></i>
+              <div>
+                <strong>รับประกันศูนย์ไทย 2 ปี + เปลี่ยนใหม่ใน 30 วัน</strong>
+                <p>หากสินค้ามีปัญหาเปลี่ยนเครื่องใหม่ทันที พร้อมทีมแพทย์ & โค้ชคอยให้คำปรึกษาตลอดการใช้งาน</p>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-confirm-order" id="confirmOrderBtn" onclick="processOrderPlacement()">
+              <i class="fa-solid fa-check"></i> ยืนยันการชำระเงินและสั่งซื้อ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Success Screen Modal -->
+  <div class="modal-overlay" id="orderSuccessOverlay">
+    <div class="success-modal text-center">
+      <div class="success-icon-wrap">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <h2>สั่งซื้อสำเร็จเรียบร้อย!</h2>
+      <p class="success-order-num">รหัสคำสั่งซื้อ: <strong id="successOrderId">KP-2026-99824</strong></p>
+      <p class="success-msg">
+        เราได้รับคำสั่งซื้อและยอดชำระของท่านเรียบร้อยแล้ว ทีมงานจะจัดส่งสินค้าและส่งเลขติดตามพัสดุผ่าน SMS & Email ทันที
+      </p>
+
+      <div class="success-summary-box" id="successSummaryBox">
+        <!-- Summary details injected via JS -->
+      </div>
+
+      <div class="success-actions">
+        <button class="btn btn-primary" onclick="closeSuccessAndReset()"><i class="fa-solid fa-house"></i> กลับสู่หน้าร้าน</button>
+        <button class="btn btn-glass" onclick="window.print()"><i class="fa-solid fa-print"></i> พิมพ์ใบสั่งซื้อ / ใบเสร็จ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rental Booking Modal (BMC Revenue Model 2) -->
+  <div class="modal-overlay" id="rentalModalOverlay">
+    <div class="checkout-modal" style="max-width: 600px;">
+      <button class="modal-close-btn" onclick="closeRentalModal()">&times;</button>
+      <div class="checkout-header">
+        <i class="fa-solid fa-rotate text-green"></i>
+        <div>
+          <h3>จองคิวเช่าอุปกรณ์ Foot Pod สำหรับผู้พักฟื้น & กายภาพ</h3>
+          <p>ส่งฟรีถึงบ้าน • ส่งคืนง่ายด้วยกล่องพัสดุในเซ็ต • มัดจำคืนทันที</p>
+        </div>
+      </div>
+      
+      <div style="padding: 24px;">
+        <div class="form-group">
+          <label>เลือกระยะเวลาการเช่า *</label>
+          <select id="rentalDurationSelect" class="custom-select" style="width: 100%; padding: 12px;">
+            <option value="1 เดือน">1 เดือน - ฿490 / เดือน (มัดจำ ฿1,000)</option>
+            <option value="2 เดือน">2 เดือน - ฿890 (ประหยัด ฿90 / มัดจำ ฿1,000)</option>
+            <option value="3 เดือน (แนะนำสำหรับฟื้นฟูข้อเข่า)">3 เดือน - ฿1,290 (ประหยัด ฿180 / มัดจำ ฿1,000)</option>
+          </select>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>ชื่อ-นามสกุล ผู้เช่า *</label>
+            <input type="text" id="rentalName" placeholder="เช่น วิภาดา ใจดี" value="คุณวิภาดา มณีรัตน์">
+          </div>
+          <div class="form-group">
+            <label>เบอร์โทรศัพท์ติดต่อ *</label>
+            <input type="tel" id="rentalPhone" placeholder="08x-xxx-xxxx" value="081-987-6543">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>ที่อยู่สำหรับจัดส่งและรับคืน *</label>
+          <textarea id="rentalAddress" rows="2" placeholder="ที่อยู่จัดส่ง">88/12 ซอยอารีย์สัมพันธ์ แขวงพญาไท เขตพญาไท กทม. 10400</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>โรงพยาบาล / คลินิกกายภาพ หรือแพทย์ผู้ดูแล (ถ้ามี)</label>
+          <input type="text" id="rentalClinic" placeholder="เช่น รพ.กรุงเทพ / คลินิกกายภาพบำบัด" value="คลินิกเวชศาสตร์ฟื้นฟู">
+        </div>
+
+        <div class="guarantee-box" style="margin-bottom: 20px;">
+          <i class="fa-solid fa-circle-check text-green"></i>
+          <div>
+            <strong>สิทธิประโยชน์พิเศษ:</strong> หากต้องการเปลี่ยนเป็น "ซื้อขาด" สามารถนำค่าเช่าที่ชำระไปแล้วมาหักลดราคาซื้อขาดได้ 100%!
+          </div>
+        </div>
+
+        <button class="btn btn-green w-100" onclick="submitRentalBooking()">
+          <i class="fa-solid fa-check"></i> ยืนยันการจองคิวเช่าอุปกรณ์
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subscription Modal (BMC Revenue Model 3) -->
+  <div class="modal-overlay" id="subscriptionModalOverlay">
+    <div class="checkout-modal" style="max-width: 580px;">
+      <button class="modal-close-btn" onclick="closeSubscriptionModal()">&times;</button>
+      <div class="checkout-header">
+        <i class="fa-solid fa-crown text-amber"></i>
+        <div>
+          <h3>สมัครสมาชิก AI Running Coach Pro</h3>
+          <p>ทดลองใช้งานฟรี 14 วันแรก • ยกเลิกได้ตลอดเวลา</p>
+        </div>
+      </div>
+      
+      <div style="padding: 24px;">
+        <div class="payment-method-selector" style="margin-bottom: 20px;">
+          <label class="pay-option active">
+            <input type="radio" name="subPlanOption" value="Annual Pro (คุ้มค่าสุด)" checked>
+            <i class="fa-solid fa-medal text-amber"></i>
+            <div>
+              <strong>แพ็กเกจรายปี (Annual Pro) - ฿1,990 / ปี</strong>
+              <span class="text-cyan">ประหยัด 35% (เฉลี่ยเพียง ฿165 / เดือน)</span>
+            </div>
+          </label>
+
+          <label class="pay-option">
+            <input type="radio" name="subPlanOption" value="Monthly Pro">
+            <i class="fa-solid fa-calendar-days text-cyan"></i>
+            <div>
+              <strong>แพ็กเกจรายเดือน (Monthly Pro) - ฿249 / เดือน</strong>
+              <span>ตัดบัตรอัตโนมัติ ยกเลิกเมื่อใดก็ได้</span>
+            </div>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>อีเมลสำหรับผูกบัญชีในแอป KinetiPod GaitWise *</label>
+          <input type="email" id="subEmail" placeholder="runner@example.com" value="runner.pro@gmail.com">
+        </div>
+
+        <div class="form-group">
+          <label>นาฬิกาวิ่งที่ใช้งานคู่กัน</label>
+          <select id="subWatch" class="custom-select" style="width: 100%; padding: 10px;">
+            <option value="Garmin">Garmin (Forerunner / Fenix / Epix)</option>
+            <option value="Apple Watch">Apple Watch (Ultra / Series)</option>
+            <option value="Suunto / Coros">Coros / Suunto / Polar</option>
+            <option value="Smartphone only">ใช้งานผ่านสมาร์ทโฟนอย่างเดียว</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary btn-glow w-100" onclick="submitSubscription()">
+          <i class="fa-solid fa-bolt"></i> เริ่มต้นทดลองใช้ฟรี 14 วัน
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated Firebase Authentication Modal (Login / Sign Up / Reset) -->
+  <div class="modal-overlay" id="authModalOverlay">
+    <div class="checkout-modal" style="max-width: 620px;">
+      <button class="modal-close-btn" onclick="closeAuthModal()">&times;</button>
+      
+      <!-- Auth Header & Navigation Tabs -->
+      <div class="auth-tabs-nav">
+        <button class="auth-tab-btn active" id="authTabBtnLogin" onclick="switchAuthTab('login')">
+          <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
+        </button>
+        <button class="auth-tab-btn" id="authTabBtnRegister" onclick="switchAuthTab('register')">
+          <i class="fa-solid fa-user-plus"></i> สมัครสมาชิก & ข้อมูลสุขภาพ
+        </button>
+        <button class="auth-tab-btn" id="authTabBtnReset" onclick="switchAuthTab('reset')" style="display: none;">
+          <i class="fa-solid fa-key"></i> ลืมรหัสผ่าน
+        </button>
+      </div>
+
+      <!-- Tab 1: Login Form -->
+      <div class="auth-tab-pane active" id="authPaneLogin">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h3 style="font-size: 1.3rem; margin-bottom: 4px;">ยินดีต้อนรับสู่ KINETIPOD™</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">เข้าสู่ระบบผ่าน Firebase เพื่อดูประวัติการวิ่ง ข้อมูลแรงกด และรายงานแพทย์</p>
+        </div>
+
+        <form onsubmit="handleEmailPasswordLogin(event)">
+          <div class="form-group">
+            <label>อีเมล (Email Address) *</label>
+            <input type="email" id="loginEmail" placeholder="เช่น runner.pro@gmail.com" required value="runner.pro@gmail.com">
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label style="margin-bottom: 0;">รหัสผ่าน (Password) *</label>
+              <a href="javascript:void(0)" onclick="switchAuthTab('reset')" style="font-size: 0.78rem; color: var(--primary-cyan);">ลืมรหัสผ่าน?</a>
+            </div>
+            <div style="position: relative;">
+              <input type="password" id="loginPassword" placeholder="กรอกรหัสผ่าน 6 ตัวขึ้นไป" required value="123456" style="padding-right: 40px;">
+              <button type="button" onclick="togglePasswordVisibility('loginPassword', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-secondary); cursor: pointer;">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 16px;">
+            <button type="submit" class="btn btn-primary btn-glow w-100" style="padding: 14px; font-size: 1rem; justify-content: center;">
+              <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ (Firebase Auth)
+            </button>
+          </div>
+        </form>
+
+        <div class="auth-divider"><span>หรือเข้าสู่ระบบด้วย</span></div>
+
+        <!-- Google Sign-In Button -->
+        <button type="button" class="social-auth-btn" onclick="handleGoogleLogin()">
+          <i class="fa-brands fa-google"></i> เข้าสู่ระบบด้วย Google Account
+        </button>
+
+        <!-- Quick Demo Accounts -->
+        <div class="demo-login-box">
+          <div class="demo-login-title"><i class="fa-solid fa-flask"></i> ทดสอบล็อกอินด่วน (Quick Demo Accounts):</div>
+          <div class="demo-pills-row">
+            <button type="button" class="demo-pill-btn" onclick="fillQuickLogin('runner.pro@gmail.com', '123456', 'คุณกิตติศักดิ์ (นักวิ่ง Sub-3)')">
+              🏃 นักวิ่งซ้อมประจำ
+            </button>
+            <button type="button" class="demo-pill-btn" onclick="fillQuickLogin('vipada.rehab@yahoo.com', '123456', 'คุณวิภาดา (ผู้พักฟื้นเข่า)')">
+              🩹 ผู้ป่วยกายภาพ
+            </button>
+            <button type="button" class="demo-pill-btn" onclick="fillQuickLogin('coach.thanapol@speedrun.th', '123456', 'โค้ชธนพล (ทีมชาติ)')">
+              🥇 โค้ชวิ่งทีมชาติ
+            </button>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 18px; font-size: 0.85rem; color: var(--text-secondary);">
+          ยังไม่มีบัญชีผู้ใช้งาน? <a href="javascript:void(0)" onclick="switchAuthTab('register')" style="color: var(--primary-cyan); font-weight: 600;">สมัครสมาชิกใหม่ที่นี่</a>
+        </div>
+      </div>
+
+      <!-- Tab 2: Register & Health Profile Form -->
+      <div class="auth-tab-pane" id="authPaneRegister">
+        <div style="text-align: center; margin-bottom: 16px;">
+          <h3 style="font-size: 1.3rem; margin-bottom: 4px;">สมัครสมาชิก & บันทึกสุขภาพ</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">สร้างบัญชี Firebase พร้อมบันทึก เพศ, อายุ, น้ำหนัก, วันเกิด เพื่อตั้งค่าเซนเซอร์</p>
+        </div>
+
+        <!-- Quick Google Register -->
+        <button type="button" class="social-auth-btn" onclick="handleGoogleLogin()">
+          <i class="fa-brands fa-google"></i> สมัครสมาชิกด่วนด้วย Google Account
+        </button>
+
+        <div class="auth-divider"><span>หรือกรอกแบบฟอร์มด้านล่าง</span></div>
+
+        <form onsubmit="handleEmailPasswordRegister(event)">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>ชื่อ-นามสกุล *</label>
+              <input type="text" id="regName" placeholder="เช่น กิตติศักดิ์ พัฒนาการ" required value="นักวิ่งมือใหม่ สุขภาพดี">
+            </div>
+            <div class="form-group">
+              <label>อีเมล (Email) *</label>
+              <input type="email" id="regEmail" placeholder="example@gmail.com" required value="newrunner@gmail.com">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>รหัสผ่าน (Password 6+ ตัว) *</label>
+              <input type="password" id="regPassword" placeholder="ตั้งรหัสผ่าน" required value="123456">
+            </div>
+            <div class="form-group">
+              <label>ยืนยันรหัสผ่าน *</label>
+              <input type="password" id="regConfirmPassword" placeholder="กรอกรหัสผ่านอีกครั้ง" required value="123456">
+            </div>
+          </div>
+
+          <!-- Integrated Health & Biometrics Data for Firebase -->
+          <div class="customer-health-box">
+            <div class="health-box-title">
+              <i class="fa-solid fa-heart-pulse text-cyan"></i>
+              <span>ข้อมูลสุขภาพ & สรีระ (บันทึกเข้า Firestore อัตโนมัติ)</span>
+            </div>
+
+            <div class="form-row-3">
+              <div class="form-group">
+                <label>เพศ (Gender) *</label>
+                <select id="regGender" class="custom-select" style="width: 100%; padding: 10px;">
+                  <option value="ชาย" selected>ชาย (Male)</option>
+                  <option value="หญิง">หญิง (Female)</option>
+                  <option value="อื่นๆ">อื่นๆ / ไม่ระบุ</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>วัน เดือน ปี เกิด *</label>
+                <input type="date" id="regBirthDate" value="1996-06-20" required onchange="autoCalcRegAge(this.value)">
+              </div>
+
+              <div class="form-group">
+                <label>อายุ (ปี) *</label>
+                <input type="number" id="regAge" min="1" max="120" value="30" required placeholder="เช่น 30">
+              </div>
+            </div>
+
+            <div class="form-row-3">
+              <div class="form-group">
+                <label>น้ำหนักตัว (กก.) *</label>
+                <input type="number" step="0.5" id="regWeight" value="62.5" required placeholder="เช่น 62.5">
+              </div>
+              <div class="form-group">
+                <label>ส่วนสูง (ซม.)</label>
+                <input type="number" id="regHeight" value="170" placeholder="เช่น 170">
+              </div>
+              <div class="form-group">
+                <label>กลุ่มผู้ใช้งาน</label>
+                <select id="regCustomerType" class="custom-select" style="width: 100%; padding: 10px;">
+                  <option value="นักวิ่งซ้อมประจำ">นักวิ่งซ้อมประจำ</option>
+                  <option value="ผู้ป่วยพักฟื้น/กายภาพ">ผู้ป่วยกายภาพ/ฟื้นฟู</option>
+                  <option value="นักกีฬา">นักกีฬา</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 16px;">
+            <button type="submit" class="btn btn-primary btn-glow w-100" style="padding: 14px; font-size: 1rem; justify-content: center;">
+              <i class="fa-solid fa-user-plus"></i> สมัครสมาชิก & บันทึกเข้า Firebase Firestore
+            </button>
+          </div>
+        </form>
+
+        <div style="text-align: center; margin-top: 16px; font-size: 0.85rem; color: var(--text-secondary);">
+          มีบัญชีอยู่แล้ว? <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: var(--primary-cyan); font-weight: 600;">เข้าสู่ระบบที่นี่</a>
+        </div>
+      </div>
+
+      <!-- Tab 3: Reset Password Form -->
+      <div class="auth-tab-pane" id="authPaneReset">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h3 style="font-size: 1.3rem; margin-bottom: 4px;">รีเซ็ตรหัสผ่าน</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">กรอกอีเมลของคุณเพื่อรับลิงก์สำหรับตั้งรหัสผ่านใหม่ผ่าน Firebase</p>
+        </div>
+
+        <form onsubmit="handlePasswordResetSubmit(event)">
+          <div class="form-group">
+            <label>อีเมลที่ลงทะเบียนไว้ *</label>
+            <input type="email" id="resetEmail" placeholder="example@gmail.com" required value="runner.pro@gmail.com">
+          </div>
+
+          <div style="text-align: center; margin-top: 16px;">
+            <button type="submit" class="btn btn-primary w-100" style="padding: 14px; font-size: 1rem; justify-content: center;">
+              <i class="fa-solid fa-paper-plane"></i> ส่งลิงก์รีเซ็ตรหัสผ่าน (Firebase)
+            </button>
+          </div>
+        </form>
+
+        <div style="text-align: center; margin-top: 18px; font-size: 0.85rem;">
+          <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: var(--text-secondary);"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเข้าสู่ระบบ</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Customer Health Profile Registration Modal (Firebase Firestore) -->
+  <div class="modal-overlay" id="customerProfileModalOverlay">
+    <div class="checkout-modal" style="max-width: 680px;">
+      <button class="modal-close-btn" onclick="closeCustomerProfileModal()">&times;</button>
+      <div class="checkout-header">
+        <i class="fa-solid fa-id-card-clip text-cyan"></i>
+        <div>
+          <h3>ลงทะเบียนข้อมูลลูกค้า & โปรไฟล์สุขภาพ (Firebase)</h3>
+          <p>บันทึก เพศ, อายุ, น้ำหนัก, วันเกิด เพื่อใช้ปรับเทียบเซนเซอร์ 16-Axis IMU เฉพาะบุคคล</p>
+        </div>
+      </div>
+      
+      <form id="customerProfileForm" onsubmit="handleCustomerProfileSubmit(event)" style="padding: 24px;">
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>ชื่อ-นามสกุล ลูกค้า *</label>
+            <input type="text" id="profName" placeholder="เช่น กิตติศักดิ์ พัฒนาการ" required value="กิตติศักดิ์ พัฒนาการ">
+          </div>
+          <div class="form-group">
+            <label>กลุ่มผู้ใช้งาน (Customer Segment) *</label>
+            <select id="profCustomerType" class="custom-select" style="width: 100%; padding: 10px;">
+              <option value="นักวิ่งซ้อมประจำ">🏃 นักวิ่งที่ชอบซ้อมเป็นประจำ (Regular Runner)</option>
+              <option value="ผู้ป่วยพักฟื้น/กายภาพ">🩹 ผู้ป่วยกายภาพบำบัด / ป้องกันบาดเจ็บ (Rehab)</option>
+              <option value="นักกีฬาสปีด">⚡ นักกีฬาสปีด & สปรินต์ (Speed Athlete)</option>
+              <option value="ผู้สูงอายุ">👵 ผู้สูงอายุ & ป้องกันการหกล้ม (Elder Guard)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="customer-health-box">
+          <div class="health-box-title">
+            <i class="fa-solid fa-chart-simple text-cyan"></i>
+            <span>ข้อมูลสรีระ (Biometrics) สำหรับวิเคราะห์ชีวกลศาสตร์</span>
+          </div>
+
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>เพศ (Gender) *</label>
+              <select id="profGender" class="custom-select" style="width: 100%; padding: 10px;">
+                <option value="ชาย" selected>ชาย (Male)</option>
+                <option value="หญิง">หญิง (Female)</option>
+                <option value="อื่นๆ">อื่นๆ / ไม่ระบุ (Other)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>วัน เดือน ปี เกิด (DOB) *</label>
+              <input type="date" id="profBirthDate" value="1994-08-12" required onchange="autoCalcProfileAge(this.value)">
+            </div>
+
+            <div class="form-group">
+              <label>อายุ (ปี) *</label>
+              <input type="number" id="profAge" min="1" max="120" value="32" required placeholder="เช่น 32">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>น้ำหนักตัว (กก. / kg) *</label>
+              <input type="number" step="0.5" id="profWeight" value="68.5" required placeholder="เช่น 68.5">
+            </div>
+            <div class="form-group">
+              <label>ส่วนสูง (ซม. / cm)</label>
+              <input type="number" id="profHeight" value="175" placeholder="เช่น 175">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>เบอร์โทรศัพท์ติดต่อ *</label>
+            <input type="tel" id="profPhone" placeholder="08x-xxx-xxxx" required value="089-123-4567">
+          </div>
+          <div class="form-group">
+            <label>อีเมล *</label>
+            <input type="email" id="profEmail" placeholder="example@email.com" required value="runner.pro@gmail.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>เป้าหมายการซ้อม / ประวัติการบาดเจ็บที่ต้องการป้องกัน</label>
+          <input type="text" id="profGoal" placeholder="เช่น เจ็บเข่า ITB, รองช้ำ, ซ้อมทำ New PB ลู่วิ่ง" value="ซ้อมมาราธอน Sub-3.30 & วัด Pace ลู่วิ่งแม่นยำ">
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+          <button type="submit" class="btn btn-primary btn-glow" style="flex-grow: 1;">
+            <i class="fa-solid fa-cloud-arrow-up"></i> บันทึกข้อมูลเข้า Firebase Firestore
+          </button>
+          <button type="button" class="btn btn-glass" onclick="openCustomersDrawer()">
+            <i class="fa-solid fa-table-list"></i> ดูรายชื่อทั้งหมด
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Customer Records Drawer (Firebase Database Viewer) -->
+  <div class="cart-drawer-overlay" id="customersOverlay" onclick="closeCustomersDrawer()"></div>
+  <aside class="customers-drawer" id="customersDrawer">
+    <div class="customers-drawer-header">
+      <div class="cart-title-wrap">
+        <i class="fa-solid fa-fire text-coral"></i>
+        <h3>ฐานข้อมูลลูกค้า Firebase Firestore (<span id="totalCustomersCount">0</span>)</h3>
+      </div>
+      <button class="drawer-close-btn" onclick="closeCustomersDrawer()">&times;</button>
+    </div>
+
+    <div class="customers-drawer-body">
+      <!-- Quick Stats -->
+      <div class="customer-stats-cards">
+        <div class="c-stat-card">
+          <div class="c-stat-num" id="statMaleCount">0</div>
+          <div class="c-stat-label">เพศชาย (Male)</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-num text-coral" id="statFemaleCount">0</div>
+          <div class="c-stat-label">เพศหญิง (Female)</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-num text-green" id="statAvgAge">0</div>
+          <div class="c-stat-label">อายุเฉลี่ย (ปี)</div>
+        </div>
+        <div class="c-stat-card">
+          <div class="c-stat-num text-amber" id="statAvgWeight">0</div>
+          <div class="c-stat-label">น้ำหนักเฉลี่ย (กก.)</div>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="drawer-toolbar">
+        <input type="text" id="customerSearchInput" class="drawer-search-input" placeholder="🔍 ค้นหา: ชื่อ, เบอร์โทร, เพศ..." onkeyup="filterCustomersTable()">
+        <select id="customerGenderFilter" class="custom-select" style="padding: 8px 12px;" onchange="filterCustomersTable()">
+          <option value="all">ทุกเพศ</option>
+          <option value="ชาย">เพศชาย</option>
+          <option value="หญิง">เพศหญิง</option>
+        </select>
+        <button class="btn btn-sm btn-cyan" onclick="openCustomerProfileModal()">
+          <i class="fa-solid fa-plus"></i> เพิ่มลูกค้า
+        </button>
+        <button class="btn btn-sm btn-glass" onclick="exportCustomersJSON()" title="Export JSON">
+          <i class="fa-solid fa-download"></i>
+        </button>
+      </div>
+
+      <!-- Customers Table -->
+      <div class="customer-table-wrap">
+        <table class="customer-table" id="customersTable">
+          <thead>
+            <tr>
+              <th>รหัส / ชื่อ</th>
+              <th>เพศ</th>
+              <th>วันเกิด (DOB)</th>
+              <th>อายุ</th>
+              <th>น้ำหนัก</th>
+              <th>เบอร์โทร</th>
+              <th>ประเภท</th>
+            </tr>
+          </thead>
+          <tbody id="customersTableBody">
+            <!-- Injected via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 16px; font-size: 0.78rem; color: var(--text-secondary); text-align: center;">
+        <i class="fa-solid fa-shield-check text-green"></i> ข้อมูลซิงค์ Real-Time กับ Firebase Firestore และ Local Cache
+      </div>
+    </div>
+  </aside>
+
+  <!-- Firebase Settings Modal -->
+  <div class="modal-overlay" id="firebaseSettingsModalOverlay">
+    <div class="checkout-modal" style="max-width: 580px;">
+      <button class="modal-close-btn" onclick="closeFirebaseSettingsModal()">&times;</button>
+      <div class="checkout-header">
+        <i class="fa-solid fa-gear text-amber"></i>
+        <div>
+          <h3>ตั้งค่าเชื่อมต่อ Firebase Project ของคุณ</h3>
+          <p>นำ Firebase Config JSON จาก Firebase Console มาวางเพื่อเชื่อมต่อโปรเจกต์จริง</p>
+        </div>
+      </div>
+      
+      <div style="padding: 24px;">
+        <div class="form-group">
+          <label>Firebase Configuration (JSON Format):</label>
+          <textarea id="firebaseConfigJsonInput" rows="7" style="width: 100%; font-family: monospace; font-size: 0.8rem; background: rgba(0,0,0,0.4); color: #00F0FF; border: 1px solid var(--border-light); padding: 12px; border-radius: var(--radius-sm);" placeholder='{
+  "apiKey": "AIzaSy...",
+  "authDomain": "your-project.firebaseapp.com",
+  "projectId": "your-project",
+  "storageBucket": "your-project.appspot.com",
+  "messagingSenderId": "...",
+  "appId": "..."
+}'></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 16px;">
+          <button class="btn btn-primary w-100" onclick="saveCustomFirebaseConfig()">
+            <i class="fa-solid fa-check"></i> บันทึกและเชื่อมต่อ Firebase
+          </button>
+          <button class="btn btn-glass" onclick="resetDefaultFirebaseConfig()">
+            รีเซ็ตค่าเริ่มต้น
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="firebase-service.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

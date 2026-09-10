@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบ & ออกจากระบบ | KINETIPOD™ Firebase Authentication</title>
+  <meta name="description" content="ระบบเข้าสู่ระบบ สมัครสมาชิก และจัดการโปรไฟล์สุขภาพนักวิ่ง เชื่อมต่อ Firebase Authentication และ Firestore">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase SDK (Compat Version) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    /* Dedicated Auth Page Layout */
+    .auth-page-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 50% 10%, rgba(0, 240, 255, 0.1) 0%, transparent 60%),
+                  radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                  #070B14;
+    }
+
+    .auth-page-header {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border-light);
+      background: rgba(14, 20, 36, 0.8);
+      backdrop-filter: blur(12px);
+    }
+
+    .auth-header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .auth-page-main {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    .auth-standalone-card {
+      width: 100%;
+      max-width: 580px;
+      background: rgba(18, 26, 46, 0.85);
+      border: 1px solid var(--border-cyan);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), var(--border-glow);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+      animation: fadeInDown 0.4s ease;
+    }
+
+    /* Logged In Dashboard Card View */
+    .logged-in-card {
+      padding: 36px 30px;
+      text-align: center;
+    }
+
+    .profile-hero-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00F0FF, #10B981);
+      color: #070B14;
+      font-size: 2.2rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px auto;
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+    }
+
+    .user-badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: var(--accent-green);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .user-profile-title {
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+      color: #FFFFFF;
+    }
+
+    .user-profile-email {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      margin-bottom: 24px;
+    }
+
+    .biometrics-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      background: rgba(14, 20, 36, 0.8);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 16px 12px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .bio-stat-item strong {
+      display: block;
+      font-size: 1.15rem;
+      color: var(--primary-cyan);
+      margin-bottom: 2px;
+    }
+
+    .bio-stat-item span {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .auth-actions-group {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-logout {
+      background: rgba(255, 70, 85, 0.15);
+      border: 1px solid rgba(255, 70, 85, 0.4);
+      color: var(--accent-coral);
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition-fast);
+    }
+
+    .btn-logout:hover {
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      box-shadow: 0 0 20px rgba(255, 70, 85, 0.4);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 640px) {
+      .biometrics-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body class="dark-mode">
+
+  <div class="auth-page-wrapper">
+    <!-- Header Navigation -->
+    <header class="auth-page-header">
+      <div class="container auth-header-container">
+        <a href="index.html" class="brand-logo">
+          <div class="logo-icon">
+            <i class="fa-solid fa-shoe-prints"></i>
+            <span class="pulse-dot"></span>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">KINETI<span class="highlight">POD</span></span>
+            <span class="brand-tagline">SMART GAIT & REHAB INTELLIGENCE</span>
+          </div>
+        </a>
+
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span id="firebaseStatusBadge" class="fb-badge offline">
+            <span class="fb-dot"></span> <i class="fa-solid fa-fire"></i> Firebase Ready
+          </span>
+          <a href="index.html" class="btn btn-sm btn-outline">
+            <i class="fa-solid fa-house"></i> กลับสู่หน้าหลัก
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="auth-page-main">
+      <div class="auth-standalone-card">
+
+        <!-- VIEW 1: NOT LOGGED IN (LOGIN / SIGN UP FORM) -->
+        <div id="authGuestView">
+          <!-- Auth Navigation Tabs -->
+          <div class="auth-tabs-nav">
+            <button class="auth-tab-btn active" id="tabBtnLogin" onclick="showAuthTab('login')">
+              <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ (Log In)
+            </button>
+            <button class="auth-tab-btn" id="tabBtnRegister" onclick="showAuthTab('register')">
+              <i class="fa-solid fa-user-plus"></i> สมัครสมาชิก & บันทึกสุขภาพ
+            </button>
+            <button class="auth-tab-btn" id="tabBtnReset" onclick="showAuthTab('reset')" style="display: none;">
+              <i class="fa-solid fa-key"></i> รีเซ็ตรหัสผ่าน
+            </button>
+          </div>
+
+          <!-- TAB 1: LOGIN -->
+          <div class="auth-tab-pane active" id="paneLogin">
+            <div style="text-align: center; margin-bottom: 22px;">
+              <h2 style="font-size: 1.4rem; margin-bottom: 6px;">เข้าสู่ระบบสมาชิก</h2>
+              <p style="font-size: 0.88rem; color: var(--text-secondary);">เข้าสู่ระบบผ่าน Firebase เพื่อซิงค์ข้อมูลการวิ่งและสถิติส่วนบุคคล</p>
+            </div>
+
+            <form onsubmit="handlePageLogin(event)">
+              <div class="form-group">
+                <label>อีเมล (Email) *</label>
+                <input type="email" id="pLoginEmail" placeholder="เช่น runner.pro@gmail.com" required value="runner.pro@gmail.com">
+              </div>
+
+              <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label style="margin-bottom: 0;">รหัสผ่าน (Password) *</label>
+                  <a href="javascript:void(0)" onclick="showAuthTab('reset')" style="font-size: 0.8rem; color: var(--primary-cyan);">ลืมรหัสผ่าน?</a>
+                </div>
+                <div style="position: relative;">
+                  <input type="password" id="pLoginPassword" placeholder="กรอกรหัสผ่าน 6 ตัวขึ้นไป" required value="123456" style="padding-right: 40px;">
+                  <button type="button" onclick="togglePasswordVisibility('pLoginPassword', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-secondary); cursor: pointer;">
+                    <i class="fa-regular fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div style="text-align: center; margin-top: 16px;">
+                <button type="submit" class="btn btn-primary btn-glow w-100" style="padding: 14px; font-size: 1rem; justify-content: center;">
+                  <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ (Log In with Firebase)
+                </button>
+              </div>
+            </form>
+
+            <div class="auth-divider"><span>หรือเข้าสู่ระบบด้วย</span></div>
+
+            <!-- Google Sign-In -->
+            <button type="button" class="social-auth-btn" onclick="handlePageGoogleLogin()">
+              <i class="fa-brands fa-google"></i> เข้าสู่ระบบด้วย Google Account
+            </button>
+
+            <!-- Quick Demo Accounts -->
+            <div class="demo-login-box">
+              <div class="demo-login-title"><i class="fa-solid fa-flask"></i> ทดสอบล็อกอินด่วน (Quick Demo):</div>
+              <div class="demo-pills-row">
+                <button type="button" class="demo-pill-btn" onclick="quickFillPage('runner.pro@gmail.com', '123456')">
+                  🏃 นักวิ่งซ้อมประจำ
+                </button>
+                <button type="button" class="demo-pill-btn" onclick="quickFillPage('vipada.rehab@yahoo.com', '123456')">
+                  🩹 ผู้ป่วยกายภาพ
+                </button>
+                <button type="button" class="demo-pill-btn" onclick="quickFillPage('coach.thanapol@speedrun.th', '123456')">
+                  🥇 โค้ชวิ่งทีมชาติ
+                </button>
+              </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 18px; font-size: 0.85rem; color: var(--text-secondary);">
+              ยังไม่มีบัญชีผู้ใช้งาน? <a href="javascript:void(0)" onclick="showAuthTab('register')" style="color: var(--primary-cyan); font-weight: 600;">สมัครสมาชิกที่นี่</a>
+            </div>
+          </div>
+
+          <!-- TAB 2: REGISTER -->
+          <div class="auth-tab-pane" id="paneRegister">
+            <div style="text-align: center; margin-bottom: 18px;">
+              <h2 style="font-size: 1.4rem; margin-bottom: 6px;">สมัครสมาชิก & บันทึกสุขภาพ</h2>
+              <p style="font-size: 0.88rem; color: var(--text-secondary);">สร้างบัญชี Firebase พร้อมบันทึกข้อมูลสรีระเพื่อตั้งค่าเซนเซอร์ 16-Axis IMU</p>
+            </div>
+
+            <!-- Quick Google Register -->
+            <button type="button" class="social-auth-btn" onclick="handlePageGoogleLogin()">
+              <i class="fa-brands fa-google"></i> สมัครสมาชิกด่วนด้วย Google Account
+            </button>
+
+            <div class="auth-divider"><span>หรือกรอกแบบฟอร์มสมัครสมาชิก</span></div>
+
+            <form onsubmit="handlePageRegister(event)">
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>ชื่อ-นามสกุล *</label>
+                  <input type="text" id="pRegName" placeholder="เช่น กิตติศักดิ์ พัฒนาการ" required value="นักวิ่งมือใหม่ สุขภาพดี">
+                </div>
+                <div class="form-group">
+                  <label>อีเมล (Email) *</label>
+                  <input type="email" id="pRegEmail" placeholder="example@gmail.com" required value="newrunner@gmail.com">
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>รหัสผ่าน (Password) *</label>
+                  <input type="password" id="pRegPassword" placeholder="ตั้งรหัสผ่าน 6 ตัวขึ้นไป" required value="123456">
+                </div>
+                <div class="form-group">
+                  <label>ยืนยันรหัสผ่าน *</label>
+                  <input type="password" id="pRegConfirmPassword" placeholder="กรอกรหัสผ่านอีกครั้ง" required value="123456">
+                </div>
+              </div>
+
+              <!-- Biometrics Health Box -->
+              <div class="customer-health-box">
+                <div class="health-box-title">
+                  <i class="fa-solid fa-heart-pulse text-cyan"></i>
+                  <span>ข้อมูลสรีระ (Biometrics) สำหรับบันทึกเข้า Firestore</span>
+                </div>
+
+                <div class="form-row-3">
+                  <div class="form-group">
+                    <label>เพศ (Gender) *</label>
+                    <select id="pRegGender" class="custom-select" style="width: 100%; padding: 10px;">
+                      <option value="ชาย" selected>ชาย (Male)</option>
+                      <option value="หญิง">หญิง (Female)</option>
+                      <option value="อื่นๆ">อื่นๆ / ไม่ระบุ</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>วัน เดือน ปี เกิด *</label>
+                    <input type="date" id="pRegBirthDate" value="1996-06-20" required onchange="autoCalcPageAge(this.value)">
+                  </div>
+
+                  <div class="form-group">
+                    <label>อายุ (ปี) *</label>
+                    <input type="number" id="pRegAge" min="1" max="120" value="30" required placeholder="เช่น 30">
+                  </div>
+                </div>
+
+                <div class="form-row-3">
+                  <div class="form-group">
+                    <label>น้ำหนักตัว (กก.) *</label>
+                    <input type="number" step="0.5" id="pRegWeight" value="62.5" required placeholder="เช่น 62.5">
+                  </div>
+                  <div class="form-group">
+                    <label>ส่วนสูง (ซม.)</label>
+                    <input type="number" id="pRegHeight" value="170" placeholder="เช่น 170">
+                  </div>
+                  <div class="form-group">
+                    <label>กลุ่มผู้ใช้งาน</label>
+                    <select id="pRegCustomerType" class="custom-select" style="width: 100%; padding: 10px;">
+                      <option value="นักวิ่งซ้อมประจำ">นักวิ่งซ้อมประจำ</option>
+                      <option value="ผู้ป่วยพักฟื้น/กายภาพ">ผู้ป่วยกายภาพ/ฟื้นฟู</option>
+                      <option value="นักกีฬา">นักกีฬา</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div style="text-align: center; margin-top: 16px;">
+                <button type="submit" class="btn btn-primary btn-glow w-100" style="padding: 14px; font-size: 1rem; justify-content: center;">
+                  <i class="fa-solid fa-user-plus"></i> สมัครสมาชิก & บันทึกเข้า Firebase Firestore
+                </button>
+              </div>
+            </form>
+
+            <div style="text-align: center; margin-top: 16px; font-size: 0.85rem; color: var(--text-secondary);">
+              มีบัญชีอยู่แล้ว? <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: var(--primary-cyan); font-weight: 600;">เข้าสู่ระบบที่นี่</a>
+            </div>
+          </div>
+
+          <!-- TAB 3: RESET PASSWORD -->
+          <div class="auth-tab-pane" id="paneReset">
+            <div style="text-align: center; margin-bottom: 20px;">
+              <h2 style="font-size: 1.4rem; margin-bottom: 6px;">รีเซ็ตรหัสผ่าน</h2>
+              <p style="font-size: 0.88rem; color: var(--text-secondary);">กรอกอีเมลของคุณเพื่อรับลิงก์ตั้งรหัสผ่านใหม่ผ่าน Firebase</p>
+            </div>
+
+            <form onsubmit="handlePageResetPassword(event)">
+              <div class="form-group">
+                <label>อีเมลที่ลงทะเบียนไว้ *</label>
+                <input type="email" id="pResetEmail" placeholder="example@gmail.com" required value="runner.pro@gmail.com">
+              </div>
+
+              <div style="text-align: center; margin-top: 16px;">
+                <button type="submit" class="btn btn-primary w-100" style="padding: 14px; font-size: 1rem; justify-content: center;">
+                  <i class="fa-solid fa-paper-plane"></i> ส่งลิงก์รีเซ็ตรหัสผ่าน (Firebase)
+                </button>
+              </div>
+            </form>
+
+            <div style="text-align: center; margin-top: 18px; font-size: 0.85rem;">
+              <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: var(--text-secondary);"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเข้าสู่ระบบ</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW 2: LOGGED IN (USER PROFILE & LOGOUT VIEW) -->
+        <div id="authLoggedInView" class="logged-in-card" style="display: none;">
+          <div class="profile-hero-avatar" id="pageUserAvatar">KP</div>
+          <div class="user-badge-status">
+            <i class="fa-solid fa-circle-check"></i> เข้าสู่ระบบ Firebase สำเร็จ
+          </div>
+          
+          <h2 class="user-profile-title" id="pageUserName">คุณกิตติศักดิ์ พัฒนาการ</h2>
+          <p class="user-profile-email" id="pageUserEmail">runner.pro@gmail.com</p>
+
+          <!-- User Biometrics Summary -->
+          <div class="biometrics-summary-grid">
+            <div class="bio-stat-item">
+              <strong id="pageUserGender">ชาย</strong>
+              <span>เพศ</span>
+            </div>
+            <div class="bio-stat-item">
+              <strong id="pageUserAge">32</strong>
+              <span>อายุ (ปี)</span>
+            </div>
+            <div class="bio-stat-item">
+              <strong id="pageUserWeight">68.5 kg</strong>
+              <span>น้ำหนัก</span>
+            </div>
+            <div class="bio-stat-item">
+              <strong id="pageUserType">นักวิ่ง</strong>
+              <span>ประเภท</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="auth-actions-group">
+            <a href="index.html" class="btn btn-primary btn-glow">
+              <i class="fa-solid fa-shoe-prints"></i> ไปที่หน้าร้าน / สั่งซื้อสินค้า
+            </a>
+            <button class="btn-logout" onclick="handlePageLogout()">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ (Log Out)
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="firebase-service.js"></script>
+  <script>
+    // Page Auth Handler Scripts
+    document.addEventListener("DOMContentLoaded", () => {
+      checkPageAuthState();
+    });
+
+    function checkPageAuthState() {
+      const user = currentUserProfile || JSON.parse(localStorage.getItem("kinetipod_current_user") || "null");
+      const guestView = document.getElementById("authGuestView");
+      const loggedInView = document.getElementById("authLoggedInView");
+
+      if (user) {
+        guestView.style.display = "none";
+        loggedInView.style.display = "block";
+
+        const initials = (user.name || "U").slice(0, 2).toUpperCase();
+        document.getElementById("pageUserAvatar").innerText = initials;
+        document.getElementById("pageUserName").innerText = user.name || "ผู้ใช้งาน";
+        document.getElementById("pageUserEmail").innerText = user.email || "-";
+        document.getElementById("pageUserGender").innerText = user.gender || "ชาย";
+        document.getElementById("pageUserAge").innerText = (user.age || "30") + " ปี";
+        document.getElementById("pageUserWeight").innerText = (user.weight || "65") + " kg";
+        document.getElementById("pageUserType").innerText = user.customerType || "นักวิ่ง";
+      } else {
+        guestView.style.display = "block";
+        loggedInView.style.display = "none";
+      }
+    }
+
+    function showAuthTab(tab) {
+      document.querySelectorAll(".auth-tab-pane").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".auth-tab-btn").forEach(b => b.classList.remove("active"));
+
+      if (tab === "login") {
+        document.getElementById("paneLogin").classList.add("active");
+        document.getElementById("tabBtnLogin").classList.add("active");
+      } else if (tab === "register") {
+        document.getElementById("paneRegister").classList.add("active");
+        document.getElementById("tabBtnRegister").classList.add("active");
+      } else if (tab === "reset") {
+        document.getElementById("paneReset").classList.add("active");
+        document.getElementById("tabBtnReset").classList.add("active");
+      }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === "password") {
+        input.type = "text";
+        btn.innerHTML = `<i class="fa-regular fa-eye-slash"></i>`;
+      } else {
+        input.type = "password";
+        btn.innerHTML = `<i class="fa-regular fa-eye"></i>`;
+      }
+    }
+
+    function autoCalcPageAge(birthDateStr) {
+      if (typeof calculateAgeFromBirthDate === "function") {
+        document.getElementById("pRegAge").value = calculateAgeFromBirthDate(birthDateStr);
+      }
+    }
+
+    function quickFillPage(email, password) {
+      document.getElementById("pLoginEmail").value = email;
+      document.getElementById("pLoginPassword").value = password;
+      showToast("กรอกบัญชีทดสอบเรียบร้อย กดเข้าสู่ระบบได้ทันที", "info");
+    }
+
+    async function handlePageLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById("pLoginEmail").value.trim();
+      const password = document.getElementById("pLoginPassword").value.trim();
+
+      try {
+        if (typeof firebaseSignIn === "function") {
+          const user = await firebaseSignIn(email, password);
+          showToast(`👋 ยินดีต้อนรับคุณ ${user.name || user.email} เข้าสู่ระบบสำเร็จ!`, "success");
+          setTimeout(() => checkPageAuthState(), 400);
+        }
+      } catch (error) {
+        alert("เข้าสู่ระบบไม่สำเร็จ: " + (error.message || "กรุณาตรวจสอบอีเมลและรหัสผ่าน"));
+      }
+    }
+
+    async function handlePageRegister(event) {
+      event.preventDefault();
+      const name = document.getElementById("pRegName").value.trim();
+      const email = document.getElementById("pRegEmail").value.trim();
+      const password = document.getElementById("pRegPassword").value;
+      const confirmPassword = document.getElementById("pRegConfirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("รหัสผ่านไม่ตรงกัน!");
+        return;
+      }
+
+      const profileData = {
+        name,
+        gender: document.getElementById("pRegGender").value,
+        birthDate: document.getElementById("pRegBirthDate").value,
+        age: parseInt(document.getElementById("pRegAge").value, 10),
+        weight: parseFloat(document.getElementById("pRegWeight").value),
+        height: parseFloat(document.getElementById("pRegHeight").value) || 170,
+        customerType: document.getElementById("pRegCustomerType").value
+      };
+
+      try {
+        if (typeof firebaseSignUp === "function") {
+          const user = await firebaseSignUp(email, password, profileData);
+          showToast(`🎉 สมัครสมาชิกและบันทึกข้อมูลสุขภาพคุณ ${user.name} เข้า Firebase สำเร็จ!`, "success");
+          setTimeout(() => checkPageAuthState(), 400);
+        }
+      } catch (error) {
+        alert("สมัครสมาชิกไม่สำเร็จ: " + (error.message || "เกิดข้อผิดพลาด"));
+      }
+    }
+
+    async function handlePageGoogleLogin() {
+      try {
+        if (typeof firebaseSignInWithGoogle === "function") {
+          const user = await firebaseSignInWithGoogle();
+          if (user) {
+            showToast(`🎉 เข้าสู่ระบบด้วย Google สำเร็จ! ยินดีต้อนรับคุณ ${user.name}`, "success");
+            setTimeout(() => checkPageAuthState(), 300);
+          }
+        }
+      } catch (e) {
+        console.warn("Google Sign-In:", e);
+      }
+    }
+
+    async function handlePageResetPassword(event) {
+      event.preventDefault();
+      const email = document.getElementById("pResetEmail").value.trim();
+      if (typeof firebaseResetPassword === "function") {
+        await firebaseResetPassword(email);
+        showToast(`📧 ส่งลิงก์รีเซ็ตรหัสผ่านไปยัง ${email} แล้ว!`, "success");
+        showAuthTab("login");
+      }
+    }
+
+    async function handlePageLogout() {
+      if (typeof firebaseSignOut === "function") {
+        await firebaseSignOut();
+        showToast("🚪 ออกจากระบบ Firebase เรียบร้อยแล้ว", "info");
+        setTimeout(() => checkPageAuthState(), 300);
+      }
+    }
+
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toastContainer");
+      if (!container) return;
+      const toast = document.createElement("div");
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<i class="fa-solid fa-circle-info text-cyan"></i> <span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    }
+  </script>
+</body>
+</html>
