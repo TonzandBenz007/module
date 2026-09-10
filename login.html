@@ -18,13 +18,13 @@
 
   <style>
     /* ==========================================================================
-       CLEAN & MINIMALIST AUTH THEME
+       CLEAN & MODERN WHITE / LIGHT THEME
        ========================================================================== */
     body {
       margin: 0;
       padding: 0;
-      background-color: #0F172A;
-      color: #F8FAFC;
+      background-color: #F8FAFC;
+      color: #0F172A;
       font-family: 'Prompt', 'Plus Jakarta Sans', sans-serif;
     }
 
@@ -32,14 +32,15 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background-color: #0F172A;
+      background-color: #F8FAFC;
     }
 
-    /* Minimalist Header */
+    /* Minimalist White Header */
     .auth-page-header {
       padding: 16px 0;
-      border-bottom: 1px solid #1E293B;
-      background-color: #0F172A;
+      border-bottom: 1px solid #E2E8F0;
+      background-color: #FFFFFF;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
     }
 
     .auth-header-container {
@@ -47,7 +48,7 @@
       margin: 0 auto;
       padding: 0 20px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
     }
 
@@ -56,22 +57,23 @@
       align-items: center;
       gap: 10px;
       text-decoration: none;
-      color: #FFFFFF;
+      color: #0F172A;
     }
 
     .brand-logo-clean i {
       font-size: 1.4rem;
-      color: #38BDF8;
+      color: #2563EB;
     }
 
     .brand-logo-clean span {
       font-size: 1.25rem;
       font-weight: 700;
       letter-spacing: 0.5px;
+      color: #0F172A;
     }
 
     .brand-logo-clean span b {
-      color: #38BDF8;
+      color: #2563EB;
     }
 
     /* Main Card Layout */
@@ -85,19 +87,19 @@
 
     .auth-clean-card {
       width: 100%;
-      max-width: 520px;
-      background: #1E293B;
-      border: 1px solid #334155;
+      max-width: 500px;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
       border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
       overflow: hidden;
     }
 
-    /* Clean Tabs */
+    /* Clean White/Light Tabs */
     .auth-clean-tabs {
       display: flex;
-      background: #0F172A;
-      border-bottom: 1px solid #334155;
+      background: #F1F5F9;
+      border-bottom: 1px solid #E2E8F0;
     }
 
     .auth-clean-tab-btn {
@@ -105,7 +107,7 @@
       padding: 15px 16px;
       background: transparent;
       border: none;
-      color: #94A3B8;
+      color: #64748B;
       font-weight: 600;
       font-size: 0.95rem;
       font-family: inherit;
@@ -119,18 +121,20 @@
     }
 
     .auth-clean-tab-btn:hover {
-      color: #F8FAFC;
+      color: #0F172A;
+      background: #E2E8F0;
     }
 
     .auth-clean-tab-btn.active {
-      color: #38BDF8;
-      border-bottom-color: #38BDF8;
-      background: #1E293B;
+      color: #2563EB;
+      border-bottom-color: #2563EB;
+      background: #FFFFFF;
+      font-weight: 700;
     }
 
     .auth-clean-tab-pane {
       display: none;
-      padding: 30px 28px;
+      padding: 32px 28px;
     }
 
     .auth-clean-tab-pane.active {
@@ -147,17 +151,17 @@
       display: block;
       font-size: 0.88rem;
       font-weight: 500;
-      color: #E2E8F0;
+      color: #334155;
       margin-bottom: 6px;
     }
 
     .clean-input {
       width: 100%;
       padding: 12px 14px;
-      background: #0F172A;
-      border: 1px solid #334155;
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
       border-radius: 8px;
-      color: #F8FAFC;
+      color: #0F172A;
       font-size: 0.95rem;
       font-family: inherit;
       outline: none;
@@ -165,9 +169,13 @@
       box-sizing: border-box;
     }
 
+    .clean-input::placeholder {
+      color: #94A3B8;
+    }
+
     .clean-input:focus {
-      border-color: #38BDF8;
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+      border-color: #2563EB;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
     .form-row-2 {
@@ -211,8 +219,8 @@
 
     /* Subsections */
     .clean-box-section {
-      background: #0F172A;
-      border: 1px solid #334155;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
       border-radius: 10px;
       padding: 16px 14px;
       margin: 18px 0;
@@ -221,7 +229,7 @@
     .clean-box-title {
       font-size: 0.85rem;
       font-weight: 600;
-      color: #38BDF8;
+      color: #2563EB;
       margin-bottom: 12px;
       display: flex;
       align-items: center;
@@ -233,7 +241,7 @@
       display: flex;
       align-items: center;
       margin: 20px 0;
-      color: #64748B;
+      color: #94A3B8;
       font-size: 0.82rem;
     }
 
@@ -241,104 +249,11 @@
       content: "";
       flex: 1;
       height: 1px;
-      background: #334155;
+      background: #E2E8F0;
     }
 
     .clean-auth-divider span {
       padding: 0 12px;
-    }
-
-    /* Quick Demo Bar */
-    .clean-demo-box {
-      background: #0F172A;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 12px;
-      margin-top: 18px;
-    }
-
-    .clean-demo-title {
-      font-size: 0.78rem;
-      color: #94A3B8;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .clean-demo-pills {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .clean-demo-pill {
-      background: #1E293B;
-      border: 1px solid #334155;
-      color: #E2E8F0;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.15s ease;
-    }
-
-    .clean-demo-pill:hover {
-      background: #334155;
-      color: #FFFFFF;
-      border-color: #475569;
-    }
-
-    /* Firebase Status Badge */
-    .fb-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 500;
-    }
-
-    .fb-badge.connected {
-      background: rgba(16, 185, 129, 0.12);
-      color: #34D399;
-      border: 1px solid rgba(16, 185, 129, 0.25);
-    }
-
-    .fb-badge.offline {
-      background: rgba(239, 68, 68, 0.12);
-      color: #F87171;
-      border: 1px solid rgba(239, 68, 68, 0.25);
-    }
-
-    .fb-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-
-    .btn-nav-outline {
-      background: transparent;
-      border: 1px solid #334155;
-      color: #CBD5E1;
-      padding: 6px 14px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s ease;
-    }
-
-    .btn-nav-outline:hover {
-      background: #1E293B;
-      color: #FFFFFF;
-      border-color: #475569;
     }
 
     /* Logged In State */
@@ -364,11 +279,11 @@
     .clean-user-title {
       font-size: 1.35rem;
       margin: 0 0 4px 0;
-      color: #F8FAFC;
+      color: #0F172A;
     }
 
     .clean-user-email {
-      color: #94A3B8;
+      color: #64748B;
       font-size: 0.9rem;
       margin: 0 0 20px 0;
     }
@@ -377,8 +292,8 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-      background: #0F172A;
-      border: 1px solid #334155;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
       border-radius: 8px;
       padding: 14px 10px;
       margin-bottom: 24px;
@@ -388,19 +303,19 @@
     .clean-bio-item strong {
       display: block;
       font-size: 1.1rem;
-      color: #38BDF8;
+      color: #2563EB;
       margin-bottom: 2px;
     }
 
     .clean-bio-item span {
       font-size: 0.75rem;
-      color: #94A3B8;
+      color: #64748B;
     }
 
     .btn-clean-logout {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      color: #F87171;
+      background: #FEE2E2;
+      border: 1px solid #FECACA;
+      color: #DC2626;
       padding: 10px 20px;
       border-radius: 8px;
       font-weight: 600;
@@ -414,8 +329,9 @@
     }
 
     .btn-clean-logout:hover {
-      background: #EF4444;
+      background: #DC2626;
       color: #FFFFFF;
+      border-color: #DC2626;
     }
 
     @media (max-width: 540px) {
@@ -426,7 +342,7 @@
         grid-template-columns: repeat(2, 1fr);
       }
       .auth-clean-tab-pane {
-        padding: 24px 16px;
+        padding: 24px 18px;
       }
     }
   </style>
@@ -436,7 +352,7 @@
   <div class="auth-page-wrapper">
     <!-- Header Navigation -->
     <header class="auth-page-header">
-      <div class="auth-header-container" style="justify-content: center;">
+      <div class="auth-header-container">
         <a href="index.html" class="brand-logo-clean">
           <i class="fa-solid fa-shoe-prints"></i>
           <span>KINETI<b>POD</b></span>
@@ -465,9 +381,9 @@
 
           <!-- TAB 1: LOGIN -->
           <div class="auth-clean-tab-pane active" id="paneLogin">
-            <div style="text-align: center; margin-bottom: 20px;">
-              <h2 style="font-size: 1.35rem; margin: 0 0 6px 0; color: #FFFFFF;">เข้าสู่ระบบสมาชิก</h2>
-              <p style="font-size: 0.88rem; color: #94A3B8; margin: 0;">เข้าสู่ระบบเพื่อจัดการข้อมูลและสถิติการวิ่ง</p>
+            <div style="text-align: center; margin-bottom: 22px;">
+              <h2 style="font-size: 1.35rem; margin: 0 0 6px 0; color: #0F172A; font-weight: 700;">เข้าสู่ระบบสมาชิก</h2>
+              <p style="font-size: 0.88rem; color: #64748B; margin: 0;">เข้าสู่ระบบเพื่อจัดการข้อมูลและสถิติการวิ่ง</p>
             </div>
 
             <form onsubmit="handlePageLogin(event)">
@@ -479,7 +395,7 @@
               <div class="clean-form-group">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                   <label style="margin-bottom: 0;">รหัสผ่าน (Password) *</label>
-                  <a href="javascript:void(0)" onclick="showAuthTab('reset')" style="font-size: 0.8rem; color: #38BDF8; text-decoration: none;">ลืมรหัสผ่าน?</a>
+                  <a href="javascript:void(0)" onclick="showAuthTab('reset')" style="font-size: 0.8rem; color: #2563EB; font-weight: 500; text-decoration: none;">ลืมรหัสผ่าน?</a>
                 </div>
                 <div style="position: relative;">
                   <input type="password" id="pLoginPassword" class="clean-input" placeholder="กรอกรหัสผ่าน" required style="padding-right: 40px;">
@@ -489,7 +405,7 @@
                 </div>
               </div>
 
-              <div style="margin-top: 20px;">
+              <div style="margin-top: 22px;">
                 <button type="submit" class="btn-clean-primary">
                   <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
                 </button>
@@ -512,16 +428,16 @@
               <span class="google-btn-badge">1-Click</span>
             </button>
 
-            <div style="text-align: center; margin-top: 24px; font-size: 0.88rem; color: #94A3B8;">
-              ยังไม่มีบัญชีผู้ใช้งาน? <a href="javascript:void(0)" onclick="showAuthTab('register')" style="color: #38BDF8; font-weight: 600; text-decoration: none;">สมัครสมาชิกใหม่</a>
+            <div style="text-align: center; margin-top: 24px; font-size: 0.88rem; color: #64748B;">
+              ยังไม่มีบัญชีผู้ใช้งาน? <a href="javascript:void(0)" onclick="showAuthTab('register')" style="color: #2563EB; font-weight: 600; text-decoration: none;">สมัครสมาชิกใหม่</a>
             </div>
           </div>
 
           <!-- TAB 2: REGISTER -->
           <div class="auth-clean-tab-pane" id="paneRegister">
-            <div style="text-align: center; margin-bottom: 18px;">
-              <h2 style="font-size: 1.35rem; margin: 0 0 6px 0; color: #FFFFFF;">สมัครสมาชิก</h2>
-              <p style="font-size: 0.88rem; color: #94A3B8; margin: 0;">สร้างบัญชีใหม่เพื่อเริ่มบันทึกข้อมูลการวิ่ง</p>
+            <div style="text-align: center; margin-bottom: 20px;">
+              <h2 style="font-size: 1.35rem; margin: 0 0 6px 0; color: #0F172A; font-weight: 700;">สมัครสมาชิก</h2>
+              <p style="font-size: 0.88rem; color: #64748B; margin: 0;">สร้างบัญชีใหม่เพื่อเริ่มบันทึกข้อมูลการวิ่ง</p>
             </div>
 
             <!-- Quick Google Register -->
@@ -611,40 +527,40 @@
                 </div>
               </div>
 
-              <div style="margin-top: 16px;">
+              <div style="margin-top: 20px;">
                 <button type="submit" class="btn-clean-primary">
                   <i class="fa-solid fa-user-plus"></i> ยืนยันสมัครสมาชิก
                 </button>
               </div>
             </form>
 
-            <div style="text-align: center; margin-top: 16px; font-size: 0.85rem; color: #94A3B8;">
-              มีบัญชีอยู่แล้ว? <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: #38BDF8; font-weight: 600; text-decoration: none;">เข้าสู่ระบบที่นี่</a>
+            <div style="text-align: center; margin-top: 18px; font-size: 0.88rem; color: #64748B;">
+              มีบัญชีอยู่แล้ว? <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: #2563EB; font-weight: 600; text-decoration: none;">เข้าสู่ระบบที่นี่</a>
             </div>
           </div>
 
           <!-- TAB 3: RESET PASSWORD -->
           <div class="auth-clean-tab-pane" id="paneReset">
             <div style="text-align: center; margin-bottom: 20px;">
-              <h2 style="font-size: 1.35rem; margin: 0 0 6px 0; color: #FFFFFF;">รีเซ็ตรหัสผ่าน</h2>
-              <p style="font-size: 0.88rem; color: #94A3B8; margin: 0;">กรอกอีเมลเพื่อรับลิงก์ตั้งรหัสผ่านใหม่</p>
+              <h2 style="font-size: 1.35rem; margin: 0 0 6px 0; color: #0F172A; font-weight: 700;">รีเซ็ตรหัสผ่าน</h2>
+              <p style="font-size: 0.88rem; color: #64748B; margin: 0;">กรอกอีเมลเพื่อรับลิงก์ตั้งรหัสผ่านใหม่</p>
             </div>
 
             <form onsubmit="handlePageResetPassword(event)">
               <div class="clean-form-group">
                 <label>อีเมลที่ลงทะเบียนไว้ *</label>
-                <input type="email" id="pResetEmail" class="clean-input" placeholder="example@gmail.com" required value="runner.pro@gmail.com">
+                <input type="email" id="pResetEmail" class="clean-input" placeholder="example@gmail.com" required>
               </div>
 
-              <div style="margin-top: 16px;">
+              <div style="margin-top: 20px;">
                 <button type="submit" class="btn-clean-primary">
                   <i class="fa-solid fa-paper-plane"></i> ส่งลิงก์รีเซ็ตรหัสผ่าน
                 </button>
               </div>
             </form>
 
-            <div style="text-align: center; margin-top: 18px; font-size: 0.85rem;">
-              <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: #94A3B8; text-decoration: none;"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเข้าสู่ระบบ</a>
+            <div style="text-align: center; margin-top: 18px; font-size: 0.88rem;">
+              <a href="javascript:void(0)" onclick="showAuthTab('login')" style="color: #64748B; text-decoration: none;"><i class="fa-solid fa-arrow-left"></i> กลับไปหน้าเข้าสู่ระบบ</a>
             </div>
           </div>
         </div>
@@ -652,7 +568,7 @@
         <!-- VIEW 2: LOGGED IN (USER PROFILE & LOGOUT VIEW) -->
         <div id="authLoggedInView" class="clean-logged-in-box" style="display: none;">
           <div class="clean-avatar" id="pageUserAvatar">KP</div>
-          <div class="fb-badge connected" style="margin-bottom: 12px;">
+          <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: #DCFCE7; color: #15803D; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px;">
             <i class="fa-solid fa-circle-check"></i> เข้าสู่ระบบเรียบร้อย
           </div>
           
@@ -767,12 +683,6 @@
       }
     }
 
-    function quickFillPage(email, password) {
-      document.getElementById("pLoginEmail").value = email;
-      document.getElementById("pLoginPassword").value = password;
-      showToast("กรอกข้อมูลตัวอย่างเรียบร้อย กดเข้าสู่ระบบได้ทันที", "info");
-    }
-
     async function handlePageLogin(event) {
       event.preventDefault();
       const email = document.getElementById("pLoginEmail").value.trim();
@@ -875,20 +785,21 @@
       const container = document.getElementById("toastContainer");
       if (!container) return;
       const toast = document.createElement("div");
-      toast.style.background = "#1E293B";
-      toast.style.color = "#F8FAFC";
-      toast.style.border = "1px solid #334155";
+      toast.style.background = "#FFFFFF";
+      toast.style.color = "#0F172A";
+      toast.style.border = "1px solid #E2E8F0";
       toast.style.borderRadius = "8px";
       toast.style.padding = "12px 18px";
-      toast.style.boxShadow = "0 8px 20px rgba(0,0,0,0.4)";
+      toast.style.boxShadow = "0 10px 25px rgba(0,0,0,0.08)";
       toast.style.fontSize = "0.9rem";
       toast.style.display = "flex";
       toast.style.alignItems = "center";
       toast.style.gap = "8px";
       toast.style.animation = "fadeIn 0.2s ease";
       
-      const icon = type === "success" ? "fa-circle-check text-green" : "fa-circle-info text-blue";
-      toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+      const iconColor = type === "success" ? "#16A34A" : "#2563EB";
+      const iconClass = type === "success" ? "fa-circle-check" : "fa-circle-info";
+      toast.innerHTML = `<i class="fa-solid ${iconClass}" style="color: ${iconColor}; font-size: 1.1rem;"></i> <span>${message}</span>`;
       container.appendChild(toast);
       setTimeout(() => toast.remove(), 3500);
     }
